@@ -1,0 +1,12 @@
+{
+  "format": 4,
+  "lastRun": "2026-08-10T18:20:00+01:00",
+  "lastDaily": "2026-08-10T18:20:00+01:00",
+  "cursors": {
+    "slack": { "meridian": "2026-08-10T18:20:00+01:00" },
+    "github": { "northwind/meridian": { "lastPr": 338, "lastCommit": null } },
+    "gmail": { "lastInternalDate": "2026-08-09T11:02:00+01:00" },
+    "calendar": { "lastEndUtc": "2026-08-10T16:00:00Z" },
+    "tracker": { "MER": "2026-08-10T18:20:00+01:00" }
+  }
+}

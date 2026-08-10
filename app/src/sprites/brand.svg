@@ -1,0 +1,59 @@
+<!-- daily-brief icon sprite — LOCKED.
+     Two sets, one file:
+       the SOURCE BRAND marks the brief has always carried (#i-slack, #i-gmail,
+       #i-cal, #i-github, #i-drive, #i-spark), and
+       the CITATION set below, which cite.css / cite.js need — chip kinds, the
+       preview card's marks, and the Google file types a Drive card shows.
+
+     The citation set lives here, not in project-doc's sprite, because the
+     citation layer is shared: the standalone brief inlines this sprite alone,
+     while project-doc inlines both. A symbol may therefore live in exactly ONE
+     of the two — a duplicate id is a check.mjs failure. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-slack" viewBox="0 0 127 127"><path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/><path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.5 39.7.6 47 .6c7.3 0 13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.1.7 54.2.7 46.9c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/><path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.8C66.9 6.5 72.8.6 80.1.6c7.3 0 13.2 5.9 13.2 13.2v33.1z" fill="#2EB67D"/><path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80.1z" fill="#ECB22E"/></symbol>
+  <symbol id="i-gmail" viewBox="52 42 88 66"><path fill="#4285f4" d="M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6"/><path fill="#34a853" d="M120 108h14c3.32 0 6-2.69 6-6V59l-20 15"/><path fill="#fbbc04" d="M120 48v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2"/><path fill="#ea4335" d="M72 74V48l24 18 24-18v26L96 92"/><path fill="#c5221f" d="M52 51v8l20 15V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4 7.2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 200 200"><g transform="translate(3.75 3.75)"><path fill="#FFF" d="M148.882,43.618l-47.368-5.263l-57.895,5.263L38.355,96.25l5.263,52.632l52.632,6.579l52.632-6.579l5.263-53.947L148.882,43.618z"/><path fill="#EA4335" d="M148.882,196.25l47.368-47.368l-23.684-10.526l-23.684,10.526l-10.526,23.684L148.882,196.25z"/><path fill="#34A853" d="M33.092,172.566l10.526,23.684h105.263v-47.368H43.618L33.092,172.566z"/><path fill="#4285F4" d="M12.039-3.75C3.316-3.75-3.75,3.316-3.75,12.039v136.842l23.684,10.526l23.684-10.526V43.618h105.263l10.526-23.684L148.882-3.75H12.039z"/><path fill="#188038" d="M-3.75,148.882v31.579c0,8.724,7.066,15.789,15.789,15.789h31.579v-47.368H-3.75z"/><path fill="#FBBC04" d="M148.882,43.618v105.263h47.368V43.618l-23.684-10.526L148.882,43.618z"/><path fill="#1967D2" d="M196.25,43.618V12.039c0-8.724-7.066-15.789-15.789-15.789h-31.579v47.368H196.25z"/></g></symbol>
+  <symbol id="i-github" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" fill="#F0F0F0"/></symbol>
+  <symbol id="i-drive" viewBox="0 0 87.3 78"><path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/><path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/><path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/><path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/><path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 16 16"><path d="M8 0l1.9 5.3L15.4 7l-5.5 1.7L8 14l-1.9-5.3L.6 7l5.5-1.7L8 0z"/></symbol>
+
+  <!-- Pact, from withpact.com/favicon.svg. A NAMED SOURCE, like #i-slack —
+       not the tracker chip, which stays the generic #i-bead because a
+       tracker is not always Pact and one vendor's logo must not stand in
+       for the category.
+
+       The source file paints itself with a <style> block and a
+       prefers-color-scheme query; both are dropped. A `path { fill: … }`
+       rule inside an inlined sprite is not scoped to the sprite — it would
+       repaint every path on the page — and the dark-mode half is moot in a
+       dark-only document. `fill="currentColor"` does the same job, and lets
+       the mark take the ink of whatever it sits in. -->
+  <symbol id="i-pact" viewBox="11 4 31.797 31.797"><path fill="currentColor" d="M32.562 4H21.235C15.597 4 11 8.597 11 14.235v11.327c0 5.638 4.597 10.235 10.235 10.235h11.327c5.638 0 10.235-4.597 10.235-10.235V14.235C42.797 8.597 38.225 4 32.562 4m-.559 2.311h.584c4.369 0 7.924 3.556 7.924 7.924v6.806l-8.787-8.787a2.494 2.494 0 0 0-1.803-.737c-.66 0-1.296.254-1.804.737l-3.098 3.098a3.035 3.035 0 0 1-4.267 0l-.076-.076 4.495-5.663a8.68 8.68 0 0 1 6.832-3.302m4.038 26.387-8.889-8.94-1.65 1.626 8 8.026c-.305.025-.61.05-.94.05h-3.759l-5.105-5.13-1.65 1.626 3.479 3.479H21.21c-4.369 0-7.924-3.556-7.924-7.924V14.184c0-4.368 3.555-7.924 7.924-7.924h3.987a10.966 10.966 0 0 0-1.88 1.88l-5.765 7.289 1.524 1.523a5.334 5.334 0 0 0 7.543 0l3.098-3.098c.102-.102.229-.102.33 0L40.46 24.267v1.244a7.621 7.621 0 0 1-.584 2.946l-9.016-9.041-1.65 1.625 9.422 9.448c-.66.99-1.575 1.701-2.59 2.21"/></symbol>
+
+  <!-- Linear and Jira, the other two trackers a project doc is likely to cite.
+       Both are the flat single-colour marks; Jira's #0052CC is lifted to
+       Atlassian's own dark-background blue, because the brand blue on our
+       #111 page reads as a smudge at 13px. -->
+  <symbol id="i-linear" viewBox="0 0 24 24"><path fill="#5E6AD2" d="M2.886 4.18A11.982 11.982 0 0 1 11.99 0C18.624 0 24 5.376 24 12.009c0 3.64-1.62 6.903-4.18 9.105L2.887 4.18ZM1.817 5.626l16.556 16.556c-.524.33-1.075.62-1.65.866L.951 7.277c.247-.575.537-1.126.866-1.65ZM.322 9.163l14.515 14.515c-.71.172-1.443.282-2.195.322L0 11.358a12 12 0 0 1 .322-2.195Zm-.17 4.862 9.823 9.824a12.02 12.02 0 0 1-9.824-9.824Z"/></symbol>
+  <symbol id="i-jira" viewBox="0 0 24 24"><path fill="#2684FF" d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z"/></symbol>
+
+<!-- {CITATION SET} — chips, card marks, Google file types -->
+<symbol id="i-bead" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5"/><circle cx="8" cy="8" r="1.6"/></symbol>
+<symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></symbol>
+<symbol id="i-commit" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.8"/><path d="M1.5 8h3.7M10.8 8h3.7"/></symbol>
+<symbol id="i-figma" viewBox="0 0 25.34 38"><path fill="#F24E1E" d="M12.67 0H6.33a6.33 6.33 0 0 0 0 12.67h6.34z"/><path fill="#FF7262" d="M12.67 0H19a6.33 6.33 0 0 1 0 12.67h-6.33z"/><path fill="#A259FF" d="M12.67 12.67H6.33a6.33 6.33 0 0 0 0 12.66h6.34z"/><circle fill="#1ABCFE" cx="19" cy="19" r="6.33"/><circle fill="#0ACF83" cx="12.67" cy="31.67" r="6.33"/></symbol>
+<symbol id="i-file" viewBox="0 0 16 16"><path d="M4 2h5l3 3v9H4zM9 2v3h3"/></symbol>
+<symbol id="i-hash" viewBox="0 0 16 16"><path d="M6.2 2.5L4.6 13.5M11.4 2.5L9.8 13.5M2.8 5.8h11M2.2 10.2h11"/></symbol>
+<symbol id="i-link" viewBox="0 0 16 16"><path d="M6.7 9.3a2.6 2.6 0 004 .3l2-2a2.6 2.6 0 00-3.7-3.7l-1.1 1.1M9.3 6.7a2.6 2.6 0 00-4-.3l-2 2a2.6 2.6 0 003.7 3.7l1.1-1.1"/></symbol>
+<symbol id="i-meet" viewBox="0 0 87.5 72"><path fill="#00832D" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z"/><path fill="#0066DA" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z"/><path fill="#E94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z"/><path fill="#2684FC" d="M0 20.5h20.5v31H0z"/><path fill="#00AC47" d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5H20.5V72h43c3.315 0 6-2.685 6-6V53.08z"/><path fill="#FFBA00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/></symbol>
+<symbol id="i-thread" viewBox="0 0 16 16"><path d="M13.5 9.2A1.8 1.8 0 0111.7 11H6l-3 2.3V4.3c0-1 .8-1.8 1.8-1.8h6.9c1 0 1.8.8 1.8 1.8z"/></symbol>
+<symbol id="i-user" viewBox="0 0 16 16"><circle cx="8" cy="5.4" r="2.7"/><path d="M2.9 14c0-2.8 2.3-4.4 5.1-4.4s5.1 1.6 5.1 4.4"/></symbol>
+<symbol id="i-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
+<symbol id="i-doc" viewBox="0 0 16 16"><path d="M4 2h5l3 3v9H4zM9 2v3h3M6 8.5h4M6 11h4"/></symbol>
+<symbol id="i-fork" viewBox="0 0 16 16"><circle cx="4.2" cy="3.6" r="1.7"/><circle cx="11.8" cy="12.4" r="1.7"/><circle cx="4.2" cy="12.4" r="1.7"/><path d="M4.2 5.3v5.4M5.9 3.6h2.3c1.9 0 1.9 1.6 1.9 3.2v3.9"/></symbol>
+<symbol id="i-gdoc" viewBox="0 0 16 16"><path fill="#4285F4" d="M3.4 1.3h5.4L12.9 5.4v9.3H3.4z"/><path fill="#FFFFFF" fill-opacity=".5" d="M8.8 1.3l4.1 4.1H8.8z"/><path fill="#FFFFFF" d="M5.3 7.7h5.4v.95H5.3zm0 2.1h5.4v.95H5.3zm0 2.1h3.6v.95H5.3z"/></symbol>
+<symbol id="i-gpdf" viewBox="0 0 16 16"><path fill="#EA4335" d="M3.4 1.3h5.4L12.9 5.4v9.3H3.4z"/><path fill="#FFFFFF" fill-opacity=".5" d="M8.8 1.3l4.1 4.1H8.8z"/><path fill="#FFFFFF" d="M4.9 8.6h6.2v3.1H4.9z" fill-opacity=".92"/><path fill="#EA4335" d="M5.7 9.3h.85q.6 0 .6.6t-.6.6H5.7zm2.05 0h.75q.75 0 .75.85t-.75.85h-.75zm2.15 0h1.15v.5h-.65v.35h.6v.5h-.6v.55h-.5z"/></symbol>
+<symbol id="i-gsheet" viewBox="0 0 16 16"><path fill="#0F9D58" d="M3.4 1.3h5.4L12.9 5.4v9.3H3.4z"/><path fill="#FFFFFF" fill-opacity=".5" d="M8.8 1.3l4.1 4.1H8.8z"/><path fill="#FFFFFF" d="M5.2 7.6h5.6v5.1H5.2zm.95.95v1.1h1.75v-1.1zm2.7 0v1.1h1.9v-1.1zm-2.7 2.05v1.15h1.75v-1.15zm2.7 0v1.15h1.9v-1.15z"/></symbol>
+<symbol id="i-gslide" viewBox="0 0 16 16"><path fill="#F4B400" d="M3.4 1.3h5.4L12.9 5.4v9.3H3.4z"/><path fill="#FFFFFF" fill-opacity=".5" d="M8.8 1.3l4.1 4.1H8.8z"/><path fill="#FFFFFF" d="M5.2 7.9h5.6v4.3H5.2zm.95.95v2.4h3.7v-2.4z"/></symbol>
+<symbol id="i-merge" viewBox="0 0 16 16"><circle cx="4.4" cy="3.7" r="1.7"/><circle cx="4.4" cy="12.3" r="1.7"/><circle cx="11.6" cy="8" r="1.7"/><path d="M4.4 5.4v5.2M6.1 3.7c0 2.4 1.6 4.3 3.8 4.3"/></symbol>
+</defs></svg>

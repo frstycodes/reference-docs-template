@@ -1,0 +1,411 @@
+{
+ "citations": [
+  {
+   "key": "slack-replay-rev",
+   "kind": "slack",
+   "raw": "#meridian",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "channel": "meridian",
+    "author": "Ana Duarte",
+    "text": "Backfill test lost ordering under partition rebalance — reverting to the synchronous path until we can prove it.",
+    "ts": "1786267800.000100",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNjIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QUQ8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "mer-412",
+   "kind": "tracker",
+   "raw": "MER-412",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-412",
+    "status": "not_started",
+    "assignee": "Kofi Mensah",
+    "due": "2026-08-18",
+    "title": "MER-412 — pilot readiness checklist"
+   }
+  },
+  {
+   "key": "pr-338",
+   "kind": "pr",
+   "raw": "PR #338",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "state": "draft",
+    "repo": "northwind/meridian",
+    "number": 338,
+    "author": "Rui Alves",
+    "additions": 74,
+    "deletions": 14,
+    "changedFiles": 3,
+    "mergedAt": "2026-08-07T09:30:00.000Z",
+    "createdAt": "2026-08-04T09:30:00.000Z",
+    "title": "PR #338 — registry retry budget",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxNDIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UkE8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "vercel-deploy-8814",
+   "kind": "custom",
+   "raw": "northwind-web@8814",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "source": "Vercel",
+    "icon": "i-vercel",
+    "title": "northwind-web — production",
+    "updatedAt": "2026-08-09T09:30:00.000Z",
+    "author": "Mira Shah",
+    "rows": [
+     {
+      "label": "State",
+      "value": "Ready"
+     },
+     {
+      "label": "Commit",
+      "value": "8814f2c"
+     },
+     {
+      "label": "Duration",
+      "value": "1m 12s"
+     },
+     {
+      "label": "Environment",
+      "value": "production"
+     }
+    ],
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNCA2MiUgNDYlKSIvPjx0ZXh0IHg9IjI0IiB5PSIzMSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NUzwvdGV4dD48L3N2Zz4="
+   }
+  },
+  {
+   "key": "mer-431",
+   "kind": "tracker",
+   "raw": "MER-431",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-431",
+    "status": "in_progress",
+    "assignee": "Tomas Weber",
+    "due": "2026-08-21",
+    "title": "MER-431 — schema-registry outage follow-up"
+   }
+  },
+  {
+   "key": "gmail-dpa",
+   "kind": "gmail",
+   "raw": "DPA — pilot tenants",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "source": "Gmail",
+    "author": "Ana Duarte",
+    "title": "DPA — countersignature pending with legal",
+    "createdAt": "2026-08-04T09:30:00.000Z",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNjIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QUQ8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "pr-329",
+   "kind": "pr",
+   "raw": "PR #329",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "state": "draft",
+    "repo": "northwind/meridian",
+    "number": 329,
+    "author": "Kofi Mensah",
+    "additions": 142,
+    "deletions": 26,
+    "changedFiles": 7,
+    "mergedAt": "2026-08-03T09:30:00.000Z",
+    "createdAt": "2026-07-31T09:30:00.000Z",
+    "title": "PR #329 — registry retry budget",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxOTAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S008L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "slack-rui",
+   "kind": "slack",
+   "raw": "#meridian",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "channel": "meridian",
+    "author": "Rui Alves",
+    "text": "Backfill test lost ordering under partition rebalance — reverting to the synchronous path until we can prove it.",
+    "ts": "1785663000.000100",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxNDIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UkE8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "drive-runbook",
+   "kind": "drive",
+   "raw": "Meridian runbook",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "mimeType": "application/pdf",
+    "owner": "Mira Shah",
+    "title": "Meridian runbook",
+    "modified": "2026-08-01T09:30:00.000Z",
+    "ownerAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNCA2MiUgNDYlKSIvPjx0ZXh0IHg9IjI0IiB5PSIzMSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NUzwvdGV4dD48L3N2Zz4="
+   }
+  },
+  {
+   "key": "mer-201",
+   "kind": "tracker",
+   "raw": "MER-201",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-201",
+    "status": "done",
+    "assignee": "Ana Duarte",
+    "due": "2026-08-27",
+    "title": "MER-201 — DPA countersignature"
+   }
+  },
+  {
+   "key": "drive-kafka-eval",
+   "kind": "drive",
+   "raw": "Streaming platform evaluation",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "mimeType": "application/pdf",
+    "owner": "Kofi Mensah",
+    "title": "Streaming platform evaluation",
+    "modified": "2026-08-07T09:30:00.000Z",
+    "ownerAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxOTAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S008L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "mer-388",
+   "kind": "tracker",
+   "raw": "MER-388",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-388",
+    "status": "not_started",
+    "assignee": "Mira Shah",
+    "due": "2026-08-30",
+    "title": "MER-388 — pilot readiness checklist"
+   }
+  },
+  {
+   "key": "mer-425",
+   "kind": "tracker",
+   "raw": "MER-425",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-425",
+    "status": "done",
+    "assignee": "Tomas Weber",
+    "due": "2026-08-17",
+    "title": "MER-425 — DPA countersignature"
+   }
+  },
+  {
+   "key": "mer-426",
+   "kind": "tracker",
+   "raw": "MER-426",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-426",
+    "status": "blocked",
+    "assignee": "Ana Duarte",
+    "due": "2026-08-18",
+    "title": "MER-426 — lag alerting thresholds"
+   }
+  },
+  {
+   "key": "mer-427",
+   "kind": "tracker",
+   "raw": "MER-427",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-427",
+    "status": "in_progress",
+    "assignee": "Kofi Mensah",
+    "due": "2026-08-19",
+    "title": "MER-427 — schema-registry outage follow-up"
+   }
+  },
+  {
+   "key": "pr-244",
+   "kind": "pr",
+   "raw": "PR #244",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "state": "merged",
+    "repo": "northwind/meridian",
+    "number": 244,
+    "author": "Ana Duarte",
+    "additions": 380,
+    "deletions": 68,
+    "changedFiles": 3,
+    "mergedAt": "2026-08-07T09:30:00.000Z",
+    "createdAt": "2026-08-04T09:30:00.000Z",
+    "title": "PR #244 — consumer lag dashboards",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNjIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QUQ8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "drive-brief",
+   "kind": "drive",
+   "raw": "Reporting performance brief",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "mimeType": "application/pdf",
+    "owner": "Mira Shah",
+    "title": "Reporting performance brief",
+    "modified": "2026-08-04T09:30:00.000Z",
+    "ownerAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNCA2MiUgNDYlKSIvPjx0ZXh0IHg9IjI0IiB5PSIzMSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NUzwvdGV4dD48L3N2Zz4="
+   }
+  },
+  {
+   "key": "pr-61",
+   "kind": "pr",
+   "raw": "PR #61",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "state": "merged",
+    "repo": "northwind/meridian",
+    "number": 61,
+    "author": "Tomas Weber",
+    "additions": 448,
+    "deletions": 80,
+    "changedFiles": 7,
+    "mergedAt": "2026-08-03T09:30:00.000Z",
+    "createdAt": "2026-07-31T09:30:00.000Z",
+    "title": "PR #61 — consumer lag dashboards",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgzNDAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VFc8L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "cal-cust-apr",
+   "kind": "cal",
+   "raw": "Customer sync",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "title": "Customer sync",
+    "start": "2026-08-12T09:30:00.000Z",
+    "end": "2026-08-12T10:15:00.000Z",
+    "month": "AUG",
+    "dateNum": 12,
+    "day": "Wed",
+    "time": "09:30",
+    "conferenceUrl": "https://meet.google.com/abc-defg-hij",
+    "attendees": [
+     {
+      "name": "Ana Duarte",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNjIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QUQ8L3RleHQ+PC9zdmc+"
+     },
+     {
+      "name": "Kofi Mensah",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxOTAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S008L3RleHQ+PC9zdmc+"
+     },
+     {
+      "name": "Rui Alves",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxNDIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UkE8L3RleHQ+PC9zdmc+"
+     }
+    ],
+    "attendeeCount": 6
+   }
+  },
+  {
+   "key": "drive-reframe",
+   "kind": "drive",
+   "raw": "Freshness, not speed",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "mimeType": "application/pdf",
+    "owner": "Kofi Mensah",
+    "title": "Freshness, not speed",
+    "modified": "2026-08-01T09:30:00.000Z",
+    "ownerAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxOTAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S008L3RleHQ+PC9zdmc+"
+   }
+  },
+  {
+   "key": "pr-140",
+   "kind": "pr",
+   "raw": "PR #140",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "state": "merged",
+    "repo": "northwind/meridian",
+    "number": 140,
+    "author": "Mira Shah",
+    "additions": 516,
+    "deletions": 92,
+    "changedFiles": 2,
+    "mergedAt": "2026-08-08T09:30:00.000Z",
+    "createdAt": "2026-08-05T09:30:00.000Z",
+    "title": "PR #140 — consumer lag dashboards",
+    "authorAvatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNCA2MiUgNDYlKSIvPjx0ZXh0IHg9IjI0IiB5PSIzMSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NUzwvdGV4dD48L3N2Zz4="
+   }
+  },
+  {
+   "key": "cal-pilot",
+   "kind": "cal",
+   "raw": "Pilot scoping",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "title": "Pilot scoping",
+    "start": "2026-08-13T09:30:00.000Z",
+    "end": "2026-08-13T10:15:00.000Z",
+    "month": "AUG",
+    "dateNum": 13,
+    "day": "Wed",
+    "time": "09:30",
+    "conferenceUrl": "https://meet.google.com/abc-defg-hij",
+    "attendees": [
+     {
+      "name": "Kofi Mensah",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxOTAgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+S008L3RleHQ+PC9zdmc+"
+     },
+     {
+      "name": "Rui Alves",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgxNDIgNjIlIDQ2JSkiLz48dGV4dCB4PSIyNCIgeT0iMzEiIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UkE8L3RleHQ+PC9zdmc+"
+     },
+     {
+      "name": "Mira Shah",
+      "avatarUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMjQiIGZpbGw9ImhzbCgyNCA2MiUgNDYlKSIvPjx0ZXh0IHg9IjI0IiB5PSIzMSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NUzwvdGV4dD48L3N2Zz4="
+     }
+    ],
+    "attendeeCount": 6
+   }
+  },
+  {
+   "key": "mer-390",
+   "kind": "tracker",
+   "raw": "MER-390",
+   "resolved": true,
+   "confidence": "exact",
+   "preview": {
+    "id": "MER-390",
+    "status": "in_progress",
+    "assignee": "Rui Alves",
+    "due": "2026-08-21",
+    "title": "MER-390 — schema-registry outage follow-up"
+   }
+  }
+ ]
+}

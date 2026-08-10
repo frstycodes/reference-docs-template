@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    // Internal imports carry explicit .ts extensions so the SAME source runs
+    // under Vite, under `node --test`, and under the publish-time prerender on
+    // bare node with nothing installed.
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client", "node"],
+
+    // `@external` is the one project-specific directory. It resolves to the
+    // reference set here and is REDIRECTED per project by `typecheck.mjs` and
+    // by the publish build — this default is what `npm run dev` and a bare
+    // `tsc` see, not a claim about where a given project's content lives.
+    "paths": {
+      "@app/*": ["./src/*"],
+      "@external/*": ["./src/__external/*"]
+    },
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": ["src", "vite.config.ts"]
+}

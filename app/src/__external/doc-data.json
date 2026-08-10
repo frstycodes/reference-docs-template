@@ -1,0 +1,1120 @@
+{
+ "meta": {
+  "project": "Meridian",
+  "tagline": "The living document — everything that happened, and where you stand.",
+  "timezone": "Europe/Lisbon",
+  "locale": "en-GB",
+  "updatedAt": "2026-08-07T18:20:00+01:00"
+ },
+ "sections": [
+  {
+   "id": "whatsnew",
+   "tab": "whatsnew",
+   "layout": "whatsnew",
+   "eyebrow": "SINCE YOU LOOKED",
+   "title": "Three runs, one reversal",
+   "lead": "The replay decision came back the other way. Everything else is build.",
+   "icon": "i-pulse",
+   "blocks": {
+    "srcNote": "Read from GitHub, Slack #meridian, Linear and the team drive.",
+    "runs": [
+     {
+      "iso": "2026-08-07",
+      "date": "7 Aug",
+      "time": "18:20",
+      "sources": "GitHub · Slack · Linear",
+      "latest": true,
+      "bullets": [
+       {
+        "kind": "dec",
+        "strong": "Replay stays synchronous.",
+        "text": "Ana reversed the 24 Jul call after the backfill test lost ordering under partition rebalance. The async path is parked, not deleted.",
+        "cites": [
+         {
+          "key": "slack-replay-rev",
+          "kind": "slack",
+          "raw": "#meridian",
+          "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1754582400",
+          "preview": true
+         }
+        ],
+        "goto": {
+         "target": "timeline",
+         "label": "See the argument"
+        }
+       },
+       {
+        "kind": "res",
+        "text": "The schema-registry outage from 3 Aug is closed out; Kofi added the vendor's status page to the on-call runbook.",
+        "cites": [
+         {
+          "key": "mer-412",
+          "kind": "tracker",
+          "raw": "MER-412",
+          "url": "https://linear.app/northwind/issue/MER-412"
+         }
+        ]
+       },
+       {
+        "kind": "add",
+        "text": "Consumer lag dashboards are live for the three highest-volume topics.",
+        "cites": [
+         {
+          "key": "pr-338",
+          "kind": "pr",
+          "raw": "PR #338",
+          "url": "https://github.com/northwind/meridian/pull/338",
+          "preview": true
+         },
+         {
+          "key": "vercel-deploy-8814",
+          "kind": "custom",
+          "raw": "northwind-web@8814",
+          "url": "https://vercel.com/northwind/northwind-web/8814",
+          "preview": true,
+          "icon": "i-vercel"
+         }
+        ]
+       },
+       {
+        "kind": "watch",
+        "text": "Nobody has picked up the dead-letter replay UI. It is on your lane and blocks the 21 Aug pilot.",
+        "cites": [
+         {
+          "key": "mer-431",
+          "kind": "tracker",
+          "raw": "MER-431",
+          "url": "https://linear.app/northwind/issue/MER-431"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "iso": "2026-08-04",
+      "date": "4 Aug",
+      "time": "09:05",
+      "sources": "GitHub · Slack",
+      "bullets": [
+       {
+        "kind": "risk",
+        "strong": "Pilot date is tight.",
+        "text": "Two of the four pilot tenants have not signed the data-processing addendum. Legal has not been chased since 28 Jul.",
+        "cites": [
+         {
+          "key": "gmail-dpa",
+          "kind": "gmail",
+          "raw": "DPA — pilot tenants",
+          "url": "https://mail.google.com/mail/u/0/#inbox/dpa-thread"
+         }
+        ]
+       },
+       {
+        "kind": "upd",
+        "text": "Checkpoint interval dropped from 60s to 15s after the 3 Aug incident. Throughput cost was under 4%.",
+        "cites": [
+         {
+          "key": "pr-329",
+          "kind": "pr",
+          "raw": "PR #329",
+          "url": "https://github.com/northwind/meridian/pull/329"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "iso": "2026-07-31",
+      "date": "31 Jul",
+      "time": "17:40",
+      "sources": "Slack · Linear · Drive",
+      "bullets": [
+       {
+        "kind": "add",
+        "text": "Rui joined on a three-month contract to own the operator surface.",
+        "cites": [
+         {
+          "key": "slack-rui",
+          "kind": "slack",
+          "raw": "#meridian",
+          "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1753980000"
+         }
+        ]
+       },
+       {
+        "kind": "upd",
+        "text": "The migration runbook moved to the shared drive and is now the single copy.",
+        "cites": [
+         {
+          "key": "drive-runbook",
+          "kind": "drive",
+          "raw": "Meridian runbook",
+          "url": "https://docs.google.com/document/d/meridian-runbook"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "tldr",
+   "tab": "orientation",
+   "layout": "tldr",
+   "eyebrow": "IN SHORT",
+   "title": "Streaming works; the pilot is the risk",
+   "icon": "i-spark",
+   "blocks": {
+    "tiles": [
+     {
+      "n": "11",
+      "label": "topics migrated",
+      "gist": "of 14 in scope"
+     },
+     {
+      "n": "3",
+      "label": "weeks to pilot",
+      "gist": "21 Aug, four tenants",
+      "risk": true
+     },
+     {
+      "n": "4%",
+      "label": "throughput cost",
+      "gist": "from the 15s checkpoint"
+     },
+     {
+      "n": "2",
+      "label": "unsigned DPAs",
+      "gist": "blocking two pilot tenants",
+      "risk": true
+     }
+    ],
+    "key": "The engineering work is ahead of schedule. The pilot date is at risk for a legal reason nobody owns.",
+    "long": "Meridian replaces the nightly batch reporting job with a streaming pipeline over Kafka. Eleven of fourteen topics are migrated and running in parallel with batch, and the reconciliation job has matched to the cent for nine consecutive days. The remaining three topics all depend on the dead-letter replay surface, which is unstarted. Separately, two of the four pilot tenants have not signed the data-processing addendum; the engineering team has treated this as somebody else's problem since 28 July and it is now the single most likely cause of a slipped date.",
+    "longGist": "Eleven of fourteen topics, nine clean reconciliation days, one unowned legal blocker"
+   }
+  },
+  {
+   "id": "goal",
+   "tab": "orientation",
+   "layout": "goal",
+   "eyebrow": "WHAT WE ARE FOR",
+   "title": "Kill the nightly job",
+   "icon": "i-compass",
+   "blocks": {
+    "current": "Reporting is fresh within a minute, and the nightly batch job is deleted rather than kept as a fallback.",
+    "shifts": [
+     {
+      "date": "7 Aug",
+      "kind": "pivot",
+      "title": "Replay stays synchronous",
+      "verdict": "Reversed the async decision from 24 Jul.",
+      "why": "The backfill test lost ordering under partition rebalance. Ana's position: a replay that reorders events is worse than a replay that is slow, because the second is visible and the first is not. Kofi still thinks the async path is recoverable with a sequencer, and that work is parked rather than abandoned.",
+      "cites": [
+       {
+        "key": "slack-replay-rev",
+        "kind": "slack",
+        "raw": "#meridian",
+        "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1754582400",
+        "preview": true
+       }
+      ]
+     },
+     {
+      "date": "12 Jun",
+      "kind": "decision",
+      "title": "Parallel-run rather than cut over",
+      "verdict": "Batch and streaming run side by side until reconciliation is clean for 14 days.",
+      "why": "Priya argued for a hard cutover on the grounds that a parallel run doubles the operational surface. The counter that won: the nightly job is the only thing that has ever been right, and deleting it before the replacement is proven leaves nothing to compare against.",
+      "cites": [
+       {
+        "key": "mer-201",
+        "kind": "tracker",
+        "raw": "MER-201",
+        "url": "https://linear.app/northwind/issue/MER-201"
+       }
+      ]
+     },
+     {
+      "date": "4 May",
+      "kind": "milestone",
+      "title": "Kafka over Kinesis",
+      "verdict": "Self-hosted Kafka, on the existing cluster.",
+      "why": "Cost modelling put Kinesis 3.4x higher at projected volume. The dissent worth recording is Rui's: the team has no Kafka operational experience and the cost gap assumed no additional headcount.",
+      "cites": [
+       {
+        "key": "drive-kafka-eval",
+        "kind": "drive",
+        "raw": "Streaming platform evaluation",
+        "url": "https://docs.google.com/document/d/meridian-kafka-eval"
+       }
+      ]
+     }
+    ],
+    "historical": "The project began in March as a caching layer for the batch job, and was reframed in May once it was clear that freshness, not speed, was the actual complaint."
+   }
+  },
+  {
+   "id": "primer",
+   "tab": "orientation",
+   "layout": "primer",
+   "eyebrow": "IF YOU ARE NEW",
+   "title": "Four things that explain the rest",
+   "icon": "i-doc",
+   "blocks": [
+    {
+     "q": "Why is there still a nightly batch job?",
+     "a": "It is the reference implementation, and it is deleted on 14 clean days.",
+     "body": "The parallel-run decision on 12 June means batch and streaming both compute every report, and a reconciliation job compares them nightly. Nine consecutive days have matched exactly. The job is deleted at fourteen, not before — and the counter resets on any mismatch, which it did on 3 August."
+    },
+    {
+     "q": "What is the dead-letter replay surface?",
+     "a": "The operator screen for re-processing events that failed.",
+     "body": "When a consumer cannot process an event it lands in a dead-letter topic. Someone then has to look at it, decide whether it is a poison message or a transient failure, and replay it. Today that is a shell script and a lot of nerve. MER-431 is the UI that replaces it, and the last three topics cannot migrate without it."
+    },
+    {
+     "q": "Why did replay go synchronous again?",
+     "a": "Async replay reordered events under partition rebalance.",
+     "body": "The 24 July decision was to replay asynchronously for throughput. The 6 August backfill test showed that when a partition rebalances mid-replay, events can be committed out of order, which silently corrupts any downstream aggregate. Synchronous replay is roughly six times slower and cannot do this. The async path is parked behind a sequencer design nobody has started."
+    },
+    {
+     "q": "Who decides whether the pilot ships?",
+     "a": "Ana, but the blocking item is legal, not engineering.",
+     "body": "Ana owns the go/no-go for the 21 August pilot. The engineering criteria are close to met. Two of the four pilot tenants have not signed the data-processing addendum, and no engineer can resolve that — it needs somebody to chase legal, which has not happened since 28 July."
+    }
+   ]
+  },
+  {
+   "id": "glossary",
+   "tab": "orientation",
+   "layout": "glossary",
+   "eyebrow": "THE WORDS",
+   "title": "What the team means by",
+   "icon": "i-hash",
+   "blocks": [
+    {
+     "name": "Pipeline",
+     "terms": [
+      {
+       "term": "Backfill",
+       "def": "Re-processing historical events through the new pipeline to populate aggregates. Distinct from replay, which is about failures."
+      },
+      {
+       "term": "Checkpoint",
+       "def": "The committed offset a consumer restarts from. Dropped from 60s to 15s after the 3 August incident.",
+       "code": true
+      },
+      {
+       "term": "Dead letter",
+       "def": "A topic holding events a consumer could not process. Requires a human decision to replay or discard."
+      },
+      {
+       "term": "Parallel run",
+       "def": "Batch and streaming both computing every report, compared nightly by the reconciliation job."
+      },
+      {
+       "term": "Rebalance",
+       "def": "Kafka reassigning partitions across consumers. The cause of the ordering bug that reversed the replay decision."
+      },
+      {
+       "term": "Reconciliation",
+       "def": "The nightly comparison of batch and streaming output. Nine consecutive clean days as of 7 August."
+      },
+      {
+       "term": "Replay",
+       "def": "Re-processing events that failed. Synchronous as of 7 August."
+      },
+      {
+       "term": "Sequencer",
+       "def": "The unbuilt component that would make async replay safe by imposing an ordering. Parked."
+      }
+     ]
+    },
+    {
+     "name": "Process",
+     "terms": [
+      {
+       "term": "Clean day",
+       "def": "A day the reconciliation job found zero mismatches. The counter resets on any mismatch."
+      },
+      {
+       "term": "DPA",
+       "def": "Data-processing addendum. Two of four pilot tenants have not signed one."
+      },
+      {
+       "term": "Go/no-go",
+       "def": "Ana's call on whether the pilot ships on 21 August."
+      },
+      {
+       "term": "In scope",
+       "def": "One of the fourteen topics named in the May plan. Three remain, all blocked on MER-431."
+      },
+      {
+       "term": "Pilot tenant",
+       "def": "One of four customers running Meridian reporting before general availability."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "architecture",
+   "tab": "project",
+   "layout": "pipeline",
+   "eyebrow": "HOW IT FITS",
+   "title": "Event to report, in five stages",
+   "lead": "Everything downstream of the dead-letter branch is where the remaining work is.",
+   "icon": "i-layers",
+   "blocks": [
+    {
+     "title": "Producers",
+     "gist": "Application services emit domain events",
+     "detail": "Fourteen services publish to topic-per-aggregate. Producers are unchanged by this project — the contract was fixed in April and has not moved since, which is the main reason the migration has been able to run in parallel with batch."
+    },
+    {
+     "title": "Kafka",
+     "gist": "Self-hosted, on the existing cluster",
+     "detail": "Three brokers, replication factor 3. Chosen over Kinesis on cost at projected volume. The team's Kafka operational experience is thin, which is what the 3 August schema-registry outage exposed."
+    },
+    {
+     "title": "Consumers",
+     "gist": "One consumer group per report family",
+     "detail": "Eleven of fourteen migrated. Checkpoint interval is 15s. A consumer that cannot process an event routes it to the dead-letter topic rather than blocking the partition."
+    },
+    {
+     "title": "Dead letter",
+     "gist": "Failed events, awaiting a human",
+     "detail": "Today this is a shell script. MER-431 replaces it with an operator surface that shows the failure, the event, and a replay button. The last three topics cannot migrate until it exists, because their failure modes are not understood well enough to run blind."
+    },
+    {
+     "title": "Aggregates",
+     "gist": "Materialised views the reports read",
+     "detail": "Written idempotently so a replay cannot double-count — which is exactly the guarantee the async replay path broke, since idempotency does not survive reordering."
+    }
+   ]
+  },
+  {
+   "id": "state",
+   "tab": "project",
+   "layout": "state",
+   "eyebrow": "WHERE THINGS STAND",
+   "title": "Eleven shipped, three blocked on one screen",
+   "icon": "i-pulse",
+   "blocks": [
+    {
+     "state": "risk",
+     "rows": [
+      {
+       "title": "Pilot date, 21 August",
+       "status": "at risk",
+       "gist": "Two unsigned DPAs, unowned since 28 Jul",
+       "cites": [
+        {
+         "key": "gmail-dpa",
+         "kind": "gmail",
+         "raw": "DPA — pilot tenants",
+         "url": "https://mail.google.com/mail/u/0/#inbox/dpa-thread"
+        }
+       ],
+       "flag": true
+      },
+      {
+       "title": "Kafka operational depth",
+       "status": "at risk",
+       "gist": "One person can debug the cluster",
+       "cites": [
+        {
+         "key": "mer-388",
+         "kind": "tracker",
+         "raw": "MER-388",
+         "url": "https://linear.app/northwind/issue/MER-388"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "state": "blocked",
+     "rows": [
+      {
+       "title": "orders topic migration",
+       "status": "blocked",
+       "gist": "Needs the replay surface",
+       "cites": [
+        {
+         "key": "mer-425",
+         "kind": "tracker",
+         "raw": "MER-425",
+         "url": "https://linear.app/northwind/issue/MER-425"
+        }
+       ]
+      },
+      {
+       "title": "refunds topic migration",
+       "status": "blocked",
+       "gist": "Needs the replay surface",
+       "cites": [
+        {
+         "key": "mer-426",
+         "kind": "tracker",
+         "raw": "MER-426",
+         "url": "https://linear.app/northwind/issue/MER-426"
+        }
+       ]
+      },
+      {
+       "title": "adjustments topic migration",
+       "status": "blocked",
+       "gist": "Needs the replay surface",
+       "cites": [
+        {
+         "key": "mer-427",
+         "kind": "tracker",
+         "raw": "MER-427",
+         "url": "https://linear.app/northwind/issue/MER-427"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "state": "flight",
+     "rows": [
+      {
+       "title": "Dead-letter replay UI",
+       "status": "in flight",
+       "gist": "Unstarted; on your lane",
+       "cites": [
+        {
+         "key": "mer-431",
+         "kind": "tracker",
+         "raw": "MER-431",
+         "url": "https://linear.app/northwind/issue/MER-431"
+        }
+       ],
+       "flag": true
+      },
+      {
+       "title": "Consumer lag dashboards",
+       "status": "in flight",
+       "gist": "Three of fourteen topics covered",
+       "cites": [
+        {
+         "key": "pr-338",
+         "kind": "pr",
+         "raw": "PR #338",
+         "url": "https://github.com/northwind/meridian/pull/338",
+         "preview": true
+        }
+       ]
+      },
+      {
+       "title": "Sequencer design",
+       "status": "parked",
+       "gist": "Would unpark async replay; nobody assigned"
+      }
+     ]
+    },
+    {
+     "state": "shipped",
+     "rows": [
+      {
+       "title": "Eleven topics migrated",
+       "status": "shipped",
+       "gist": "Running in parallel with batch",
+       "cites": [
+        {
+         "key": "mer-201",
+         "kind": "tracker",
+         "raw": "MER-201",
+         "url": "https://linear.app/northwind/issue/MER-201"
+        }
+       ]
+      },
+      {
+       "title": "Reconciliation job",
+       "status": "shipped",
+       "gist": "Nine consecutive clean days",
+       "cites": [
+        {
+         "key": "pr-244",
+         "kind": "pr",
+         "raw": "PR #244",
+         "url": "https://github.com/northwind/meridian/pull/244"
+        }
+       ]
+      },
+      {
+       "title": "15s checkpoint interval",
+       "status": "shipped",
+       "gist": "Under 4% throughput cost",
+       "cites": [
+        {
+         "key": "pr-329",
+         "kind": "pr",
+         "raw": "PR #329",
+         "url": "https://github.com/northwind/meridian/pull/329"
+        }
+       ]
+      },
+      {
+       "title": "Schema registry runbook",
+       "status": "shipped",
+       "gist": "Closed out the 3 Aug incident",
+       "cites": [
+        {
+         "key": "mer-412",
+         "kind": "tracker",
+         "raw": "MER-412",
+         "url": "https://linear.app/northwind/issue/MER-412"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "timeline",
+   "tab": "timeline",
+   "layout": "timeline",
+   "eyebrow": "HOW WE GOT HERE",
+   "title": "March to August",
+   "lead": "Decisions carry their argument. Two of them were later reversed.",
+   "icon": "i-clock",
+   "blocks": [
+    {
+     "kind": "milestone",
+     "iso": "2026-03-02",
+     "date": "2 Mar",
+     "title": "Project opens as a caching layer",
+     "gist": "The complaint was speed; the brief was a cache.",
+     "body": "Reports took ninety seconds to load and the original brief was to cache them. This framing survived two months and is the reason the first month of commits is all cache invalidation work that was later deleted.",
+     "bodyHead": "The original brief",
+     "cites": [
+      {
+       "key": "drive-brief",
+       "kind": "drive",
+       "raw": "Reporting performance brief",
+       "url": "https://docs.google.com/document/d/meridian-brief"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-03-18",
+     "date": "18 Mar",
+     "title": "Read-through cache ships",
+     "gist": "Load time 90s to 4s. Complaints continue.",
+     "cites": [
+      {
+       "key": "pr-61",
+       "kind": "pr",
+       "raw": "PR #61",
+       "url": "https://github.com/northwind/meridian/pull/61"
+      }
+     ]
+    },
+    {
+     "kind": "meeting",
+     "iso": "2026-04-09",
+     "date": "9 Apr",
+     "title": "Customer call: the numbers are wrong",
+     "gist": "Not slow — stale. The cache made it worse.",
+     "body": "Three customers on the same call independently described the same problem, and none of them used the word slow. The reports were a day behind, and the cache had extended that to a day and a half.",
+     "bodyHead": "What they actually said",
+     "cites": [
+      {
+       "key": "cal-cust-apr",
+       "kind": "cal",
+       "raw": "Customer sync",
+       "url": "https://calendar.google.com/event?eid=meridian-apr"
+      }
+     ]
+    },
+    {
+     "kind": "pivot",
+     "iso": "2026-04-14",
+     "date": "14 Apr",
+     "title": "Reframed from speed to freshness",
+     "gist": "The cache work is deleted, not kept.",
+     "body": "Ana's call, made in the room on the 9th and written up on the 14th. The argument that carried it: a cache over stale data makes the actual problem worse, and every hour spent tuning it is an hour spent making the wrong thing faster. Priya pushed to keep the cache as a separate win; that was declined on the grounds that it would need maintaining forever for a problem nobody had.",
+     "bodyHead": "Why the cache went",
+     "cites": [
+      {
+       "key": "drive-reframe",
+       "kind": "drive",
+       "raw": "Freshness, not speed",
+       "url": "https://docs.google.com/document/d/meridian-reframe"
+      }
+     ]
+    },
+    {
+     "kind": "decision",
+     "iso": "2026-05-04",
+     "date": "4 May",
+     "title": "Kafka over Kinesis",
+     "gist": "3.4x cost gap at projected volume.",
+     "body": "Cost modelling put Kinesis at 3.4x Kafka's cost at projected volume, on the existing cluster. Rui's dissent is on the record and turned out to matter: the team had no Kafka operational experience, and the cost comparison assumed no additional headcount to acquire it. The 3 August outage is the first bill for that assumption.",
+     "bodyHead": "The dissent that was right",
+     "cites": [
+      {
+       "key": "drive-kafka-eval",
+       "kind": "drive",
+       "raw": "Streaming platform evaluation",
+       "url": "https://docs.google.com/document/d/meridian-kafka-eval"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-05-20",
+     "date": "20 May",
+     "title": "First topic migrated end to end",
+     "gist": "invoices, running alongside batch.",
+     "cites": [
+      {
+       "key": "pr-140",
+       "kind": "pr",
+       "raw": "PR #140",
+       "url": "https://github.com/northwind/meridian/pull/140"
+      }
+     ]
+    },
+    {
+     "kind": "decision",
+     "iso": "2026-06-12",
+     "date": "12 Jun",
+     "title": "Parallel run, not a cutover",
+     "gist": "Batch stays until 14 clean days.",
+     "body": "Priya argued a hard cutover, on the grounds that running both doubles the operational surface during the riskiest period. The counter that won: the nightly job is the only thing that has ever been right, and deleting it before the replacement is proven leaves nothing to compare against. Fourteen days was arbitrary and everyone said so at the time.",
+     "bodyHead": "Both sides",
+     "cites": [
+      {
+       "key": "mer-201",
+       "kind": "tracker",
+       "raw": "MER-201",
+       "url": "https://linear.app/northwind/issue/MER-201"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-06-24",
+     "date": "24 Jun",
+     "title": "Reconciliation job ships",
+     "gist": "Nightly batch-vs-stream comparison.",
+     "cites": [
+      {
+       "key": "pr-244",
+       "kind": "pr",
+       "raw": "PR #244",
+       "url": "https://github.com/northwind/meridian/pull/244"
+      }
+     ]
+    },
+    {
+     "kind": "milestone",
+     "iso": "2026-07-02",
+     "date": "2 Jul",
+     "title": "Eight topics migrated",
+     "gist": "Over half of scope, ahead of plan."
+    },
+    {
+     "kind": "meeting",
+     "iso": "2026-07-15",
+     "date": "15 Jul",
+     "title": "Pilot scoped to four tenants",
+     "gist": "21 August, opt-in, reporting only.",
+     "cites": [
+      {
+       "key": "cal-pilot",
+       "kind": "cal",
+       "raw": "Pilot scoping",
+       "url": "https://calendar.google.com/event?eid=meridian-pilot"
+      }
+     ]
+    },
+    {
+     "kind": "decision",
+     "iso": "2026-07-24",
+     "date": "24 Jul",
+     "title": "Replay goes asynchronous",
+     "gist": "Throughput. Reversed two weeks later.",
+     "body": "Kofi's proposal, accepted without much argument: synchronous replay is roughly six times slower and replay was assumed to be rare. The assumption nobody tested was that partition rebalance during replay is also rare.",
+     "bodyHead": "The assumption",
+     "cites": [
+      {
+       "key": "mer-390",
+       "kind": "tracker",
+       "raw": "MER-390",
+       "url": "https://linear.app/northwind/issue/MER-390"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-07-28",
+     "date": "28 Jul",
+     "title": "DPA sent to pilot tenants",
+     "gist": "Two of four still unsigned.",
+     "cites": [
+      {
+       "key": "gmail-dpa",
+       "kind": "gmail",
+       "raw": "DPA — pilot tenants",
+       "url": "https://mail.google.com/mail/u/0/#inbox/dpa-thread"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-07-31",
+     "date": "31 Jul",
+     "title": "Rui joins to own the operator surface",
+     "gist": "Three-month contract.",
+     "cites": [
+      {
+       "key": "slack-rui",
+       "kind": "slack",
+       "raw": "#meridian",
+       "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1753980000"
+      }
+     ]
+    },
+    {
+     "kind": "incident",
+     "iso": "2026-08-03",
+     "date": "3 Aug",
+     "title": "Schema registry outage, 4h",
+     "gist": "All consumers stalled. Clean-day counter reset.",
+     "body": "The registry's managed instance went down and every consumer stalled behind it, because none of them cached schemas locally. Four hours to recover, most of it spent working out that the registry was the problem — nobody had it on a dashboard. The checkpoint interval drop and the runbook both came out of the postmortem.",
+     "bodyHead": "What broke, and what it cost",
+     "cites": [
+      {
+       "key": "mer-412",
+       "kind": "tracker",
+       "raw": "MER-412",
+       "url": "https://linear.app/northwind/issue/MER-412"
+      }
+     ],
+     "flag": true
+    },
+    {
+     "kind": "build",
+     "iso": "2026-08-04",
+     "date": "4 Aug",
+     "title": "Checkpoint interval 60s to 15s",
+     "gist": "Under 4% throughput cost.",
+     "cites": [
+      {
+       "key": "pr-329",
+       "kind": "pr",
+       "raw": "PR #329",
+       "url": "https://github.com/northwind/meridian/pull/329"
+      }
+     ]
+    },
+    {
+     "kind": "build",
+     "iso": "2026-08-06",
+     "date": "6 Aug",
+     "title": "Backfill test loses ordering",
+     "gist": "Async replay reorders under rebalance.",
+     "body": "The test replayed four hours of the invoices topic while a consumer was added to the group. Seven events committed out of order, and the aggregate was wrong by a number nobody could explain until the offsets were read by hand.",
+     "bodyHead": "How it showed up"
+    },
+    {
+     "kind": "pivot",
+     "iso": "2026-08-07",
+     "date": "7 Aug",
+     "title": "Replay back to synchronous",
+     "gist": "Reverses 24 Jul. Async parked behind a sequencer.",
+     "body": "Ana's reversal, on the argument that a replay which reorders is worse than a replay which is slow, because the second failure is visible and the first is not. Kofi maintains the async path is recoverable with a sequencer and that work is parked rather than abandoned — but nobody is assigned to it, which in practice means it is abandoned.",
+     "bodyHead": "The reversal",
+     "cites": [
+      {
+       "key": "slack-replay-rev",
+       "kind": "slack",
+       "raw": "#meridian",
+       "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1754582400",
+       "preview": true
+      }
+     ],
+     "flag": true
+    },
+    {
+     "kind": "milestone",
+     "iso": "2026-08-07",
+     "date": "7 Aug",
+     "title": "Nine consecutive clean days",
+     "gist": "Five short of deleting the batch job."
+    }
+   ]
+  },
+  {
+   "id": "lane",
+   "tab": "you",
+   "layout": "gantt",
+   "eyebrow": "YOUR WORK, ACROSS TIME",
+   "title": "Three weeks to the pilot",
+   "icon": "i-user",
+   "blocks": {
+    "window": {
+     "start": "2026-07-06",
+     "unit": "week",
+     "cols": 8,
+     "todayC1": 5,
+     "vh": "Eight weeks from 6 July to 31 August"
+    },
+    "rows": [
+     {
+      "title": "Consumer lag dashboards",
+      "laneId": "item-lag",
+      "status": "shipped",
+      "c1": 1,
+      "span": 3,
+      "vh": "Shipped, weeks one to three"
+     },
+     {
+      "title": "Dead-letter replay UI",
+      "laneId": "item-replay",
+      "status": "risk",
+      "c1": 4,
+      "span": 3,
+      "dep": "blocks 3 topics",
+      "vh": "At risk, weeks four to six"
+     },
+     {
+      "title": "Replay ordering fix",
+      "laneId": "item-ordering",
+      "status": "flight",
+      "c1": 5,
+      "span": 2,
+      "vh": "In flight, weeks five and six"
+     },
+     {
+      "title": "Pilot readiness review",
+      "laneId": "item-pilot",
+      "status": "blocked",
+      "c1": 7,
+      "span": 2,
+      "dep": "needs DPAs",
+      "vh": "Blocked, weeks seven and eight"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lane-items",
+   "tab": "you",
+   "layout": "lane",
+   "eyebrow": "AND IN FULL",
+   "title": "What each of those actually is",
+   "icon": "i-check",
+   "blocks": [
+    {
+     "id": "item-lag",
+     "title": "Consumer lag dashboards",
+     "href": "https://linear.app/northwind/issue/MER-402",
+     "tag": "Shipped",
+     "d": "Per-topic lag, with alerting above 60s. Three of fourteen topics are covered.",
+     "cites": [
+      {
+       "key": "pr-338",
+       "kind": "pr",
+       "raw": "PR #338",
+       "url": "https://github.com/northwind/meridian/pull/338",
+       "preview": true
+      }
+     ],
+     "disc": "Covers invoices, payments and ledger — the three highest-volume topics. The remaining eleven are a copy-paste job nobody has scheduled, and until they are done a stalled consumer on a quiet topic is invisible.",
+     "discHead": "What is actually covered",
+     "watch": {
+      "kind": "pr",
+      "ref": "northwind/meridian#338"
+     }
+    },
+    {
+     "id": "item-replay",
+     "title": "Dead-letter replay UI",
+     "href": "https://linear.app/northwind/issue/MER-431",
+     "tag": "Your call",
+     "d": "The operator surface that replaces the replay shell script. Unstarted, and three topic migrations are waiting on it.",
+     "cites": [
+      {
+       "key": "mer-431",
+       "kind": "tracker",
+       "raw": "MER-431",
+       "url": "https://linear.app/northwind/issue/MER-431"
+      }
+     ],
+     "disc": "Needs a list of dead-lettered events, the failure reason, the event body, and a replay action that is safe to press twice. The safe-to-press-twice part is the whole job: aggregates are idempotent only if ordering holds, which is exactly what the 7 August reversal was about.",
+     "discHead": "What is involved",
+     "watch": {
+      "kind": "tracker",
+      "ref": "MER-431"
+     }
+    },
+    {
+     "id": "item-ordering",
+     "title": "Replay ordering fix",
+     "href": "https://linear.app/northwind/issue/MER-390",
+     "d": "Make synchronous replay the only path, and delete the async branch behind a flag.",
+     "cites": [
+      {
+       "key": "mer-390",
+       "kind": "tracker",
+       "raw": "MER-390",
+       "url": "https://linear.app/northwind/issue/MER-390"
+      }
+     ],
+     "watch": {
+      "kind": "tracker",
+      "ref": "MER-390"
+     }
+    },
+    {
+     "id": "item-pilot",
+     "title": "Pilot readiness review",
+     "d": "The engineering half of the 21 August go/no-go. Blocked on something that is not engineering.",
+     "cites": [
+      {
+       "key": "cal-pilot",
+       "kind": "cal",
+       "raw": "Pilot scoping",
+       "url": "https://calendar.google.com/event?eid=meridian-pilot"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ask",
+   "tab": "you",
+   "layout": "ask",
+   "eyebrow": "OPEN LEDGER",
+   "title": "Four unanswered, two settled",
+   "lead": "Each names who owns it and what it blocks.",
+   "icon": "i-ask",
+   "blocks": {
+    "open": [
+     {
+      "q": "Who is chasing legal on the two unsigned DPAs?",
+      "who": "Ana",
+      "ctx": "Untouched since 28 Jul. This is the single most likely cause of a slipped pilot date, and no engineer can resolve it.",
+      "cites": [
+       {
+        "key": "gmail-dpa",
+        "kind": "gmail",
+        "raw": "DPA — pilot tenants",
+        "url": "https://mail.google.com/mail/u/0/#inbox/dpa-thread"
+       }
+      ]
+     },
+     {
+      "q": "Does the replay UI need to handle poison messages, or only transient failures?",
+      "who": "Rui",
+      "ctx": "Changes the scope of MER-431 by roughly a week. Asked on 5 Aug, no answer.",
+      "cites": [
+       {
+        "key": "mer-431",
+        "kind": "tracker",
+        "raw": "MER-431",
+        "url": "https://linear.app/northwind/issue/MER-431"
+       }
+      ]
+     },
+     {
+      "q": "Is the sequencer actually parked, or abandoned?",
+      "who": "Kofi",
+      "ctx": "Nobody is assigned. If it is abandoned the async branch should be deleted rather than left behind a flag."
+     },
+     {
+      "q": "Does the 14-clean-day counter reset on any mismatch, or only an unexplained one?",
+      "who": "Priya",
+      "ctx": "The 3 Aug reset was an outage, not a correctness bug. Nobody wrote the rule down."
+     }
+    ],
+    "done": [
+     {
+      "q": "Do we keep the batch job as a permanent fallback?",
+      "who": "Ana",
+      "answer": "No — it is deleted at fourteen clean days. Keeping it forever was the thing the parallel-run decision was explicitly not agreeing to.",
+      "cites": [
+       {
+        "key": "mer-201",
+        "kind": "tracker",
+        "raw": "MER-201",
+        "url": "https://linear.app/northwind/issue/MER-201"
+       }
+      ]
+     },
+     {
+      "q": "Can the pilot ship with eleven of fourteen topics?",
+      "who": "Ana",
+      "answer": "Yes. The three blocked topics are not in any pilot tenant's report set, which is why the pilot was scoped to four tenants in the first place.",
+      "cites": [
+       {
+        "key": "cal-pilot",
+        "kind": "cal",
+        "raw": "Pilot scoping",
+        "url": "https://calendar.google.com/event?eid=meridian-pilot"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "contradictions",
+   "tab": "project",
+   "layout": "prose",
+   "eyebrow": "THE RECORD DISAGREES",
+   "title": "Two things the sources say differently",
+   "lead": "Surfaced rather than resolved — nobody has reconciled these.",
+   "icon": "i-alert",
+   "blocks": [
+    {
+     "type": "callout",
+     "variant": "quiet",
+     "text": "The clean-day count is nine in Slack and eleven in the Linear milestone. The difference is whether the 3 August outage day counts as a mismatch or an absence of data."
+    },
+    {
+     "type": "p",
+     "text": "The pilot is described as four tenants in the 15 July scoping notes and as six in the DPA thread. Two of the six were never mentioned again after 28 July."
+    },
+    {
+     "type": "fields",
+     "title": "Where each number comes from",
+     "icon": "i-link",
+     "fields": [
+      {
+       "label": "Nine clean days",
+       "value": "Slack #meridian, 7 Aug, Priya"
+      },
+      {
+       "label": "Eleven clean days",
+       "value": "Linear milestone description, last edited 4 Aug"
+      },
+      {
+       "label": "Four pilot tenants",
+       "value": "Scoping notes, 15 Jul"
+      },
+      {
+       "label": "Six pilot tenants",
+       "value": "DPA thread, 28 Jul"
+      }
+     ]
+    },
+    {
+     "type": "disc",
+     "title": "Why this is not resolved here",
+     "gist": "A document that picks a side hides the disagreement",
+     "body": "The sourcing standard says contradictions in the record are surfaced rather than resolved away. Picking nine or eleven would make this page tidier and would also mean that whoever eventually needs the real number has no idea the question exists."
+    }
+   ]
+  }
+ ]
+}

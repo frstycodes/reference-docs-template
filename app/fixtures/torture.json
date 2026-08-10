@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "project": "Ω",
+    "tagline": "Every optional field absent, every string too long, every list length one.",
+    "timezone": "Pacific/Kiritimati",
+    "updatedAt": "2026-08-07"
+  },
+  "sections": [
+    {
+      "id": "whatsnew",
+      "tab": "whatsnew",
+      "layout": "whatsnew",
+      "title": "One run, one bullet, no lead and no eyebrow",
+      "blocks": {
+        "runs": [
+          {
+            "iso": "2026-08-07",
+            "date": "7 Aug",
+            "time": "23:59",
+            "sources": "GitHub · Slack · Gmail · Calendar · Drive · Linear · Figma · a custom source with a very long display name",
+            "latest": true,
+            "bullets": [
+              {
+                "kind": "watch",
+                "text": "A bullet whose text runs on well past any reasonable measure, because the model that wrote it did not fold anything into a disclosure and the renderer must not assume a headline fits on one line, or two, or in fact any particular number of lines at any particular viewport width.",
+                "cites": [
+                  { "key": "no-url", "kind": "pr", "raw": "PR #1 (no URL — must render unlinked)" },
+                  { "key": "bad-host", "kind": "drive", "raw": "Off-allowlist doc", "url": "https://evil.example/doc" },
+                  { "key": "legacy", "kind": "bead", "raw": "BEAD-0001 (legacy kind)" },
+                  { "key": "unknown-kind", "kind": "notion", "raw": "Notion page (unknown kind)", "url": "https://github.com/a/b" },
+                  { "key": "urlish", "kind": "link", "raw": "javascript:alert(1)", "url": "javascript:alert(1)" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "tldr",
+      "tab": "orientation",
+      "layout": "tldr",
+      "title": "One tile where the grammar expects four",
+      "blocks": {
+        "tiles": [{ "n": "1,048,576", "label": "a label long enough to wrap inside a tile that was designed for two words", "risk": true }]
+      }
+    },
+
+    {
+      "id": "goal",
+      "tab": "orientation",
+      "layout": "goal",
+      "title": "No current framing, no historical note, one shift with no why",
+      "blocks": {
+        "shifts": [{ "date": "1 Jan", "kind": "milestone", "title": "A shift with no rationale and no citations", "verdict": "Accepted." }]
+      }
+    },
+
+    {
+      "id": "primer",
+      "tab": "orientation",
+      "layout": "primer",
+      "title": "One card",
+      "blocks": [{ "q": "Whatisaverylongunbrokentokenthatcannotwrapanywhereatallbecauseitcontainsnospacesorhyphens?", "a": "It is an overflow test.", "body": "supercalifragilisticexpialidociousantidisestablishmentarianismpneumonoultramicroscopicsilicovolcanoconiosis" }]
+    },
+
+    {
+      "id": "glossary",
+      "tab": "orientation",
+      "layout": "glossary",
+      "title": "One group, one term, one letter in the rail",
+      "blocks": [{ "name": "Only", "terms": [{ "term": "Zed", "def": "The single term, so the letter rail has exactly one entry and every filter but Z matches nothing.", "code": true }] }]
+    },
+
+    {
+      "id": "architecture",
+      "tab": "project",
+      "layout": "pipeline",
+      "title": "A single stage, so there is no arrow to draw",
+      "blocks": [{ "title": "Only stage", "gist": "The last stage has no arrow — when it is also the first, the pipeline is one box.", "detail": "Renderers that draw the connector before checking for a next stage fail here." }]
+    },
+
+    {
+      "id": "state",
+      "tab": "project",
+      "layout": "state",
+      "title": "One group, so three of the four tiles are zero",
+      "blocks": [{ "state": "blocked", "rows": [{ "title": "The only row", "flag": true }] }]
+    },
+
+    {
+      "id": "timeline",
+      "tab": "timeline",
+      "layout": "timeline",
+      "title": "Two events fourteen months apart",
+      "lead": "The month clustering must not invent the thirteen empty months between them.",
+      "blocks": [
+        { "kind": "incident", "iso": "2025-06-01", "date": "1 Jun 2025", "title": "The first event", "gist": "No body, no cites, no flag." },
+        { "kind": "decision", "iso": "2026-08-07", "date": "7 Aug 2026", "title": "The second event, whose title is itself long enough to test whether the rail's headline truncates, wraps, or pushes the date column out of alignment entirely", "body": "A body with no bodyHead, which must fall back to the renderer's default disclosure label rather than rendering an empty summary." }
+      ]
+    },
+
+    {
+      "id": "lane",
+      "tab": "you",
+      "layout": "gantt",
+      "title": "A one-column window with a bar that overruns it",
+      "blocks": {
+        "window": { "start": "2026-08-03", "unit": "week", "cols": 1 },
+        "rows": [
+          { "title": "Overruns the window", "laneId": "only-item", "status": "risk", "c1": 1, "span": 4 },
+          { "title": "No lane item at all", "status": "shipped", "c1": 1, "span": 1 }
+        ]
+      }
+    },
+
+    {
+      "id": "lane-items",
+      "tab": "you",
+      "layout": "lane",
+      "title": "One item, no href, no tag, no cites, no disclosure",
+      "blocks": [{ "id": "only-item", "title": "The only lane item", "d": "Everything optional is absent.", "watch": { "kind": "bead", "ref": "BEAD-0001" } }]
+    },
+
+    {
+      "id": "ask",
+      "tab": "you",
+      "layout": "ask",
+      "title": "Open questions and an empty settled tray",
+      "blocks": {
+        "open": [{ "q": "A question with no owner and no context?" }],
+        "done": []
+      }
+    },
+
+    {
+      "id": "novel",
+      "tab": "project",
+      "layout": "sankey",
+      "title": "An unknown layout, which must degrade to prose rather than fail",
+      "blocks": [
+        { "type": "p", "text": "A plain paragraph." },
+        { "type": "callout", "text": "A callout with no variant." },
+        { "type": "fields", "fields": [{ "label": "Only field", "value": "—" }] },
+        { "type": "marquee", "text": "An unknown block type inside an unknown layout." },
+        { "type": "disc", "title": "A disclosure with no gist", "body": "Its summary must not render an empty gist span." }
+      ]
+    }
+  ]
+}

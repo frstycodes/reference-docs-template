@@ -1,0 +1,43 @@
+<!-- project-doc icon sprite — LOCKED. Inlined once, immediately after the
+     daily-brief sprite. That sprite owns the source-brand marks AND the whole
+     citation set (#i-bead, #i-commit, #i-thread, #i-link, #i-figma, the Google
+     file types, #i-merge …), because cite.css / cite.js are shared with the
+     standalone brief and a symbol may live in exactly ONE sprite — project-doc
+     inlines both, and a duplicate id is a check.mjs failure.
+
+     What is left here is what only this document draws: its markers, its status
+     marks, and one mark per tab. Every marker in the document comes from one of
+     the two sprites — never a unicode glyph, which ignores stroke weight and
+     breaks the set's alignment.
+
+     Two flavours, distinguished by the class on the <svg>, not by the symbol:
+       .ic.ic-b  brand symbols — they carry their own fills
+       .ic.ic-s  structural symbols — stroke is currentColor, weight and caps
+                 come from doc-components.css
+     Everything here is drawn on a 16×16 grid so the two sets align optically. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- markers and motion -->
+  <symbol id="i-chev" viewBox="0 0 16 16"><path d="M6 3.5L10.5 8L6 12.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></symbol>
+  <symbol id="i-pivot" viewBox="0 0 16 16"><path d="M10.5 4.5H6a3 3 0 000 6h4.5M9 8.5l2 2-2 2"/></symbol>
+
+  <symbol id="i-dot" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3"/></symbol>
+
+  <!-- state and status -->
+  <symbol id="i-block" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M4.1 11.9l7.8-7.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16"><path d="M8 2.6l5.6 10H2.4zM8 6.6v3M8 11.4v.1"/></symbol>
+  <symbol id="i-flight" viewBox="0 0 16 16"><path d="M3 13l10-10M13 3v6M13 3H7"/></symbol>
+  <symbol id="i-ship" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.6"/><path d="M5.4 8.2l1.9 1.9L10.7 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.3"/><path d="M10.2 10.2L14 14"/></symbol>
+
+  <!-- an open question -->
+  <symbol id="i-ask" viewBox="0 0 16 16"><path d="M5.8 5.9a2.2 2.2 0 114.2 1c0 1.5-2 1.7-2 3.1M8 13v.1"/></symbol>
+
+  <!-- tab marks, one per panel, used by the dial -->
+  <symbol id="i-sun" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.2 1.2M11.8 11.8L13 13M13 3l-1.2 1.2M4.2 11.8L3 13"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 16 16"><path d="M1.5 8.5h2.8L6 4l2.6 8L10.4 8.5h4.1"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M10.6 5.4L9.3 9.3 5.4 10.6 6.7 6.7z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 16 16"><path d="M8 1.8L14.2 5 8 8.2 1.8 5zM1.8 8.3L8 11.5l6.2-3.2M1.8 11.3L8 14.5l6.2-3.2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 4.6V8l2.4 1.6"/></symbol>
+
+</svg>

@@ -1,0 +1,38 @@
+{
+  "name": "project-doc-app",
+  "version": "1.0.0",
+  "description": "Both documents, as one React app. A document supplies src/__external; this supplies everything else.",
+  "scripts": {
+    "dev": "vite",
+    "build": "./node_modules/.bin/vite build",
+    "build:ssr": "./node_modules/.bin/vite build --ssr src/prerender.tsx --outDir dist-ssr",
+    "build:brief": "BRIEF=1 ./node_modules/.bin/vite build",
+    "build:brief:ssr": "./node_modules/.bin/vite build --ssr src/brief-prerender.tsx --outDir dist-brief-ssr",
+    "vendor": "NEUTRAL_CARDS=1 npm run build && NEUTRAL_CARDS=1 npm run build:ssr && NEUTRAL_CARDS=1 npm run build:brief && NEUTRAL_CARDS=1 npm run build:brief:ssr && node scripts/vendor.mjs",
+    "typecheck": "node scripts/typecheck.mjs",
+    "test": "node --test src/schema/*.test.ts src/lib/*.test.ts src/lib/*.test.mjs scripts/*.test.mjs ../scripts/*.test.mjs",
+    "build:doc": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.7.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@tanstack/react-router": "^1.170.23",
+    "motion": "^13.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "node-html-parser": "^9.0.1",
+    "playwright": "^1.62.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,412 @@
+/* Ported verbatim from daily-brief/references/shell.css — the token layer.
+   Ownership moved here when the Today fragment became data: the app renders
+   both surfaces now, so it owns the tokens they share.
+
+   ONE line changed from the original: the first line was
+     @import url('https://fonts.googleapis.com/css2?family=Manrope…');
+   which the Artifact's CSP blocks outright — so Manrope and JetBrains Mono
+   have never actually loaded in a published document, and the page has been
+   rendering in the -apple-system / ui-monospace fallbacks all along. Removed
+   rather than left as a dead request. Getting the real faces back means
+   embedding woff2 subsets as data: URIs; until then the fallbacks below are
+   what ships, honestly rather than silently. ('Exposure', the serif display
+   face, has no @font-face at all and has always fallen back to Georgia.) */
+
+:root{
+  --page:#111111; --card:#1D1D1D; --hairline:#2A2A2A;
+  --ink:#F0F0F0; --ink-2:#D0D0D0; --ink-3:#99938A; --ink-4:#948E85;
+  --accent:#FFE501; --accent-ink:#111111;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --serif:'Exposure',Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Manrope',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--page);color:var(--ink);font-family:var(--sans);font-weight:400;
+  line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+.grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.035;mix-blend-mode:overlay}
+.wrap{max-width:1040px;margin:0 auto;padding:0 48px}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;padding:64px 0 0}
+.hero-edge{position:absolute;top:52%;transform:translateY(-50%) rotate(180deg);
+  writing-mode:vertical-rl;font-family:var(--serif);font-style:italic;font-size:19px;
+  color:var(--ink-3);letter-spacing:.03em;font-variant-numeric:tabular-nums;
+  z-index:6;pointer-events:none}
+.hero-date{left:2px}
+.hero-time{right:2px}
+
+.herofig{position:relative;width:86%;margin:8px auto 0}
+.frame{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:2px}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.frame::after{content:"";position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 150px 30px rgba(0,0,0,.62), inset 0 0 50px 6px rgba(0,0,0,.45)}
+.title{position:absolute;left:0;right:0;top:53%;transform:translateY(-50%);text-align:center;
+  font-family:var(--serif);line-height:.84;pointer-events:none;z-index:5;
+  text-shadow:0 1px 20px rgba(0,0,0,.28)}
+.title .the{display:block;font-style:italic;color:var(--accent);font-size:38px;
+  transform:translate(-26px,20px)}
+.title .big{display:block;font-style:normal;color:var(--accent);font-size:122px;letter-spacing:-.015em}
+
+.underhero{display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+  margin:24px auto 0;width:86%}
+.blurb{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.45;
+  color:var(--ink-3);max-width:34ch}
+.credit{font-family:var(--mono);font-size:11px;color:var(--ink-4);text-align:right;
+  max-width:22ch;line-height:1.5}
+
+/* ---------- SECTION SHELL ---------- */
+section{margin-top:104px}
+.grid{display:grid;grid-template-columns:minmax(180px,32%) 1fr;gap:40px;align-items:start}
+.side{position:sticky;top:40px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-4)}
+.h{font-family:var(--serif);font-style:italic;font-size:27px;color:var(--ink);
+  margin:12px 0 0;line-height:1.1;font-weight:400}
+.lead{color:var(--ink-3);font-size:14px;max-width:34ch;margin-top:12px}
+.side .badgewrap{margin-top:26px;display:inline-block}
+
+/* ---------- FEATURE / PUSH ---------- */
+.feature{position:relative;margin-top:76px;background:var(--card);border-radius:16px;
+  padding:44px 48px}
+.feature .h{margin-top:0;color:var(--ink)}
+.feature .fp-topic{font-size:19px;font-weight:500;color:var(--ink);line-height:1.45}
+.feature .fp{font-size:16px;line-height:1.7;color:var(--ink-3);max-width:58ch;margin-top:9px}
+.feature .fp b{color:var(--ink-2);font-weight:500}
+/* static so the absolute badge below anchors to .feature, not this column */
+.feature .side{position:static}
+/* hangs off the card's bottom edge — never adds to the card's height */
+.feature .badgewrap{position:absolute;bottom:-26px;left:42px;margin-top:0}
+
+/* ---------- STATIC SOURCE MARK ---------- */
+/* .sico — the brief's old source-icon anchor — is retired in favour of the
+   shared .cite chip (cite.css), which carries a kind, an unlinked fallback and a
+   hover card. What survives is .sico-static: a brand mark used as decoration
+   INSIDE something already linked, such as the reading card's Drive icon. It is
+   not a link and has no tip, so it needs none of the anchor's machinery. */
+.sico-static{display:inline-block;vertical-align:-3px}
+
+/* ---------- AVATARS ---------- */
+.avas{display:inline-flex;align-items:center;margin-left:9px;vertical-align:middle}
+.av{position:relative;display:inline-flex;margin-left:-7px}
+.av:first-child{margin-left:0}
+.av:hover{z-index:4}
+.ava{width:26px;height:26px;border-radius:50%;object-fit:cover;display:block;
+  border:2px solid var(--page);background:var(--card);
+  transition:transform 240ms var(--spring)}
+.av:hover .ava{transform:translateY(-3px) scale(1.1)}
+.ava.mono{display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--ink-2);background:var(--hairline)}
+.avname{position:absolute;bottom:calc(100% + 9px);left:50%;white-space:nowrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.02em;color:var(--ink);
+  background:var(--card);border:1px solid var(--hairline);border-radius:6px;padding:3px 8px;
+  pointer-events:none;opacity:0;transform-origin:bottom center;z-index:6;
+  transform:translateX(-50%) translateY(6px) scale(.5) rotate(-8deg);
+  transition:opacity 150ms var(--ease)}
+.avname::after{content:"";position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--hairline)}
+.av:hover .avname{opacity:1;animation:pop-in 360ms var(--ease) both}
+@keyframes pop-in{
+  0%{opacity:0;transform:translateX(-50%) translateY(6px) scale(.5) rotate(-8deg)}
+  55%{transform:translateX(-50%) translateY(-3px) scale(1.09) rotate(3deg)}
+  100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(0)}}
+
+/* ---------- TODOS ---------- */
+.list{position:relative;display:flex;flex-direction:column;gap:6px}
+.item{display:flex;gap:18px;padding:18px 2px;
+  align-items:flex-start;position:relative;isolation:isolate;cursor:pointer}
+.item::before{content:"";position:absolute;top:4px;bottom:4px;left:-14px;right:-14px;
+  border-radius:12px;background:rgba(255,255,255,.045);opacity:0;z-index:0;
+  pointer-events:none;transition:opacity .18s var(--ease)}
+.item:hover::before{opacity:1}
+.item:has(input:checked)::before{opacity:0}
+.item > *{position:relative;z-index:1}
+.chk{position:relative;flex:0 0 auto;margin-top:1px}
+.chk input{position:absolute;opacity:0;width:22px;height:22px;margin:0;cursor:pointer}
+.box{position:relative;width:22px;height:22px;border:1.5px solid var(--ink-4);border-radius:50%;
+  display:grid;place-items:center;
+  transition:background 160ms var(--ease),transform 220ms var(--ease),border-color 160ms var(--ease)}
+.box svg{width:12px;height:12px;stroke:var(--page);stroke-width:3;fill:none;
+  opacity:0;transition:opacity 120ms var(--ease)}
+.chk:active .box{transform:scale(1.28)}
+.chk:hover .box{border-color:var(--ink-2)}
+.box::after{content:"";position:absolute;top:50%;left:50%;width:100%;height:100%;border-radius:50%;
+  transform:translate(-50%,-50%) scale(1);pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(255,255,255,.22) 0%,transparent 70%)}
+.chk input:checked + .box{background:var(--ink-4);border-color:var(--ink-4);
+  animation:check-bounce .4s var(--spring)}
+.chk input:checked + .box::after{animation:check-glow .6s ease-out forwards}
+.chk input:checked + .box svg{opacity:1}
+@keyframes check-bounce{0%{transform:scale(1.28)}40%{transform:scale(.85)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes check-glow{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(3.5)}}
+.body{flex:1;min-width:0}
+.item .t{font-size:16px;font-weight:500;color:var(--ink);line-height:1.45}
+.item .t a{text-decoration:none;background-image:linear-gradient(var(--hairline),var(--hairline));
+  background-size:100% 1px;background-repeat:no-repeat;background-position:0 100%;
+  transition:background-size 200ms var(--ease),color 160ms var(--ease)}
+.item .t a:hover{color:#fff;background-image:linear-gradient(var(--accent),var(--accent))}
+.item .d{font-size:14px;color:var(--ink-3);margin-top:5px;max-width:58ch}
+.item.is-done{animation:nudge 260ms var(--ease)}
+.item:has(input:checked) .body{opacity:.4;transition:opacity .3s var(--ease) .05s}
+.item:has(input:checked) .t{text-decoration:line-through;text-decoration-color:var(--ink-4)}
+@keyframes nudge{40%{transform:scale(1.03)}100%{transform:none}}
+/* default tag = quiet serif italic, like a byline */
+.tag{font-family:var(--serif);font-style:italic;font-size:.9em;color:var(--ink-4);
+  white-space:nowrap;margin-left:8px;line-height:1}
+/* the one filled tag per section — reserved for genuine priority */
+.tag.fill{font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 7px;border-radius:3px;
+  background:var(--accent);color:var(--accent-ink);vertical-align:2px}
+
+/* ---------- ALL DONE CARD ---------- */
+/* overlay sits on top of the blurred to-do list */
+.list.is-all-done .item{filter:blur(6px);opacity:.3;pointer-events:none;
+  transition:filter .28s ease,opacity .28s ease}
+.alldone{display:none;pointer-events:none}
+.list.is-all-done .alldone{display:flex;position:absolute;inset:0;align-items:center;
+  justify-content:center;z-index:3}
+.alldone-card{position:relative;pointer-events:auto;width:min(100%,34rem);
+  background:#1a1a1a;border-radius:14px;padding:34px 30px 30px;text-align:center;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);animation:card-in 340ms var(--spring) both}
+@keyframes card-in{0%{opacity:0;transform:scale(.94)}100%{opacity:1;transform:none}}
+@keyframes fade-in{to{opacity:1}}
+@keyframes badge-pop{0%{opacity:0;transform:scale(.72) rotate(-10deg)}
+  72%{opacity:1;transform:scale(1.05) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes content-in{to{opacity:1;transform:translateY(0)}}
+.alldone-close{opacity:0;animation:fade-in .35s ease forwards .15s;
+  position:absolute;top:12px;right:12px;width:26px;height:26px;border:0;
+  background:none;color:var(--ink-4);cursor:pointer;border-radius:50%;display:grid;place-items:center}
+.alldone-close:hover{color:var(--ink);background:var(--hairline)}
+.alldone-badge{position:relative;width:56px;height:56px;margin:0 auto 16px;display:grid;
+  place-items:center;background:var(--accent);color:var(--accent-ink);
+  border:2px solid #1a1a1a;opacity:0;animation:badge-pop .32s var(--spring) forwards .2s;
+  clip-path:polygon(50% 0,60.4% 11.4%,75% 6.7%,78.3% 21.7%,93.3% 25%,88.6% 39.6%,100% 50%,88.6% 60.4%,93.3% 75%,78.3% 78.3%,75% 93.3%,60.4% 88.6%,50% 100%,39.6% 88.6%,25% 93.3%,21.7% 78.3%,6.7% 75%,11.4% 60.4%,0 50%,11.4% 39.6%,6.7% 25%,21.7% 21.7%,25% 6.7%,39.6% 11.4%)}
+.alldone-badge svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
+.alldone-t{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--ink);
+  font-weight:400;text-wrap:balance;opacity:0;transform:translateY(14px);
+  animation:content-in .48s ease forwards .5s}
+.alldone-d{font-size:14px;color:var(--ink-3);margin-top:8px;opacity:0;transform:translateY(14px);
+  animation:content-in .48s ease forwards .62s}
+
+/* ---------- NUMBERED UPDATES ---------- */
+.ups{display:flex;flex-direction:column;gap:26px}
+.up{display:flex;gap:20px;align-items:flex-start}
+.up-num{font-family:var(--mono);font-size:11px;color:var(--ink-4);flex:0 0 auto;
+  width:20px;padding-top:3px;font-variant-numeric:tabular-nums}
+.up-body{flex:1;min-width:0}
+.up-t{font-size:16px;font-weight:500;color:var(--ink);line-height:1.45;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+.up-t a{text-decoration:none;background-image:linear-gradient(var(--hairline),var(--hairline));
+  background-size:100% 1px;background-repeat:no-repeat;background-position:0 100%;
+  transition:background-size 200ms var(--ease),color 160ms var(--ease)}
+.up-t a:hover{color:#fff;background-image:linear-gradient(var(--accent),var(--accent))}
+.up-d{font-size:14px;color:var(--ink-3);margin-top:5px;max-width:58ch}
+
+/* ---------- SCHEDULE CARD ---------- */
+/* flat two-column, both sides top-aligned — no card, no divider on desktop */
+.sched{display:grid;grid-template-columns:minmax(0,44%) 1fr;gap:34px;align-items:start}
+.sched-list{display:flex;flex-direction:column}
+.sched-item{display:flex;gap:14px;align-items:baseline;width:100%;text-align:left;
+  padding:7px 12px;margin:0 -12px;border:0;border-radius:8px;background:none;font:inherit;
+  color:var(--ink-2);cursor:pointer;transition:background 160ms var(--ease)}
+.sched-item:hover{background:rgba(255,255,255,.045)}
+.sched-item.is-active{background:rgba(255,255,255,.06)}
+.sched-time{font-family:var(--mono);font-size:13px;color:var(--ink-4);flex:0 0 auto;
+  min-width:4em;font-variant-numeric:tabular-nums}
+.sched-item.is-active .sched-time{color:var(--accent)}
+.sched-ev{font-size:15px;font-weight:500;color:var(--ink)}
+.sched-div{display:none}
+.sched-detail{display:flex;flex-direction:column;gap:22px;padding-top:5px}
+.sched-badge{align-self:flex-end}
+.sched-detail .dt{font-size:15px;font-weight:500;color:var(--ink)}
+.sched-detail .dd{font-size:14px;color:var(--ink-3);margin-top:6px;max-width:46ch}
+.sched-detail .dd a{color:var(--ink-3);text-decoration:underline;text-decoration-color:var(--hairline)}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink-4);margin-top:10px;
+  font-variant-numeric:tabular-nums}
+.count b{color:var(--ink-2);font-weight:500}
+
+/* ---------- READING ---------- */
+.reads{display:flex;flex-direction:column;gap:26px}
+.read{display:block;text-decoration:none}
+.read .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-4)}
+.read .rt{font-size:16px;color:var(--ink-2);font-weight:500;margin-top:6px;
+  transition:color 160ms var(--ease)}
+.read:hover .rt{color:#fff}
+.read .rd{font-size:14px;color:var(--ink-3);margin-top:4px;max-width:58ch}
+
+/* ---------- STAR BADGE ---------- */
+.star{--rot:-5deg;--rot-h:-12deg;
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:118px;height:118px;border:0;cursor:pointer;flex:0 0 auto;overflow:hidden;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.28));
+  clip-path:polygon(50% 0,60.4% 11.4%,75% 6.7%,78.3% 21.7%,93.3% 25%,88.6% 39.6%,100% 50%,88.6% 60.4%,93.3% 75%,78.3% 78.3%,75% 93.3%,60.4% 88.6%,50% 100%,39.6% 88.6%,25% 93.3%,21.7% 78.3%,6.7% 75%,11.4% 60.4%,0 50%,11.4% 39.6%,6.7% 25%,21.7% 21.7%,25% 6.7%,39.6% 11.4%);
+  background:var(--accent);color:var(--accent-ink);
+  transform:rotate(var(--rot));transition:transform .3s var(--ease) .15s,filter .3s var(--ease) .15s}
+.star--prep{--rot:5deg;--rot-h:12deg}
+.star:hover{transform:rotate(var(--rot-h)) scale(1.03);
+  transition:transform .2s var(--ease),filter .2s var(--ease);
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.3))}
+.star::before{content:"";position:absolute;top:-20%;left:-120%;width:110%;height:140%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.1) 30%,
+    rgba(255,200,220,.2) 38%,rgba(200,220,255,.25) 46%,rgba(220,255,220,.2) 54%,
+    rgba(255,240,200,.15) 62%,rgba(255,255,255,.1) 70%,transparent 80%);
+  transform:skewX(-15deg);opacity:0;pointer-events:none;z-index:1;transition:opacity .2s ease}
+.star:hover::before{opacity:1;animation:prismatic-shine .6s ease-out forwards}
+@keyframes prismatic-shine{0%{left:-120%}100%{left:140%}}
+.star-txt{position:relative;z-index:2;font-family:var(--serif);font-style:italic;font-size:20px;
+  line-height:1.18;text-align:center;max-width:88px;transform:rotate(var(--rot))}
+.star-arrow{display:inline-block;font-family:var(--sans);font-style:normal;font-size:.8em;
+  opacity:.6;transition:opacity .2s ease}
+.star:hover .star-arrow{opacity:1}
+.badgewrap{position:relative}
+
+/* shared star tooltip popover */
+.startip{position:fixed;z-index:80;width:290px;background:var(--card);
+  border:1px solid var(--hairline);border-radius:10px;padding:11px 13px;
+  box-shadow:0 12px 34px rgba(0,0,0,.5);pointer-events:none;opacity:0;
+  transform:translateY(6px) scale(.97);transition:opacity 170ms var(--ease),transform 240ms var(--spring)}
+.startip[aria-hidden="false"]{opacity:1;transform:translateY(0) scale(1)}
+.startip-head{display:flex;align-items:center;gap:7px;color:var(--ink);
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.startip-head svg{width:13px;height:13px;flex:0 0 auto;fill:var(--accent)}
+.startip-body{margin-top:7px;font-size:12px;line-height:1.5;color:var(--ink-3)}
+
+.learned{margin-top:104px;padding-top:28px;border-top:1px solid var(--hairline)}
+.learned-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-4);margin:0 0 16px}
+.learned-list{margin:0;display:grid;gap:14px}
+.learned-row{display:grid;grid-template-columns:82px 1fr;gap:16px;align-items:baseline}
+.learned-kind{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-4)}
+/* A rule is the only kind that changed behaviour today — the others are the
+   agent thinking out loud. */
+.learned-kind--rule{color:var(--accent)}
+.learned-text{margin:0;font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink-2)}
+.learned-why{display:block;color:var(--ink-4);font-size:13px;margin-top:3px}
+
+/* ---------- FOOTER ---------- */
+footer{margin-top:96px;min-height:315px;position:relative;text-align:center;overflow:hidden;
+  isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:clamp(72px,12vw,120px) 48px 40px;
+  /* Full-bleed out of whatever column holds it. Standalone, that column is the
+     page; on project-doc's Today tab it is the panel, which is why removing
+     `.wrap` was not enough. `50%` resolves against the container and `50vw`
+     against the window, so a centred ancestor of any width lands the edge at 0.
+     The halftone is `inset:0` inside this, and `overflow:hidden` still clips the
+     blurred fade. */
+  width:100vw;margin-inline:calc(50% - 50vw)}
+.foot-fade{position:absolute;top:clamp(48px,8vw,96px);left:50%;transform:translateX(-50%);
+  width:min(938px,82%);height:168px;background:var(--page);filter:blur(100px);
+  pointer-events:none;z-index:0}
+.foot-halftone{position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-color:var(--page);
+  /* Warm, not white: the hero is a dusk painting and a neutral dot field reads
+     blue against it. */
+  background-image:radial-gradient(circle,rgba(255,236,200,.22) .85px,transparent .85px);
+  background-size:5px 5px;
+  /* One mask, vertical only. The ellipse this used to intersect with pinched
+     the field to ~90% width and cut it off at the corners; the dots run the
+     full width now and fade upward alone. */
+  mask-image:linear-gradient(to top,#000 0%,transparent 55%);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 55%)}
+.foot-inner{position:relative;z-index:2}
+.foot-credit{font-family:var(--serif);font-style:normal;font-size:clamp(18px,1.6vw,23px);
+  color:var(--ink-3);display:inline-flex;align-items:center;flex-wrap:wrap;
+  justify-content:center;gap:4.5px;max-width:52ch;letter-spacing:-.01em;line-height:1.55}
+.foot-credit em{font-style:italic;color:var(--ink-2)}
+.fsrc{display:inline-flex;align-items:center;gap:5px;font-family:inherit;font-style:normal;
+  font-size:.86em;color:var(--ink-2);text-decoration:none;transition:opacity 160ms var(--ease)}
+.fsrc:hover{opacity:.65}
+.fsrc svg{width:15px;height:15px;transform:rotate(var(--tilt,0deg));
+  transition:transform 200ms var(--spring)}
+.fsrc:hover svg{transform:rotate(var(--htilt,0deg)) scale(1.12)}
+
+.rise{opacity:0;transform:translateY(8px)}
+.rise.in{opacity:1;transform:none;transition:opacity 240ms var(--ease),transform 240ms var(--ease)}
+
+@media (max-width:680px){
+  .hero-edge{display:none}
+  .wrap{padding:0 22px}
+  footer{padding-inline:22px}
+  .learned-row{grid-template-columns:1fr;gap:4px}
+  .frame,.underhero,.herofig{width:100%}
+  .title .big{font-size:64px}
+  .title .the{font-size:22px;transform:translate(-52px,10px)}
+  .underhero{flex-direction:column;gap:10px}
+  .credit{text-align:left;max-width:none}
+  section{margin-top:56px}
+  .grid{grid-template-columns:1fr;gap:20px}
+  .side{position:static}
+  .lead{max-width:60ch}
+  .feature{padding:30px 24px 34px}
+  .feature .badgewrap{bottom:auto;top:-22px;left:auto;right:16px}
+  .sched{grid-template-columns:1fr}
+  .sched-div{height:1px}
+  .sched-detail{flex-direction:column}
+  .star{width:96px;height:96px}
+  .startip{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .rise{opacity:1;transform:none}
+}
+
+/* {COPY-PROMPT} — "start working" on a to-do.
+   The .star badge offers a prompt for the day; this offers one for a single
+   task, and hands the reader a running start instead of a link they still have
+   to turn into a question. Same data-prompt contract, same copy ladder in
+   shell.js, same prismatic sheen — it is .star at row scale.
+   Absolutely positioned in .item (which is already position:relative), so the
+   description reserves room for it rather than reflowing on hover. */
+#todos .item .d{padding-right:104px}
+.copyp{--rot:-3.5deg;
+  position:absolute;right:0;bottom:0;overflow:hidden;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-4);background:var(--card);border:1px solid var(--hairline);border-radius:12px;
+  padding:7px 12px;line-height:1.3;cursor:pointer;white-space:nowrap;
+  opacity:0;transform:translateY(5px) rotate(calc(var(--rot) * 2)) scale(.9);
+  transform-origin:100% 100%;
+  transition:opacity 150ms var(--ease),transform 380ms var(--spring),
+    color 160ms var(--ease),border-color 160ms var(--ease),box-shadow 200ms var(--ease)}
+/* it appears on approach and on focus — never hover-only, or a keyboard reader
+   never learns it is there */
+#todos .item:hover .copyp,.copyp:focus-visible{opacity:1;transform:rotate(var(--rot))}
+.copyp:hover,.copyp:focus-visible{color:var(--ink);border-color:var(--ink-4);
+  box-shadow:0 2px 10px rgba(0,0,0,.35)}
+#todos .item:hover .copyp:hover{transform:rotate(0deg) translateY(-2px) scale(1.05)}
+.copyp:active{transform:rotate(0deg) translateY(0) scale(.97);transition-duration:90ms}
+.copyp::before{content:"";position:absolute;top:-30%;left:-130%;width:90%;height:160%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.06) 34%,
+    rgba(255,200,220,.14) 44%,rgba(200,220,255,.16) 52%,rgba(220,255,220,.12) 60%,
+    rgba(255,255,255,.06) 72%,transparent 84%);
+  transform:skewX(-15deg);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.copyp:hover::before{opacity:1;animation:prismatic-shine .62s ease-out forwards}
+.copyp-t{position:relative;z-index:2;text-align:left}
+.copyp svg{width:12px;height:12px;flex:0 0 auto;fill:currentColor;position:relative;z-index:2;
+  transition:transform 420ms var(--spring)}
+.copyp:hover svg{transform:rotate(18deg) scale(1.22)}
+/* the label pops when it flips to "copied" */
+.copyp.is-copied{color:var(--ink);border-color:var(--ink-4)}
+.copyp.is-copied .copyp-t{animation:copyp-pop 420ms var(--spring) both}
+.copyp.is-copied svg{transform:rotate(0) scale(1.3)}
+@keyframes copyp-pop{0%{transform:scale(.6) translateY(3px);opacity:0}
+  100%{transform:scale(1) translateY(0);opacity:1}}
+/* a finished task is not one you start — the offer withdraws itself */
+#todos .item:has(input:checked) .copyp{opacity:0;pointer-events:none}
+/* no hover to reveal it on touch, and no hover on a printed page */
+@media (hover:none){.copyp{opacity:1;transform:rotate(var(--rot))}}
+@media print{.copyp{opacity:1;transform:rotate(var(--rot))}}
+@media (prefers-reduced-motion:reduce){
+  .copyp,#todos .item:hover .copyp,#todos .item:hover .copyp:hover{transform:none;
+    transition:opacity 150ms var(--ease)}
+  .copyp::before{display:none}
+  .copyp svg,.copyp.is-copied .copyp-t{animation:none;transition:none;transform:none}}

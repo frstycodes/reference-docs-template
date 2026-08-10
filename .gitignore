@@ -1,0 +1,29 @@
+# working copies the doc skill leaves behind — the record lives in git history
+*.bak
+*.bak.*
+
+# the app's dependencies and its dev-server output
+node_modules/
+.vite/
+
+# Raw build output at any depth. What ships for the standalone brief is the
+# copy vendored into daily-brief/references/, which IS tracked; the living
+# document is built from source per document and ships nothing from here.
+dist/
+dist-ssr/
+dist-brief/
+dist-brief-ssr/
+
+# `typecheck.mjs` writes this to point `@external` at one document, then
+# removes it; it survives only a killed run.
+tsconfig.project.json
+
+# the design detector's dedup cache — the config beside it is tracked
+**/.impeccable/hook.cache.json
+
+# Built documents. The published Artifact is the delivery and `__external/` is
+# the state — a file here is neither, just the last thing a build produced.
+.ignored/
+
+# SDD scratch — briefs, review packages and reports quote private material verbatim.
+.superpowers/

@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "var(--spring)",
+        "createdAt": "2026-08-10T06:52:34.606Z",
+        "reason": "the chip wobble is deliberate, and quiet mode already removes it"
+      }
+    ]
+  }
+}

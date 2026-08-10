@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The living document</title>
+    <!-- Mirrors the published shell: the no-JS nav must not flash before the
+         app boots. In the Artifact this line is inlined by assemble.mjs. -->
+    <script>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

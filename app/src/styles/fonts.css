@@ -1,0 +1,41 @@
+/* The two faces `shell.css` has always asked for and never got.
+ *
+ * The original stylesheet opened with an @import of Google Fonts, which the
+ * Artifact's CSP blocks — so every published document has rendered in the
+ * -apple-system / ui-monospace fallbacks. Fontsource ships the woff2 as an npm
+ * package, and `assetsInlineLimit` is set high enough that Vite inlines them as
+ * data: URIs, so the fonts become part of the single published file and no
+ * request is made.
+ *
+ * LATIN SUBSET ONLY, deliberately. Fontsource's own `wght.css` pulls cyrillic,
+ * greek, vietnamese and latin-ext as well — five extra faces the document has
+ * no use for, at several times the weight. Latin normal is 25 KB + 40 KB, which
+ * is about 87 KB once base64 inflates it.
+ *
+ * The family names match the tokens in `shell.css` exactly (`Manrope`, not
+ * Fontsource's `Manrope Variable`) so the ported stylesheet stays byte-faithful
+ * and simply starts resolving.
+ *
+ * `Exposure`, the serif display face, is not here: it is a commercial font with
+ * no Fontsource package, so `--serif` still falls back to Georgia. That is the
+ * one part of the type spec this cannot fix without a licensed file.
+ *
+ * No italic mono — nothing in either surface sets one. */
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

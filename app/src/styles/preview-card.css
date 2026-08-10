@@ -1,0 +1,30 @@
+/* The adapter between Base UI's PreviewCard and the ported `cite.css`.
+ *
+ * `cite.css` was written for a card that placed itself: one reused element,
+ * `position: fixed`, with JS computing top/left and writing `--cprev-origin`
+ * after a flip. Base UI's Positioner does that job now, so the two disagree in
+ * exactly two places. Everything else — the surface, the spring, the -2deg
+ * entry and the +0.7deg overshoot — is left alone, because that motion is the
+ * point of the component.
+ *
+ * The reveal itself needs nothing here: the Popup carries `aria-hidden="false"`
+ * so `cite.css`'s own `.cprev[aria-hidden="false"]` rule fires unchanged, with
+ * its `cprev-pop` animation. Base UI mounts the Popup only while open, so the
+ * attribute is never a lie. */
+
+/* The Positioner is the fixed element now; the card is just its child. */
+.cprev {
+  position: static;
+  /* Base UI publishes the flip-corrected origin the old JS used to write. */
+  --cprev-origin: var(--transform-origin, 50% 100%);
+}
+
+/* Same two adjustments for the brief's shared prompt popover, which `shell.js`
+ * also placed by hand — and reparented to <body>, because `position: fixed`
+ * resolves against the nearest transformed ancestor and this tooltip lives
+ * inside project-doc's animated panel. Base UI's Portal solves that
+ * structurally, so the reparenting is gone rather than reimplemented. */
+.startip {
+  position: static;
+  transform-origin: var(--transform-origin, 50% 100%);
+}

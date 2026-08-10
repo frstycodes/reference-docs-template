@@ -1,0 +1,49 @@
+{
+  "project": "Meridian",
+  "tagline": "The living document — everything that happened, and where you stand.",
+  "timezone": "Europe/Lisbon",
+  "locale": "en-GB",
+  "you": {
+    "name": "Ana Duarte",
+    "role": "Platform — streaming and replay",
+    "trackerAssignee": "ana",
+    "lane": {
+      "windowUnit": "week",
+      "windowColumns": 12,
+      "windowStart": "2026-06-01"
+    }
+  },
+  "sources": {
+    "slack": {
+      "channels": [{ "id": "C07MERIDIAN", "name": "meridian" }],
+      "includeThreads": true
+    },
+    "github": {
+      "repo": "northwind/meridian",
+      "branches": ["main"],
+      "ignoreAuthors": ["dependabot[bot]"]
+    },
+    "gmail": { "query": "subject:meridian", "enabled": true },
+    "calendar": { "match": "meridian|pilot", "calendarIds": ["primary"] },
+    "tracker": { "kind": "linear", "team": "MER" },
+    "vercel": { "project": "northwind-web" }
+  },
+  "brief": {
+    "scope": "project",
+    "slackChannels": ["C07MERIDIAN"],
+    "githubRepo": "northwind/meridian"
+  },
+  "allowlist": [
+    "github.com",
+    "avatars.githubusercontent.com",
+    "linear.app",
+    "slack.com",
+    "northwind.slack.com",
+    "docs.google.com",
+    "drive.google.com",
+    "mail.google.com",
+    "calendar.google.com",
+    "meet.google.com",
+    "vercel.com"
+  ]
+}

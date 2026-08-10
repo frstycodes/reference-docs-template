@@ -1,0 +1,307 @@
+{
+  "meta": {
+    "date": "7 Aug 2026",
+    "dateIso": "2026-08-07",
+    "weekday": "Friday",
+    "timezone": "Europe/Lisbon",
+    "scope": "project"
+  },
+  "hero": {
+    "art": {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MDAgNTYwJz48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9J3MnIHgxPScwJyB5MT0nMCcgeDI9JzAnIHkyPScxJz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyYjJmM2EnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyM4YTZiNGEnLz48L2xpbmVhckdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0nbScgY3g9Jy42OCcgY3k9Jy4yNCcgcj0nLjE2Jz48c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyNmZmU5YTgnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyNmZmU5YTgnIHN0b3Atb3BhY2l0eT0nMCcvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSc4MDAnIGhlaWdodD0nNTYwJyBmaWxsPSd1cmwoI3MpJy8+PGNpcmNsZSBjeD0nNTQ0JyBjeT0nMTM0JyByPScxNTAnIGZpbGw9J3VybCgjbSknLz48Y2lyY2xlIGN4PSc1NDQnIGN5PScxMzQnIHI9JzM0JyBmaWxsPScjZjZlN2JkJy8+PHBhdGggZD0nTTAgMzkyIEwxNTAgMzAwIEwyNjggMzcyIEw0MDAgMjY4IEw1NDYgMzU4IEw2OTAgMjg2IEw4MDAgMzQwIEw4MDAgNTYwIEwwIDU2MCBaJyBmaWxsPScjMjAyMjJjJyBvcGFjaXR5PScuOTInLz48cGF0aCBkPSdNMCA0NTIgTDE4MiAzOTYgTDM0MCA0NDggTDUyMCAzOTIgTDcwMCA0NDYgTDgwMCA0MTQgTDgwMCA1NjAgTDAgNTYwIFonIGZpbGw9JyMxNTE2MWQnLz48ZyBmaWxsPScjMGUwZjE0Jz48cmVjdCB4PSc5NicgeT0nNDcwJyB3aWR0aD0nNTgnIGhlaWdodD0nOTAnLz48cmVjdCB4PScxNjgnIHk9JzQ5NCcgd2lkdGg9JzQyJyBoZWlnaHQ9JzY2Jy8+PHJlY3QgeD0nNTk2JyB5PSc0ODYnIHdpZHRoPSc2NicgaGVpZ2h0PSc3NCcvPjwvZz48ZyBzdHJva2U9JyNmZmU1MDEnIHN0cm9rZS13aWR0aD0nMycgb3BhY2l0eT0nLjg1Jz48cGF0aCBkPSdNMTEyIDQ3MCBMMTEyIDQzNicvPjxwYXRoIGQ9J002MjIgNDg2IEw2MjIgNDUyJy8+PC9nPjwvc3ZnPg==",
+      "alt": "A valley at dusk under a low moon, two lit windows in the dark below",
+      "credit": "Evening on the Ridge, after Ana Duarte, 2026. gouache on paper"
+    },
+    "blurb": "Nine clean days and counting, which is the good news. The bad news is a signature, and it is not one you can write."
+  },
+  "feature": {
+    "topic": "Chase the two unsigned DPAs before the replay UI",
+    "prompt": {
+      "head": "Start a chat about this",
+      "aria": "Copy a prompt about chasing the unsigned DPAs",
+      "prompt": "I am the frontend contractor on northwind/meridian. Two of the four pilot tenants have not signed the data-processing addendum and nobody has chased legal since 28 July — this is the most likely cause of a slipped 21 August pilot. Draft a short message to Ana asking who owns the chase, naming both tenants and the date it was last touched. Keep it to four sentences and give me the message to paste, not a summary of it."
+    },
+    "body": [
+      {
+        "t": "text",
+        "text": "The replay UI is the work you want to do, but it is not the thing that will slip the pilot. Two tenants still have not signed the "
+      },
+      {
+        "t": "b",
+        "text": "data-processing addendum"
+      },
+      {
+        "t": "text",
+        "text": ", and the thread has been untouched since 28 July. Ask "
+      },
+      {
+        "t": "link",
+        "text": "Ana",
+        "href": "https://northwind.slack.com/archives/C07MERIDIAN"
+      },
+      {
+        "t": "text",
+        "text": " who owns the chase before you open the editor. "
+      },
+      {
+        "t": "people",
+        "people": [
+          {
+            "name": "Ana Duarte",
+            "initial": "A"
+          },
+          {
+            "name": "Kofi Boateng",
+            "initial": "K"
+          }
+        ]
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "todos",
+      "eyebrow": "WAITING ON YOU",
+      "title": "Three things",
+      "lead": "Two are yours; the third only needs a nudge.",
+      "kind": "todos",
+      "items": [
+        {
+          "id": "t1",
+          "title": "Scope the dead-letter replay UI",
+          "href": "https://linear.app/northwind/issue/MER-431",
+          "tag": "Blocks 3",
+          "d": "Three topic migrations are waiting on this and it is still unstarted. The open question is whether it handles poison messages or only transient failures.",
+          "rot": -3.5,
+          "cites": [
+            {
+              "key": "mer-431",
+              "kind": "tracker",
+              "raw": "MER-431",
+              "url": "https://linear.app/northwind/issue/MER-431"
+            }
+          ],
+          "people": [
+            {
+              "name": "Rui Alves",
+              "initial": "R"
+            }
+          ],
+          "prompt": {
+            "head": "Start a chat about this",
+            "aria": "Copy a prompt about scoping the replay UI",
+            "prompt": "I am the frontend contractor on northwind/meridian, picking up MER-431 — the dead-letter replay operator surface. It needs a list of dead-lettered events, the failure reason, the event body, and a replay action that is safe to press twice. Rui has not answered whether it must handle poison messages or only transient failures, which changes the scope by about a week. Draft the two options as a short fork I can put to him, then sketch the component layout for the narrower one. Verify with pnpm check-types."
+          }
+        },
+        {
+          "id": "t2",
+          "title": "Answer the 14-clean-day question",
+          "d": "Priya asked whether the counter resets on any mismatch or only an unexplained one. Nobody wrote the rule down and the 3 Aug reset was an outage, not a correctness bug.",
+          "rot": 2,
+          "cites": [
+            {
+              "key": "slack-clean",
+              "kind": "slack",
+              "raw": "#meridian",
+              "url": "https://northwind.slack.com/archives/C07MERIDIAN"
+            }
+          ],
+          "prompt": {
+            "head": "Start a chat about this",
+            "aria": "Copy a prompt about the clean-day counter rule",
+            "prompt": "I am on northwind/meridian. The batch job is deleted after 14 consecutive clean reconciliation days, but nobody wrote down whether the counter resets on any mismatch or only an unexplained one — the 3 August reset was a schema-registry outage, not a correctness bug. Write the rule as two sentences we can paste into the Linear milestone, covering both cases, and say which reading is more conservative and why."
+          }
+        },
+        {
+          "id": "t3",
+          "title": "Re-run the backfill test on the sync path",
+          "href": "https://github.com/northwind/meridian/pull/338",
+          "d": "The 6 Aug run is what reversed the replay decision. Worth confirming the synchronous path holds under the same rebalance.",
+          "rot": -1.2,
+          "cites": [
+            {
+              "key": "pr-338",
+              "kind": "pr",
+              "raw": "PR #338",
+              "url": "https://github.com/northwind/meridian/pull/338",
+              "preview": true
+            }
+          ],
+          "prompt": {
+            "head": "Start a chat about this",
+            "aria": "Copy a prompt about re-running the backfill test",
+            "prompt": "I am on northwind/meridian. On 6 August a backfill test replayed four hours of the invoices topic while a consumer joined the group, and seven events committed out of order — that reversed the replay decision back to synchronous on 7 August. Help me re-run the same test against the synchronous path and assert ordering holds under rebalance. Give me the commands to run and what a pass looks like, then the two-line summary to post in #meridian."
+          }
+        }
+      ]
+    },
+    {
+      "id": "sched",
+      "eyebrow": "TODAY",
+      "title": "One thing in the diary",
+      "kind": "schedule",
+      "items": [
+        {
+          "time": "4:30p",
+          "event": "Pilot readiness review",
+          "dt": "Pilot readiness review — 4:30 PM – 5:15 PM",
+          "startIso": "2026-08-07T16:30:00+01:00",
+          "endIso": "2026-08-07T17:15:00+01:00",
+          "dd": [
+            {
+              "t": "text",
+              "text": "Ana, Priya and Kofi. Bring the MER-431 scope fork and the DPA status. "
+            },
+            {
+              "t": "link",
+              "text": "meet.google.com/mer-idn-rev",
+              "href": "https://meet.google.com/mer-idn-rev"
+            }
+          ],
+          "prompt": {
+            "head": "Start a chat to prep for this meeting",
+            "aria": "Copy a prompt to prep for the pilot readiness review",
+            "prompt": "I am the frontend contractor on northwind/meridian. In the pilot readiness review I need to report on MER-431 (dead-letter replay UI, unstarted, blocking three topic migrations) and flag that two of four pilot tenants have not signed the DPA. Prep me: three bullets on where the engineering half stands, one sentence naming the legal blocker and who I think owns it, and the one question I should leave the room with an answer to."
+          }
+        },
+        {
+          "time": "6:00p",
+          "event": "Reconciliation check",
+          "dt": "Reconciliation check — 6:00 PM – 6:15 PM",
+          "startIso": "2026-08-07T18:00:00+01:00",
+          "endIso": "2026-08-07T18:15:00+01:00",
+          "dd": [
+            {
+              "t": "text",
+              "text": "Day ten, if it is clean. Four short of deleting the batch job."
+            }
+          ],
+          "prompt": {
+            "head": "Start a chat to prep for this meeting",
+            "aria": "Copy a prompt to prep for the reconciliation check",
+            "prompt": "I am the frontend contractor on northwind/meridian. The reconciliation check is on day ten of a clean run, four short of deleting the nightly batch job. Prep me: what I should look at to be confident day ten is genuinely clean rather than quietly not running, what the rollback looks like if day eleven breaks, and who has to agree before the job comes out."
+          }
+        }
+      ]
+    },
+    {
+      "id": "ups",
+      "eyebrow": "WHILE YOU WERE OUT",
+      "title": "Two moved",
+      "kind": "updates",
+      "items": [
+        {
+          "title": "Replay is synchronous again",
+          "href": "https://northwind.slack.com/archives/C07MERIDIAN",
+          "tag": "Decision",
+          "d": [
+            {
+              "t": "text",
+              "text": "Ana reversed the 24 July call after the backfill test lost ordering under partition rebalance. The async path is "
+            },
+            {
+              "t": "b",
+              "text": "parked, not deleted"
+            },
+            {
+              "t": "text",
+              "text": " — behind a sequencer nobody is assigned to. "
+            }
+          ],
+          "cites": [
+            {
+              "key": "slack-replay-rev",
+              "kind": "slack",
+              "raw": "#meridian",
+              "url": "https://northwind.slack.com/archives/C07MERIDIAN/p1754582400",
+              "preview": true
+            }
+          ],
+          "people": [
+            {
+              "name": "Ana Duarte",
+              "initial": "A"
+            }
+          ]
+        },
+        {
+          "title": "Consumer lag dashboards merged",
+          "href": "https://github.com/northwind/meridian/pull/338",
+          "tag": "Shipped",
+          "d": [
+            {
+              "t": "text",
+              "text": "Three of fourteen topics have per-topic lag with alerting above 60s. The other eleven are a copy-paste job nobody has scheduled. "
+            }
+          ],
+          "cites": [
+            {
+              "key": "pr-338",
+              "kind": "pr",
+              "raw": "PR #338",
+              "url": "https://github.com/northwind/meridian/pull/338",
+              "preview": true
+            }
+          ],
+          "people": [
+            {
+              "name": "Kofi Boateng",
+              "initial": "K"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reads",
+      "eyebrow": "IF YOU HAVE TEN MINUTES",
+      "title": "One to read",
+      "kind": "reads",
+      "items": [
+        {
+          "kicker": "RUNBOOK",
+          "title": "Meridian migration runbook",
+          "url": "https://docs.google.com/document/d/meridian-runbook",
+          "icon": "i-gdoc",
+          "desc": "Kofi added the schema-registry vendor status page after the 3 Aug outage. You are the one who will be on call for the pilot, so the new section is yours to know."
+        }
+      ]
+    }
+  ],
+  "learned": [
+    {
+      "kind": "rule",
+      "text": "Dependabot PRs are never to-dos.",
+      "why": "Eleven listed over three weeks, none actioned."
+    },
+    {
+      "kind": "watching",
+      "text": "\"Review PR #338\" survives every morning while other work ships.",
+      "why": "Seen 2 of 3 mornings."
+    }
+  ],
+  "footer": {
+    "sources": [
+      {
+        "name": "Slack",
+        "icon": "i-slack",
+        "url": "https://app.slack.com/client"
+      },
+      {
+        "name": "GitHub",
+        "icon": "i-github",
+        "url": "https://github.com/notifications"
+      },
+      {
+        "name": "Linear",
+        "icon": "i-bead",
+        "url": "https://linear.app/northwind"
+      },
+      {
+        "name": "Drive",
+        "icon": "i-drive",
+        "url": "https://drive.google.com/"
+      }
+    ]
+  }
+}

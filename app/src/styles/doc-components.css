@@ -1,0 +1,847 @@
+/* Ported verbatim from project-doc/references/doc-components.css — this
+   document's own grammar, and the only place --alert is defined. */
+/* project-doc components — LOCKED.
+   Loaded AFTER daily-brief/references/shell.css, which owns the token layer.
+   Colour, font and easing come only from:
+   --page --card --hairline --ink --ink-2 --ink-3 --ink-4 --accent --accent-ink
+   --alert --ease --spring --serif --sans --mono
+   No raw colour literals. Washes are color-mix() over the tokens.
+   (`transparent` and `currentColor` are not colour choices and are exempt.)
+
+   --alert is this file's ONE addition to the token layer, defined in the :root
+   block below because shell.css belongs to the sibling daily-brief skill and is
+   never edited. It is #FF6B5A, and it means exactly one thing: THIS NEEDS A
+   RESPONSE — at risk, blocked, incident. It is never a category colour, never a
+   second accent, and never the only channel: the icon and the word stay.
+     #FF6B5A on --page #111111 ....... 6.75:1  (AA text, AA graphical)
+     #FF6B5A on --card #1D1D1D ....... 6.02:1  (AA text, AA graphical)
+     --accent-ink #111111 on #FF6B5A . 6.75:1  (AA text, for filled pills/tiles)
+   The hue sits ~5deg against --accent's ~57deg: same warmth, unmistakably not
+   the same signal, and legible to red-green colour blindness because the two
+   also differ ~40% in lightness.
+
+   LOUDNESS LADDER — the reference document's six semantic colours
+   (accent / magenta / good / warn / crit / neutral) are re-encoded here as four
+   rungs of weight + border-style + ink level. The top rung has two colours and
+   they mean different things:
+     1a FILLED accent ... accent bg, --accent-ink text .... a choice was made (decision, pivot, new)
+     1b FILLED alert .... --alert bg, --accent-ink text ... it needs a response (at risk)
+     2 RULED ............ solid --alert border, --ink text  something broke or stalled (incident, blocked)
+     3 OUTLINED ......... solid --hairline border, --ink-2 . it exists and it landed (build, milestone, shipped)
+     4 GHOST ............ dashed --hairline, --ink-3/-4 .... ambient (meeting, in flight)
+   The ladder is never the only status channel, so every rung is always paired
+   with an icon and a word. Never rung-alone, never colour-alone.
+
+   TYPE POLICY
+     --serif  display only: section <h2>, the dial's project name, the What's New
+              run date. Never body text, never a label.
+     --mono   machine tokens only: PR numbers, bead ids, commit shas, <code>.
+              Class `.tok`. Dates, sources, labels and meta are --sans at small
+              size with letter-spacing.
+     --sans   everything else, including every big number.
+
+   AFFORDANCE POLICY
+     :hover, :active and `cursor: pointer` appear ONLY on a[href], button,
+     summary, input and [tabindex]. A static row, a tile that is not a filter, a
+     list item and a paragraph get no lift, no tint, no pointer. :focus-visible
+     stays on everything genuinely focusable — the ring is shell.css's, and this
+     file never removes it.
+*/
+
+:root {
+  /* the one hue this file adds — see the header note for its contrast figures */
+  --alert: #FF6B5A;
+}
+
+/* {UTILITY} */
+/* Every interaction in this document is `el.hidden = true`, so `hidden` has to
+   beat any component's own display rule. It used to lose: the timeline's
+   `.timeline > .tl-month > ol > li { display: grid }` (0,2,2) outranked
+   `.timeline li[hidden] { display: none }` (0,2,1), so filtered-out events kept
+   rendering and only the empty month clusters disappeared — which read as
+   "filtering works for rare types, not for milestone or decision". One
+   invariant, stated once, so no future selector can re-break it. There are
+   deliberately NO per-component [hidden] rules anywhere below — this line is
+   the only one, and adding a scoped copy is the defect it exists to prevent. */
+[hidden] { display: none !important; }
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+/* small tracked label — the replacement for every retired mono label */
+.lbl { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-4); }
+/* the one surviving mono idiom: a machine token */
+.tok { font-family: var(--mono); font-size: .92em; font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em; }
+
+/* {ICONS} — .ic-b carries its own brand fills, .ic-s is stroked currentColor */
+.ic { width: 1em; height: 1em; flex: 0 0 auto; display: inline-block; vertical-align: -.14em; }
+.ic-s { fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round; }
+
+/* {NO-JS NAV} — the degraded path. doc-shell.js adds .js to <html> and this
+   disappears; without JS every panel is visible and this is the jump list. */
+.nojs-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 26px 0 0; }
+.nojs-nav a { font-family: var(--sans); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-3); text-decoration: none;
+  border-bottom: 1px solid var(--hairline); }
+html.js .nojs-nav { display: none; }
+
+/* {DIAL} — the floating section dial, bottom right.
+   Replaces the masthead and the horizontal tablist both: it is the page's only
+   chrome, and it carries the document's identity (project name, updated-at)
+   inside the popover. Hidden without JS; the .nojs-nav above takes over. */
+.dial { display: none; }
+html.js .dial { display: block; position: fixed; z-index: 70;
+  right: calc(20px + env(safe-area-inset-right));
+  bottom: calc(20px + env(safe-area-inset-bottom)); }
+
+.dial-btn { display: flex; align-items: center; gap: 9px; font: inherit; cursor: pointer;
+  padding: 9px 15px 9px 13px; border-radius: 999px; border: 1px solid var(--hairline);
+  background: var(--card); color: var(--ink);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--page) 78%, transparent);
+  transition: border-color 160ms var(--ease), transform 160ms var(--ease); }
+.dial-btn:hover { border-color: var(--ink-4); }
+.dial-btn:active { transform: scale(.97); }
+.dial-btn .ic { width: 15px; height: 15px; color: var(--accent); }
+/* the current section, readable while closed */
+.dial-cur { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; white-space: nowrap; }
+.dial-caret { width: 11px; height: 11px; color: var(--ink-4);
+  transition: transform 200ms var(--spring); }
+.dial-btn[aria-expanded="true"] .dial-caret { transform: rotate(-90deg); }
+.dial-btn[aria-expanded="true"] { border-color: var(--accent); }
+
+.dial-pop { position: absolute; right: 0; bottom: calc(100% + 10px); width: 232px;
+  transform-origin: 100% 100%; background: var(--card);
+  border: 1px solid var(--hairline); border-radius: 14px; padding: 7px;
+  box-shadow: 0 18px 46px color-mix(in srgb, var(--page) 82%, transparent);
+  opacity: 0; transform: translateY(6px) scale(.96); pointer-events: none;
+  transition: opacity 140ms var(--ease), transform 220ms var(--spring); }
+.dial-pop[data-open="true"] { opacity: 1; transform: none; pointer-events: auto; }
+
+.dial-tab { display: flex; width: 100%; align-items: center; gap: 10px; font: inherit;
+  text-align: left; cursor: pointer; padding: 9px 11px; border: 0; border-radius: 9px;
+  background: none; color: var(--ink-3);
+  transition: background 140ms var(--ease), color 140ms var(--ease); }
+.dial-tab .ic { width: 15px; height: 15px; color: var(--ink-4);
+  transition: transform 240ms var(--spring), color 140ms var(--ease); }
+.dial-tab-t { font-size: 13px; font-weight: 500; letter-spacing: .01em; }
+.dial-tab:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink); }
+.dial-tab:hover .ic { transform: translateX(1px) scale(1.12); color: var(--ink-2); }
+.dial-tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+.dial-tab[aria-selected="true"] .ic { color: var(--accent-ink); }
+/* staggered entrance, one line at a time, set by doc-shell.js as --i */
+.dial-pop[data-open="true"] .dial-tab { animation: dial-item 260ms var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 26ms); }
+@keyframes dial-item { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+/* identity lives here now that the masthead is gone */
+.dial-id { margin: 7px 4px 3px; padding-top: 9px; border-top: 1px solid var(--hairline); }
+.dial-name { display: block; font-family: var(--serif); font-style: italic; font-size: 16px;
+  line-height: 1.15; color: var(--accent); }
+.dial-meta { display: block; margin-top: 4px; font-family: var(--sans); font-size: 10px;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-4); }
+
+/* {PANELS} — ship unhidden; doc-shell.js hides the inactive ones */
+.panel { display: block; }
+html.js .panel { animation: panel-in 260ms var(--ease) both; }
+@keyframes panel-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+/* the dial floats over the page; keep the last section clear of it */
+.panel > section.sec:last-of-type { padding-bottom: 96px; }
+
+/* {SECTION SHELL}
+   shell.css sets section{margin-top:104px}; inner sections sit tighter inside a panel */
+section.sec { margin-top: 0; padding-top: 54px; }
+section.sec:first-of-type { padding-top: 40px; }
+section.sec + section.sec { margin-top: 54px; border-top: 1px solid var(--hairline); }
+/* the doc's own eyebrow is sans — shell.css's mono eyebrow stays with the brief */
+.sec .eyebrow { font-family: var(--sans); font-size: 10px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4);
+  display: inline-flex; align-items: center; gap: 7px; }
+.sec .eyebrow .ic { width: 12px; height: 12px; color: var(--accent); }
+.sec > h2 { font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(28px, 4vw, 38px); line-height: 1.08; color: var(--ink);
+  margin-top: 12px; text-wrap: balance; }
+.sec h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin: 36px 0 10px;
+  display: flex; align-items: center; gap: 8px; }
+.sec h3 .ic { width: 14px; height: 14px; color: var(--ink-4); }
+.sec h4 { font-size: 14px; font-weight: 600; color: var(--ink-2); margin: 22px 0 6px; }
+.sec p { font-size: 15px; color: var(--ink-3); max-width: 66ch; margin-top: 12px; }
+/* the one line under the h2 that tells a returning reader whether to keep reading */
+.sec .sec-lead { font-size: 16px; color: var(--ink-2); max-width: 50ch; margin-top: 12px; }
+.sec p b, .sec p strong, .sec li strong { color: var(--ink); font-weight: 600; }
+.sec ul, .sec ol { margin: 12px 0 0; padding-left: 20px; max-width: 70ch; }
+.sec li { font-size: 15px; color: var(--ink-3); margin-bottom: 7px; }
+.sec a { color: var(--ink-2); text-decoration: underline;
+  text-decoration-color: var(--hairline); text-underline-offset: 3px;
+  transition: text-decoration-color 160ms var(--ease), color 160ms var(--ease); }
+.sec a:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.sec code { font-family: var(--mono); font-size: .85em; color: var(--ink-2);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  padding: .1em .38em; border-radius: 4px; }
+:target { scroll-margin-top: 40px; }
+/* "go to the section this changed" */
+.goto { display: inline-flex; align-items: center; gap: 5px; font-family: var(--sans);
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-4);
+  text-decoration: none; transition: color 160ms var(--ease); }
+.goto .ic { width: 12px; height: 12px; transition: transform 200ms var(--spring); }
+.sec a.goto { text-decoration: none; }
+.sec a.goto:hover { color: var(--accent); }
+.goto:hover .ic { transform: translateX(3px); }
+
+/* {CALLOUT} */
+.callout { background: var(--card); border-radius: 12px; padding: 16px 20px; margin-top: 18px;
+  max-width: 72ch; }
+/* long unbroken tokens (a URL, a slug) must wrap, not overflow the callout */
+.callout p { margin-top: 0; max-width: none; overflow-wrap: anywhere; }
+.callout p + p { margin-top: 10px; }
+/* rung 1 — the one that must be read. Subtle, not a slab of accent: a faint
+   accent wash and a hairline accent border carry the emphasis; the text stays on
+   the document's own ink ramp so it is legible, not shouting. */
+.callout.key { background: color-mix(in srgb, var(--accent) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent); }
+.callout.key p { color: var(--ink); font-size: 16px; font-weight: 500; }
+.callout.key a { color: var(--ink); text-decoration-color: var(--accent); }
+/* rung 2 — something is wrong */
+.callout.crit { background: none; border: 1px solid var(--ink-2); }
+.callout.crit p { color: var(--ink-2); }
+/* rung 4 — aside, softer than body */
+.callout.quiet { background: none; border: 1px dashed var(--hairline); }
+.callout.quiet p { color: var(--ink-4); font-size: 14px; }
+
+/* {PILL} — sans now, not mono; every pill is a word, not a token */
+.pill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--sans);
+  font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+  white-space: nowrap; padding: 2px 8px; border-radius: 3px; border: 1px solid transparent;
+  vertical-align: 1px; }
+.pill .ic { width: 11px; height: 11px; }
+/* rung 1 FILLED — a choice was made */
+.pill.decision { background: var(--accent); color: var(--accent-ink); }
+.pill.pivot { background: var(--accent); color: var(--accent-ink);
+  border: 1px dashed var(--accent-ink); }
+.pill.flag { background: var(--accent); color: var(--accent-ink); margin-left: 7px; }
+/* rung 1b FILLED alert — it needs a response */
+.pill.risk { background: var(--alert); color: var(--accent-ink); }
+/* rung 2 RULED — broke or stalled */
+.pill.incident { border-color: var(--alert); color: var(--alert); }
+.pill.blocked { border-color: var(--alert); color: var(--alert); }
+.pill.notstarted { border: 1px dotted var(--ink-2); color: var(--ink-2); }
+/* rung 3 OUTLINED — it exists, it landed */
+.pill.milestone { border-color: var(--hairline); color: var(--ink); }
+.pill.done { border-color: var(--hairline); color: var(--ink-2); }
+.pill.build { border-color: var(--hairline); color: var(--ink-2); }
+.pill.review { border-color: var(--hairline); color: var(--ink-2); }
+/* pull-request state, used by the citation preview card. Same ladder: merged
+   landed, closed did not, open exists, draft is ambient. */
+.pill.merged { background: var(--accent); color: var(--accent-ink); }
+.pill.open { border-color: var(--hairline); color: var(--ink); }
+.pill.closed { border-color: var(--alert); color: var(--alert); }
+.pill.draft { border: 1px dashed var(--hairline); color: var(--ink-4); }
+/* rung 4 GHOST — ambient */
+.pill.progress { border: 1px dashed var(--hairline); color: var(--ink-3); }
+.pill.meeting { border: 1px solid var(--hairline); color: var(--ink-4); }
+/* inferred, not read from a source — never silently blended with cited items */
+.pill.inferred { border: 1px dashed var(--ink-4); color: var(--ink-4);
+  text-transform: none; letter-spacing: .04em; font-weight: 500; }
+
+/* {WHATS NEW} — a dated spine, not cards.
+   ONE level of surface: the rail is the only structure. Runs hang off it; the
+   newest run is accent-noded and full-ink, older runs recede by type size and
+   ink level, never by being boxed inside a box. */
+.wn { position: relative; margin-top: 30px; padding-left: 26px; }
+.wn::before { content: ""; position: absolute; left: 4px; top: 10px; bottom: 10px;
+  width: 1px; background: var(--hairline); }
+.wn-run { position: relative; padding: 0 0 34px; }
+.wn-run::before { content: ""; position: absolute; left: -26px; top: 7px; width: 9px; height: 9px;
+  box-sizing: border-box; border-radius: 50%; border: 1px solid var(--ink-4);
+  background: var(--page); }
+.wn-run.is-latest::before { left: -28px; width: 13px; height: 13px; top: 5px;
+  background: var(--accent); border-color: var(--accent); }
+.wn-when { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 12px; }
+.wn-d { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .04em;
+  color: var(--ink-3); }
+.wn-run.is-latest .wn-d { font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 26px; letter-spacing: 0; color: var(--accent); }
+.wn-when .lbl { color: var(--ink-4); }
+.wn-bul { list-style: none; padding: 0; margin: 12px 0 0; max-width: 68ch; }
+.wn-bul > li { margin: 0 0 16px; padding: 0; font-size: 15px; }
+.wn-run:not(.is-latest) .wn-bul > li { font-size: 14px; }
+.wn-k { display: inline-flex; align-items: center; gap: 5px; margin-right: 9px;
+  font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; vertical-align: 1px; }
+.wn-k .ic { width: 11px; height: 11px; }
+.wn-x { display: inline; color: var(--ink-3); }
+.wn-x strong { color: var(--ink); font-weight: 600; }
+.wn-run:not(.is-latest) .wn-x strong { color: var(--ink-2); }
+.wn-m { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 7px; }
+/* the six kinds, on the loudness ladder, each with an icon so it is never weight-alone */
+.wn-k.dec { color: var(--accent-ink); background: var(--accent); padding: 2px 7px;
+  border-radius: 3px; }
+.wn-k.risk { color: var(--ink); }
+.wn-k.res { color: var(--ink-2); }
+.wn-k.add { color: var(--ink-2); }
+.wn-k.upd { color: var(--ink-3); }
+.wn-k.watch { color: var(--ink-4); }
+
+/* {TIMELINE} */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 22px; }
+.filters button { display: inline-flex; align-items: center; gap: 6px; font: inherit;
+  font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; padding: 6px 13px; border-radius: 999px;
+  border: 1px solid var(--hairline); background: none; color: var(--ink-4); cursor: pointer;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease), transform 140ms var(--ease); }
+.filters button:hover { color: var(--ink-2); border-color: var(--ink-4); }
+.filters button:active { transform: scale(.97); }
+.filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent);
+  color: var(--accent-ink); }
+.filters button .ic { width: 12px; height: 12px; }
+/* {SORT} — a single choice, so it does not borrow the filter chips' pressed
+   state. It pushes to the far end of the same row and reads as a control on
+   the list rather than a seventh kind to filter by; below the fold-width it
+   wraps under them and starts the line. */
+.filters-sort { display: inline-flex; align-items: center; gap: 2px;
+  margin-left: auto; padding: 2px; border: 1px solid var(--hairline);
+  border-radius: 999px; }
+.filters-sort > .ic { width: 11px; height: 11px; margin: 0 3px 0 5px;
+  color: var(--ink-4); transform: rotate(90deg); }
+.filters-sort button { font: inherit; font-family: var(--sans); font-size: 11px;
+  letter-spacing: .02em; color: var(--ink-4); background: none; border: 0;
+  border-radius: 999px; padding: 3px 9px; cursor: pointer;
+  transition: color 160ms var(--ease), background 160ms var(--ease); }
+.filters-sort button:hover { color: var(--ink-2); }
+.filters-sort button[aria-checked="true"] { color: var(--ink); background: var(--hairline); }
+@media (max-width: 620px) {
+  .filters-sort { margin-left: 0; }
+}
+
+/* activity strip — one bar per month, height = events that month.
+   --h is an integer 1..100 the generator computes; the text equivalent is the
+   month group each bar links to. */
+.tl-spark, .tl-spark-ax { display: grid; grid-auto-flow: column; grid-auto-columns: 34px;
+  justify-content: start; gap: 4px; padding: 0; margin: 22px 0 0; list-style: none;
+  max-width: none; overflow-x: auto; }
+.tl-spark { align-items: end; height: 56px; }
+.tl-spark > li { margin: 0; height: 100%; display: flex; align-items: flex-end; }
+.tl-spark a { display: block; width: 100%; height: calc(6px + (100% - 6px) * var(--h, 10) / 100);
+  border-radius: 4px 4px 2px 2px; background: color-mix(in srgb, var(--ink) 20%, transparent);
+  text-decoration: none; transition: background 160ms var(--ease); }
+.sec .tl-spark a { text-decoration: none; }
+.tl-spark a:hover, .tl-spark a:focus-visible { background: var(--accent); }
+.tl-spark-ax { margin-top: 7px; }
+.tl-spark-ax > span { text-align: center; }
+
+.sec .timeline { list-style: none; padding: 0; margin: 26px 0 0; position: relative;
+  max-width: none; }
+.timeline::before { content: ""; position: absolute; left: 88px; top: 4px; bottom: 4px;
+  width: 1px; background: var(--hairline); }
+/* month cluster — the rail carries the weight, the label sits on it */
+.tl-month { position: relative; margin: 0; padding: 0; list-style: none; }
+.tl-month > h3 { margin: 30px 0 10px; padding-left: 118px; font-family: var(--serif);
+  font-style: italic; font-weight: 400; font-size: 19px; color: var(--ink-2); display: block; }
+/* the month node is structure, not a type — it stays off the dot vocabulary so
+   it can never be mistaken for a "decision" */
+.tl-month > h3::before { content: ""; position: absolute; left: 84px; margin-top: 9px;
+  width: 9px; height: 9px; border-radius: 50%; background: var(--ink-4); }
+ /* `position: relative` is load-bearing, not tidiness: AnimatePresence's
+   popLayout absolutely-positions an exiting row, which resolves against the
+   nearest positioned ancestor. Without this that is `.tl-month`, and every
+   leaving row would jump up by the height of the month heading on its way
+   out. */
+.tl-month > ol { list-style: none; padding: 0; margin: 0; max-width: none;
+  position: relative; }
+.timeline > .tl-month > ol > li { display: grid; grid-template-columns: 74px 30px 1fr;
+  align-items: baseline; margin: 0; padding: 7px 0; }
+.timeline .t-date { font-family: var(--sans); font-size: 11px; font-weight: 500;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-4); text-align: right; }
+/* {TIMELINE DOTS} — the ONE definition, shared by the rail and the legend.
+   The legend's swatches are literal `.t-dot` elements carrying the same
+   `data-type`, so a dot and its key cannot drift apart: change a rule here and
+   both move. Geometry (size, ring, fill) lives on `.t-dot`; only the absolute
+   placement on the rail is scoped to `.timeline`. */
+.t-dot { position: relative; display: inline-block; width: 13px; height: 13px;
+  flex: 0 0 auto; }
+.t-dot::before { content: ""; position: absolute; inset: 0; border-radius: 50%;
+  box-sizing: border-box; border: 1.5px solid var(--ink-4); background: var(--page); }
+.timeline .t-dot { align-self: stretch; height: auto; }
+.timeline .t-dot::before { inset: auto; left: 8px; top: 5px; width: 13px; height: 13px; }
+/* typed dots, ladder order:
+   filled accent = a choice was made · alert ring = it needs a response ·
+   solid ink = it landed · hollow = ambient */
+[data-type="decision"] .t-dot::before { background: var(--accent); border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 24%, transparent); }
+[data-type="pivot"] .t-dot::before { border-color: var(--accent); border-style: dashed;
+  background: color-mix(in srgb, var(--accent) 18%, var(--page)); }
+[data-type="incident"] .t-dot::before { background: var(--alert); border-color: var(--alert);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--alert) 26%, transparent); }
+[data-type="milestone"] .t-dot::before { background: var(--ink); border-color: var(--ink); }
+[data-type="build"] .t-dot::before { background: var(--ink-4); border-color: var(--ink-4); }
+[data-type="meeting"] .t-dot::before { border-style: dotted; border-color: var(--ink-4);
+  background: var(--page); }
+/* no card — the body sits on the page ground, the rail does the containing.
+   No row hover: an event row is not clickable, and a tint that follows the
+   pointer across static text is a promise the row cannot keep. */
+.timeline .t-body { padding: 0 0 0 2px; }
+.timeline .t-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px 10px; }
+.timeline .t-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+.timeline .t-desc { font-size: 14px; color: var(--ink-3); margin-top: 3px; max-width: 60ch; }
+.timeline .t-src { margin-top: 6px; }
+@media (max-width: 620px) {
+  .timeline::before { left: 5px; }
+  .tl-month > h3 { padding-left: 30px; }
+  .tl-month > h3::before { left: 1px; }
+  .timeline > .tl-month > ol > li { grid-template-columns: 30px 1fr; }
+  .timeline .t-date { grid-column: 2; text-align: left; order: -1; padding: 0 0 3px; }
+  .timeline .t-dot { grid-row: 1 / span 2; }
+  .timeline .t-body { grid-column: 2; }
+}
+
+/* {TABLE} */
+.table-wrap { overflow-x: auto; margin-top: 20px; }
+.table-wrap table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.table-wrap th, .table-wrap td { text-align: left; padding: 10px 14px 10px 0; vertical-align: top;
+  border-bottom: 1px solid var(--hairline); }
+.table-wrap th { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-4); white-space: nowrap; }
+.table-wrap td { color: var(--ink-3); }
+.table-wrap td strong { color: var(--ink); font-weight: 600; }
+.table-wrap tr:last-child td { border-bottom: 0; }
+
+/* {GLOSSARY} — a scannable term grid with a letter rail and a filter */
+.gtools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.gsearch-wrap { position: relative; flex: 1 1 300px; max-width: 380px; }
+.gsearch-wrap .ic { position: absolute; left: 13px; top: 50%; margin-top: -7px;
+  width: 14px; height: 14px; color: var(--ink-4); pointer-events: none; }
+.gsearch { width: 100%; font: inherit; font-size: 14px; padding: 10px 14px 10px 36px;
+  border-radius: 999px; border: 1px solid var(--hairline); background: var(--card);
+  color: var(--ink); transition: border-color 160ms var(--ease); }
+.gsearch:hover, .gsearch:focus { border-color: var(--ink-4); }
+.gsearch::placeholder { color: var(--ink-4); }
+.galpha { display: flex; flex-wrap: wrap; gap: 2px; }
+.galpha button { font: inherit; font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase; width: 24px; height: 24px; padding: 0;
+  border: 0; border-radius: 6px; background: none; color: var(--ink-4); cursor: pointer;
+  transition: background 140ms var(--ease), color 140ms var(--ease); }
+.galpha button:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 8%, transparent);
+  color: var(--ink); }
+.galpha button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.galpha button:disabled { color: color-mix(in srgb, var(--ink) 16%, transparent); cursor: default; }
+.gcat { margin-top: 26px; }
+.gcat > h3 { margin: 0 0 4px; }
+.gterms { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0 26px; margin-top: 4px; }
+.gterm { padding: 11px 0; border-top: 1px solid var(--hairline); }
+.gterm dt { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+.gterm dt code { font-size: .92em; }
+.gterm dd { margin: 4px 0 0; font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+.gempty { font-size: 14px; color: var(--ink-4); margin-top: 24px; }
+
+/* {DISCLOSURE}
+   The one depth idiom, and the mechanism sparseness is achieved by: the visible
+   line is a headline plus a gist, the full prose lives in .disc-body one click
+   away. Never delete prose to shorten a line — move it here. The marker is the
+   sprite chevron in the markup — never a text glyph. */
+.disc { background: var(--card); border-radius: 12px; margin-top: 8px; }
+.disc > summary { position: relative; cursor: pointer; list-style: none; display: flex;
+  flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 13px 40px 13px 16px;
+  border-radius: 12px; transition: background 160ms var(--ease); }
+.disc > summary::-webkit-details-marker { display: none; }
+.disc > summary:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.disc-i { position: absolute; right: 15px; top: 16px; width: 13px; height: 13px;
+  color: var(--ink-4); fill: none; stroke: currentColor;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 220ms var(--spring), color 160ms var(--ease); }
+.disc > summary:hover .disc-i { color: var(--ink-2); }
+.disc[open] > summary .disc-i { transform: rotate(90deg); }
+.disc-body { padding: 0 40px 15px 16px; overflow: hidden; }
+.disc-body p { margin-top: 10px; }
+.disc-body p:first-child { margin-top: 0; }
+.disc-body h4 { margin-top: 14px; }
+.disc[open] > .disc-body { animation: disc-in 220ms var(--ease) both; }
+@keyframes disc-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+/* generic depth block: the gist sits in .disc-t, everything else folds away */
+.disc-t { font-size: 15px; font-weight: 600; color: var(--ink); }
+.disc-g { font-size: 14px; color: var(--ink-3); }
+/* a bare disclosure sitting on the page ground, used where a card would nest */
+.disc.flat { background: none; border-radius: 0; border-top: 1px solid var(--hairline); }
+.disc.flat > summary { padding: 12px 30px 12px 2px; border-radius: 0; }
+.disc.flat > summary .disc-i { right: 4px; top: 15px; }
+.disc.flat > .disc-body { padding: 0 30px 14px 2px; }
+
+/* {TILES} — the visual anchor of #state and #tldr. Numbers are sans and large:
+   a serif or mono figure reads as decoration, and tabular figures make a
+   three-digit number look loose at display size.
+   In #state the tiles are buttons that filter the rows beneath them. */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 6px; margin-top: 26px; }
+.tile { display: block; width: 100%; text-align: left; font: inherit; background: var(--card);
+  border: 1px solid transparent; border-radius: 14px; padding: 18px 18px 16px;
+  transition: transform 200ms var(--spring), border-color 160ms var(--ease); }
+button.tile { cursor: pointer; }
+button.tile:hover { transform: translateY(-3px); }
+button.tile:active { transform: translateY(-1px) scale(.985); }
+/* a tile whose group has nothing is disabled by doc-shell.js — a button that
+   filters to blankness is a promise the page cannot keep */
+button.tile:disabled { cursor: default; opacity: .55; }
+button.tile:disabled:hover { transform: none; }
+.tile-n { display: block; font-family: var(--sans); font-size: clamp(30px, 4.4vw, 40px);
+  line-height: 1; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.tile-k { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-family: var(--sans);
+  font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-4); }
+.tile-k .ic { width: 12px; height: 12px; }
+.tile-g { display: block; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
+/* rung 1b FILLED alert — the count that demands a response */
+.tile.is-risk { background: var(--alert); }
+.tile.is-risk .tile-n, .tile.is-risk .tile-k, .tile.is-risk .tile-g { color: var(--accent-ink); }
+/* rung 2 RULED — stalled */
+.tile.is-blocked { border-color: var(--alert); }
+.tile.is-blocked .tile-k { color: var(--alert); }
+/* rung 3 OUTLINED — it landed */
+.tile.is-done { border-color: var(--hairline); }
+/* rung 4 GHOST — in motion, ambient */
+.tile.is-flight { border: 1px dashed var(--hairline); }
+.tile.is-flight .tile-n { color: var(--ink-2); }
+/* pressed = this group is the only one showing */
+button.tile[aria-pressed="true"] { border-color: var(--accent); }
+button.tile[aria-pressed="true"] .tile-k { color: var(--accent); }
+.tile.is-risk[aria-pressed="true"] .tile-k { color: var(--accent-ink); }
+
+/* {ROWS} — grouped compact status rows. Recessive by design: the tiles above
+   are the anchor, these are the detail. */
+.rows { display: flex; flex-direction: column; margin-top: 10px; }
+.rows > * { border-top: 1px solid var(--hairline); }
+.rows > *:first-child { border-top: 0; }
+.row { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 5px;
+  align-items: baseline; padding: 12px 2px; }
+.row-t { font-size: 15px; font-weight: 600; color: var(--ink); }
+.row-t .pill { margin-left: 8px; }
+.row-g { grid-column: 1 / -1; font-size: 14px; color: var(--ink-3); max-width: 64ch; }
+.row-m { grid-column: 2; justify-self: end; }
+.rows > .disc { background: none; border-radius: 0; margin-top: 0; }
+.rows > .disc > summary { padding: 12px 30px 12px 2px; border-radius: 0; }
+.rows > .disc > .disc-body { padding: 0 30px 14px 2px; }
+.rows > .disc > summary .disc-i { right: 4px; top: 15px; }
+
+/* {PIPELINE} — #architecture as a diagram, not a numbered list.
+   A left-to-right strip of nodes joined by real arrows from the sprite, with one
+   inspector panel below. Without JS every panel is open and the strip still
+   reads in order. */
+/* one unbroken left-to-right run; it scrolls inside its own container rather than
+   wrapping, because a wrapped pipeline leaves an arrow pointing at nothing */
+.pipe-wrap { margin-top: 26px; }
+.pipe-rail { overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 4px; }
+.sec .pipe { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 0; list-style: none;
+  padding: 0; margin: 0; max-width: none; width: max-content; }
+.pipe > li { display: flex; align-items: center; margin: 0 0 6px; }
+.pipe-arrow { width: 15px; height: 15px; flex: 0 0 auto; margin: 0 4px; color: var(--ink-4);
+  fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round;
+  stroke-linejoin: round; }
+.stage-btn { display: flex; flex-direction: column; gap: 3px; height: 100%; text-align: left;
+  font: inherit; cursor: pointer; padding: 11px 14px; border: 1px solid var(--hairline);
+  border-radius: 10px; background: var(--card); color: var(--ink); min-width: 118px;
+  transition: border-color 160ms var(--ease), transform 180ms var(--spring); }
+.stage-btn:hover { border-color: var(--ink-4); transform: translateY(-2px); }
+.stage-btn:active { transform: translateY(0) scale(.98); }
+.stage-btn[aria-expanded="true"] { border-color: var(--accent); }
+.stage-n { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: .14em;
+  color: var(--ink-4); }
+.stage-btn[aria-expanded="true"] .stage-n { color: var(--accent); }
+.stage-t { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.stage-g { font-size: 12px; color: var(--ink-3); max-width: 22ch; }
+.pipe-detail { margin-top: 14px; }
+.stage-d { border-top: 1px solid var(--hairline); padding: 16px 0 2px; max-width: 68ch; }
+.stage-d > h4 { margin-top: 0; color: var(--ink); }
+.stage-d p { margin-top: 8px; }
+html.js .stage-d { animation: disc-in 220ms var(--ease) both; }
+@media (max-width: 620px) {
+  .pipe-rail { overflow-x: visible; }
+  .sec .pipe { flex-direction: column; align-items: stretch; width: auto; }
+  .pipe > li { flex-direction: column; align-items: stretch; }
+  .stage-btn { min-width: 0; }
+  .pipe-arrow { transform: rotate(90deg); margin: 3px auto; }
+  .stage-g { max-width: none; }
+}
+
+/* {GANTT} — #lane as bars across time.
+   CSS grid, no library, no external anything. Column geometry comes from two
+   integers per bar (--c1 start column, --span width in columns) that the
+   generator computes from the run's dates. Status is encoded by the loudness
+   ladder AND an icon AND a word — never by weight alone. Each bar is a link to
+   its own row in the lane list below, which is the chart's table-view twin. */
+.gantt-wrap { margin-top: 24px; overflow-x: auto; overscroll-behavior-x: contain; }
+/* --lab and --gap are the label column's geometry, declared once so the today
+   line can compute its own offset from them and stay welded to the gridlines */
+.gantt { min-width: 560px; --lab: 148px; --gap: 14px; }
+.g-head, .g-row { display: grid; grid-template-columns: var(--lab) 1fr; column-gap: var(--gap);
+  align-items: center; }
+.g-head { align-items: end; }
+/* the axis spacer pins exactly as the row labels do, so the axis never slides
+   visibly under the label column while the chart scrolls — the head and the
+   rows must scroll as one object */
+.g-head > span:first-child { position: sticky; left: 0; z-index: 3;
+  background: var(--page); align-self: stretch; }
+.g-axis { display: flex; flex-direction: column; gap: 3px;
+  border-bottom: 1px solid var(--hairline); padding-bottom: 6px; }
+.g-ticks { position: relative; display: grid; grid-template-columns: repeat(var(--cols, 12), 1fr); }
+.g-tick { grid-column: var(--c1) / span var(--span, 1); font-family: var(--sans); font-size: 10px;
+  font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4);
+  white-space: nowrap; }
+/* the month band names the month; the day band under it carries the real date,
+   one label per column, so a reader never has to guess which week a bar starts in */
+.g-ticks.g-months .g-tick { color: var(--ink-3); }
+.g-ticks.g-days .g-tick { letter-spacing: .04em; text-transform: none;
+  font-variant-numeric: tabular-nums; }
+.g-rows { position: relative; list-style: none; padding: 0; margin: 0; max-width: none; }
+/* .sec ol's own padding-left would inset the rows from the head and, worse,
+   shift the today line off its gridline — the line's offset is a percentage of
+   this element's box */
+.sec .g-rows { margin: 0; padding: 0; }
+/* a lane row is not clickable — only the bar inside it is — so the row itself
+   gets no hover tint */
+.g-row { padding: 5px 0; margin: 0; }
+.g-lab { position: sticky; left: 0; z-index: 3; background: var(--page); padding-right: 8px;
+  font-size: 13px; font-weight: 500; color: var(--ink-2); line-height: 1.3; }
+.g-track { position: relative; display: grid; grid-template-columns: repeat(var(--cols, 12), 1fr);
+  align-items: center; min-height: 24px; }
+/* the only gridlines: hairline, solid, recessive */
+.g-track::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(to right,
+    var(--hairline) 0 1px, transparent 1px calc(100% / var(--cols, 12)));
+  opacity: .75; }
+/* TODAY — ONE element for the whole chart, emitted once as the first child of
+   .g-rows. It used to be one span per row, which drew a dashed stack of
+   disconnected ticks instead of a line. Its left edge is computed from the same
+   --lab / --gap / --cols the grid uses, so it lands exactly on its gridline.
+   z-index 1 puts it over the gridlines; bars are z-index 2, so it never crosses
+   a bar's label. */
+.g-today { position: absolute; top: 0; bottom: 0; width: 2px; z-index: 1;
+  pointer-events: none; background: var(--accent); border-radius: 1px;
+  left: calc(var(--lab) + var(--gap)
+    + (100% - var(--lab) - var(--gap)) * (var(--c1, 1) - 1) / var(--cols, 12)); }
+.g-today::before { content: ""; position: absolute; top: -3px; left: -2px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.g-bar { position: relative; z-index: 2; grid-column: var(--c1) / span var(--span, 1);
+  display: flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px;
+  border-radius: 4px; border: 1px solid var(--hairline); box-sizing: border-box;
+  background: color-mix(in srgb, var(--ink) 9%, transparent); color: var(--ink-2);
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap;
+  overflow: hidden; text-decoration: none;
+  transition: transform 200ms var(--spring), border-color 160ms var(--ease); }
+.sec a.g-bar { text-decoration: none; }
+.g-bar:hover { transform: translateY(-2px); border-color: var(--accent); }
+.g-bar .ic { width: 12px; height: 12px; }
+/* a bar too short for a word keeps only its icon — a label is never clipped */
+.g-bar.is-tight { padding: 0 4px; justify-content: center; }
+.g-bar.is-tight > span:not(.vh) { display: none; }
+/* rung 3 OUTLINED — it landed */
+.g-row[data-status="shipped"] .g-bar { border-color: var(--hairline);
+  background: color-mix(in srgb, var(--ink) 13%, transparent); color: var(--ink-2); }
+/* rung 4 GHOST — in motion */
+.g-row[data-status="flight"] .g-bar { border-style: dashed;
+  background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink-3); }
+/* rung 2 RULED — stalled. hatched so it reads as blocked in grayscale too, and
+   ruled in --alert so it reads as stuck at a glance */
+.g-row[data-status="blocked"] .g-bar { border-color: var(--alert); color: var(--ink);
+  background: repeating-linear-gradient(135deg,
+    color-mix(in srgb, var(--alert) 24%, transparent) 0 3px, transparent 3px 7px); }
+.g-row[data-status="blocked"] .g-bar .ic { color: var(--alert); }
+/* rung 1b FILLED alert — the one that demands a response */
+.g-row[data-status="risk"] .g-bar { background: var(--alert); border-color: var(--alert);
+  color: var(--accent-ink); }
+/* a bar that waits on another names its predecessor in the label column, rather
+   than in the bar (where it would be clipped) or as a fragile overlay arrow */
+.g-dep { display: flex; align-items: center; gap: 5px; margin-top: 2px;
+  font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-4); }
+.g-dep .ic { width: 11px; height: 11px; }
+.g-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; }
+.g-legend > span { display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans);
+  font-size: 11px; letter-spacing: .04em; color: var(--ink-4); }
+.g-legend .ic { width: 12px; height: 12px; }
+.g-key { width: 20px; height: 10px; border-radius: 3px; border: 1px solid var(--hairline);
+  background: color-mix(in srgb, var(--ink) 13%, transparent); flex: 0 0 auto; }
+.g-key.k-flight { border-style: dashed; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.g-key.k-blocked { border-color: var(--alert);
+  background: repeating-linear-gradient(135deg,
+    color-mix(in srgb, var(--alert) 24%, transparent) 0 3px, transparent 3px 7px); }
+.g-key.k-risk { background: var(--alert); border-color: var(--alert); }
+.g-legend .k-blocked ~ .ic, .g-legend .k-risk ~ .ic { color: var(--alert); }
+@media (max-width: 620px) {
+  /* the today line reads these two, so overriding them keeps it aligned */
+  .gantt { --lab: 116px; --gap: 10px; }
+  .g-lab { font-size: 12px; }
+}
+/* more than ~14 columns and the day labels start touching: the generator adds
+   .is-dense and every other date drops out rather than overlapping */
+.g-ticks.g-days.is-dense .g-tick:nth-child(even) { visibility: hidden; }
+
+/* {LANE} — the Today tab's .item row, reused verbatim so "what I should do"
+   reads the same in both tabs. No #todos id here, so shell.js leaves it inert. */
+.sec .lane-list { position: relative; display: flex; flex-direction: column; gap: 4px;
+  list-style: none; padding: 0; margin: 26px 0 0; max-width: none; }
+/* shell.css's .item is a to-do row: pointer cursor and a hover wash, because in
+   the brief the whole row toggles a checkbox. A lane item toggles nothing, so
+   both affordances come off — only the links and the disclosure inside it are
+   interactive. */
+.lane-list .item { cursor: default; scroll-margin-top: 40px; }
+.lane-list .item:hover::before { opacity: 0; }
+.lane-list .item-n { flex: 0 0 auto; font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: .06em; color: var(--ink-4); padding-top: 5px; }
+.lane-list .item .disc { margin-top: 10px; }
+.lane-list .item .cites { margin-top: 7px; }
+
+/* {QUESTIONS} — #ask as an open ledger, not a card grid.
+   The idea: a question is a thing someone still owes you an answer to, so the
+   section opens on a running TALLY of what is still owed — a real number and,
+   beside it, five-bar tally strokes, one stroke per open question, drawn by
+   doc-shell.js from the list itself so the count can never disagree with the
+   rows. Below it, open questions hang off a rail, each with a hollow accent
+   mark. Answered ones are not deleted and not left shouting: they settle into a
+   folded tray, mark closed to a check, ink dropped one step. */
+.ask { margin-top: 26px; }
+
+/* the tally — the section's one loud object */
+.ask-tally { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 16px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--hairline); }
+.ask-n { font-family: var(--sans); font-size: clamp(38px, 5.4vw, 52px); line-height: .9;
+  font-weight: 600; letter-spacing: -.035em; color: var(--accent);
+  font-variant-numeric: proportional-nums; }
+/* the label reads after the strokes, so the whole tally is one object:
+   "6 ||||\ | open questions" */
+.ask-n-k { order: 3; font-family: var(--sans); font-size: 11px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); max-width: 7ch;
+  line-height: 1.25; }
+.ask-strokes { display: flex; align-items: flex-end; gap: 14px; padding: 0 2px 3px; }
+.ask-grp { position: relative; display: flex; align-items: flex-end; gap: 5px; }
+.ask-stroke { width: 3px; height: 30px; border-radius: 1px; background: var(--accent);
+  transform: rotate(-4deg); transform-origin: 50% 100%; }
+/* the fifth stroke of a group crosses the other four, as a hand tally does */
+.ask-stroke.is-cross { position: absolute; left: -5px; right: -5px; bottom: 4px;
+  width: auto; height: 3px; transform: rotate(-24deg); transform-origin: 50% 50%; }
+html.js .ask-stroke { animation: ask-stroke-in 260ms var(--spring) both;
+  animation-delay: calc(var(--i, 0) * 55ms); }
+@keyframes ask-stroke-in { from { opacity: 0; transform: rotate(-3deg) scaleY(0); }
+  to { opacity: 1; transform: rotate(-3deg) scaleY(1); } }
+html.js .ask-stroke.is-cross { animation-name: ask-cross-in; }
+@keyframes ask-cross-in { from { opacity: 0; transform: rotate(-18deg) scaleX(0); }
+  to { opacity: 1; transform: rotate(-18deg) scaleX(1); } }
+
+/* the open ledger */
+.sec .ask-open, .sec .ask-done { list-style: none; padding: 0; margin: 0; max-width: none; }
+/* .sec p / .sec li own the generic ink and margins, so every one of these needs
+   to outrank them — hence the .ask prefix rather than a bare class */
+.sec .ask-q { display: grid; grid-template-columns: 26px 1fr; column-gap: 15px;
+  padding: 20px 0; margin: 0; border-top: 1px solid var(--hairline); }
+.ask-open > .ask-q:first-child { border-top: 0; }
+.ask-mark { grid-row: 1 / span 2; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; box-sizing: border-box; color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.ask-mark .ic { width: 13px; height: 13px; }
+.ask .ask-t { font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.35;
+  text-wrap: balance; max-width: 46ch; margin: 0; }
+/* who owes it and what it holds up — the two facts that turn a question into work */
+.ask .ask-who { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 7px;
+  font-size: 13px; color: var(--ink-3); }
+.ask-who .lbl { color: var(--ink-4); }
+.ask-q .ctx { font-size: 14px; color: var(--ink-3); margin-top: 7px; max-width: 62ch; }
+.ask-q .disc.flat { border-top: 0; margin-top: 4px; }
+.ask-q .disc.flat > summary { padding: 9px 30px 9px 0; }
+.ask-q .disc.flat > summary .disc-i { top: 12px; right: 2px; }
+.ask-q .disc.flat > .disc-body { padding: 0 30px 8px 0; }
+.ask-q .cites { margin-top: 8px; }
+
+/* settled: folded, never deleted */
+.ask-tray { margin-top: 4px; }
+.ask-tray > summary .disc-t { color: var(--ink-2); }
+.ask-tray-n { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent); }
+.ask-done > .ask-q { border-top: 1px solid var(--hairline); }
+.ask-done > .ask-q:first-child { border-top: 0; }
+.ask-q.is-answered .ask-mark { color: var(--ink-4); border-color: var(--hairline);
+  background: none; }
+.ask .ask-q.is-answered .ask-t { font-size: 15px; font-weight: 500; color: var(--ink-2); }
+.ask .ask-ans { margin-top: 6px; font-size: 14px; color: var(--ink-3); max-width: 62ch; }
+.ask-ans strong { color: var(--ink-2); font-weight: 600; }
+/* opening an answer lands it: the mark gives one small nod */
+html.js .ask-q:has(.disc[open]) .ask-mark { animation: ask-settle 420ms var(--spring); }
+@keyframes ask-settle { 0% { transform: scale(1); } 45% { transform: scale(1.18) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0); } }
+
+/* {Q&A} — #primer: one question per card, answer in a line, depth folded */
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 6px; margin-top: 24px; }
+.qa > .disc { margin-top: 0; }
+.qa > .disc > summary { padding: 16px 40px 16px 18px; }
+.qa > .disc > .disc-body { padding: 0 18px 16px; }
+.qa-q { flex: 1 1 auto; font-size: 15px; font-weight: 600; color: var(--ink); }
+.qa-a { flex-basis: 100%; font-size: 14px; color: var(--ink-3); }
+
+/* {DECISION ROWS} — one line per fork: when, what, the verdict, its kind */
+.decisions { display: flex; flex-direction: column; margin-top: 24px; }
+.decisions > .disc { background: none; border-radius: 0; margin-top: 0;
+  border-top: 1px solid var(--hairline); }
+.decisions > .disc:first-child { border-top: 0; }
+.decisions > .disc > summary { display: grid; grid-template-columns: 62px minmax(150px, 26%) 1fr;
+  column-gap: 16px; row-gap: 4px; align-items: baseline;
+  padding: 15px 30px 15px 2px; border-radius: 0; }
+.decisions > .disc > summary .disc-i { right: 4px; top: 17px; }
+.dec-date { font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ink-4); }
+.dec-t { font-size: 15px; font-weight: 600; color: var(--ink); }
+.dec-t .pill { margin-left: 8px; }
+.dec-v { font-size: 14px; color: var(--ink-3); max-width: 64ch; }
+.decisions > .disc > .disc-body { padding: 0 30px 16px 78px; }
+@media (max-width: 620px) {
+  .decisions > .disc > summary { grid-template-columns: 1fr; }
+  .decisions > .disc > .disc-body { padding-left: 2px; }
+}
+
+/* {NOTES} */
+/* doc-shell.js swaps any anchor whose host fails the allowlist for this */
+.blocked-link { color: var(--ink-4); text-decoration: line-through;
+  text-decoration-color: var(--ink-4); }
+.src-note { font-family: var(--sans); font-size: 11px; letter-spacing: .06em; color: var(--ink-4);
+  margin-top: 16px; }
+/* {LEGEND} — the timeline key. Its swatches are REAL `.t-dot` elements carrying
+   the same `data-type` as the events, so they render from the dot rules above
+   and cannot drift from the rail. Never redraw a swatch by hand here. */
+.legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 18px;
+  padding-top: 16px; border-top: 1px solid var(--hairline);
+  font-family: var(--sans); font-size: 11px; letter-spacing: .04em; color: var(--ink-3); }
+.legend > span { display: inline-flex; align-items: center; gap: 7px; }
+.legend .ic { width: 12px; height: 12px; color: var(--ink-4); }
+.legend [data-type] { display: inline-flex; align-items: center; gap: 7px; }
+.legend [data-type="incident"] .ic { color: var(--alert); }
+.legend .lg-w { color: var(--ink-2); font-weight: 600; }
+
+/* {FOCUS} — shell.css owns the ring for the brief's own components; these are
+   THIS file's controls, so their ring is stated here rather than assumed from
+   a sibling stylesheet. Accent, offset, visible on every surface. */
+.dial-btn:focus-visible, .dial-tab:focus-visible, .filters button:focus-visible,
+button.tile:focus-visible, .stage-btn:focus-visible, .galpha button:focus-visible,
+.gsearch:focus-visible, .g-bar:focus-visible, .goto:focus-visible,
+.disc > summary:focus-visible, .tl-spark a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 680px) {
+  section.sec { padding-top: 38px; }
+  section.sec + section.sec { margin-top: 38px; }
+  html.js .dial { right: calc(14px + env(safe-area-inset-right));
+    bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .dial-pop { width: min(232px, calc(100vw - 28px)); }
+  .dial-cur { display: none; }
+  .dial-btn { padding: 11px; }
+}
+/* every programmatic jump — deep link, filter jump, spark-strip click — glides,
+   and only when the reader has not asked for stillness */
+@media (prefers-reduced-motion: no-preference) {
+  html.js { scroll-behavior: smooth; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filters button, .sec a, .disc > summary, .disc-i, .stage-btn, .tile, .g-bar,
+  .dial-btn, .dial-pop, .dial-tab, .dial-caret { transition: none; }
+  .disc[open] > .disc-body, html.js .stage-d, html.js .panel,
+  .dial-pop[data-open="true"] .dial-tab, html.js .ask-stroke,
+  html.js .ask-q:has(.disc[open]) .ask-mark { animation: none; }
+  button.tile:hover, .stage-btn:hover, .g-bar:hover { transform: none; }
+}
