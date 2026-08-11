@@ -42584,232 +42584,6 @@ function CardBody({ cite, entry }) {
 	}
 }
 //#endregion
-//#region src/components/Cite.tsx
-/**
-* The citation chip — the one component both surfaces share, so the Today tab
-* and the Timeline tab cite things identically.
-*
-* Three things ride on it, and all three are the experience rather than the
-* information:
-*
-* - **The wobble.** Every chip's icon sits at its own small angle (`--tilt`) and
-*   swings further when you reach for it (`--htilt`). `cite.css` has always had
-*   the rules; without something setting the properties they fall back to
-*   `0deg`, which leaves the bare `scale(1.16)` and none of the character.
-* - **The tip.** A linked chip names where it goes on hover and on focus. An
-*   unlinked one does not, because it goes nowhere — same icon, no tooltip, and
-*   never a fabricated href.
-* - **The card.** A chip with a baked payload opens a hover card, built from
-*   `#doc-previews` with no request. Base UI's PreviewCard supplies the intent
-*   delay, collision-aware placement, pointer/keyboard parity and Escape
-*   dismissal; `cprev` styling and every pixel of the content stay ours.
-*
-* The allowlist is applied HERE rather than trusted from the data — a URL that
-* does not clear `#doc-allowlist` cannot become an href regardless of what
-* wrote it into `#doc-data`.
-*/
-/** kind -> [sprite id, wrap the label in `.tok`, where it goes]
-*
-*  Whether the mark is filled or stroked is NOT here: `isBrandIcon` already
-*  knows, and two places knowing meant the tracker chip kept its old stroked
-*  flag after its symbol became a filled logo. */
-var CITE_KIND = {
-	pr: [
-		"i-github",
-		true,
-		"Open in GitHub"
-	],
-	slack: [
-		"i-slack",
-		false,
-		"Open in Slack"
-	],
-	gmail: [
-		"i-gmail",
-		false,
-		"Open in Gmail"
-	],
-	cal: [
-		"i-cal",
-		false,
-		"Open in Calendar"
-	],
-	drive: [
-		"i-drive",
-		false,
-		"Open in Drive"
-	],
-	tracker: [
-		"i-bead",
-		true,
-		"Open the item"
-	],
-	figma: [
-		"i-figma",
-		false,
-		"Open in Figma"
-	],
-	commit: [
-		"i-commit",
-		true,
-		"Open the commit"
-	],
-	path: [
-		"i-file",
-		true,
-		"Open the file"
-	],
-	thread: [
-		"i-thread",
-		false,
-		"Open the thread"
-	],
-	link: [
-		"i-link",
-		false,
-		"Open the link"
-	],
-	custom: [
-		"i-link",
-		false,
-		"Open the item"
-	]
-};
-/** Intent delays, from cite.js: brushing past must not flash a card, and the
-*  pointer needs grace to cross the gap on the way out. */
-var CARD_IN = 350;
-var CARD_OUT = 120;
-function CiteChip({ cite }) {
-	const { allowlist, previews, quiet, config } = useDoc();
-	const [kindIcon, tok, tip] = CITE_KIND[cite.kind] ?? CITE_KIND.link;
-	const iconId = cite.icon ?? (cite.kind === "tracker" ? trackerIcon(cite.raw, trackerKind(config)) : kindIcon);
-	const linked = isAllowed(cite.url, allowlist);
-	const entry = cite.preview ? previews[cite.key] : void 0;
-	const style = quiet ? void 0 : {
-		"--tilt": tiltFor(cite.key).tilt,
-		"--htilt": tiltFor(cite.key).htilt
-	};
-	const inner = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-			id: iconId,
-			brand: isBrandIcon(iconId)
-		}),
-		tok ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-			className: "tok",
-			children: cite.raw
-		}) : cite.raw,
-		linked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-			className: "cite-tip",
-			children: tip
-		}) : null
-	] });
-	const chip = linked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-		className: "cite",
-		style,
-		href: cite.url,
-		target: "_blank",
-		rel: "noopener",
-		"data-cite": entry ? cite.key : void 0,
-		children: inner
-	}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		className: "cite",
-		style,
-		"data-cite": entry ? cite.key : void 0,
-		tabIndex: entry ? 0 : void 0,
-		children: inner
-	});
-	if (!entry) return chip;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PreviewCardRoot, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardTrigger, {
-		delay: CARD_IN,
-		closeDelay: CARD_OUT,
-		render: chip
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPortal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPositioner, {
-		side: "top",
-		sideOffset: 8,
-		collisionPadding: 12,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPopup, {
-			className: "cprev",
-			role: "tooltip",
-			"aria-hidden": "false",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardBody, {
-				cite,
-				entry
-			})
-		})
-	}) })] });
-}
-/** A run of chips, optionally wrapped. Renders nothing for an empty list —
-*  never an empty tag. */
-function Cites({ list, wrapClass }) {
-	if (!list?.length) return null;
-	const chips = list.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CiteChip, { cite: c }, `${c.key}-${i}`));
-	return wrapClass ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: wrapClass,
-		children: chips
-	}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: chips });
-}
-//#endregion
-//#region src/components/SectionShell.tsx
-function SectionShell({ section, children }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		className: "sec",
-		id: section.id,
-		children: [
-			section.eyebrow ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-				className: "eyebrow",
-				children: [section.icon ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { id: section.icon }) : null, section.eyebrow]
-			}) : null,
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: section.title }),
-			section.lead ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "sec-lead",
-				children: section.lead
-			}) : null,
-			children
-		]
-	});
-}
-//#endregion
-//#region src/lib/sound.ts
-/**
-* The interaction sounds — synthesised, no assets, one lazily created context.
-* Ported from `doc-shell.js`'s {SOUND} block, same vocabulary as the brief.
-*
-* Everything here is a no-op under `prefers-reduced-motion` and on the server:
-* "nothing moves and nothing sounds" is one rule, and the reduced-motion check
-* happens at call time rather than at import time so a viewer who changes the
-* setting mid-session is honoured without a reload.
-*/
-var actx = null;
-function prefersReducedMotion() {
-	if (typeof window === "undefined" || !window.matchMedia) return true;
-	return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-function tone(from, to, dur, level, type = "sine") {
-	if (prefersReducedMotion()) return;
-	try {
-		actx ??= new AudioContext();
-		const t = actx.currentTime;
-		const osc = actx.createOscillator();
-		const gain = actx.createGain();
-		osc.type = type;
-		osc.frequency.setValueAtTime(from, t);
-		osc.frequency.exponentialRampToValueAtTime(to, t + dur);
-		gain.gain.setValueAtTime(level, t);
-		gain.gain.exponentialRampToValueAtTime(1e-4, t + dur + .01);
-		osc.connect(gain);
-		gain.connect(actx.destination);
-		osc.start(t);
-		osc.stop(t + dur + .02);
-	} catch {}
-}
-var sndOpen = () => tone(420, 690, .05, .05);
-var sndClose = () => tone(560, 330, .045, .035);
-var sndSwitch = () => {
-	tone(520, 810, .045, .06);
-	tone(300, 300, .02, .02, "triangle");
-};
-var sndTick = () => tone(700, 520, .03, .025);
-//#endregion
 //#region src/schema/doc-data.ts
 /**
 * `#doc-data` — the document's content, and the single edit surface.
@@ -43200,14 +42974,396 @@ var DocData = object({
 	sections: array(SectionNode).min(1, "#doc-data has no sections")
 });
 //#endregion
+//#region src/schema/doc-previews.ts
+/**
+* `#doc-previews` — the payload behind each hover card, baked into the document
+* so a card never fetches anything. That is what makes the cards work offline
+* and under a strict CSP.
+*
+* Every field is optional. A payload is whatever the source could actually
+* supply, and a card that is missing a field renders without it rather than
+* inventing one — "nothing fabricated" is the rule these shapes exist to serve.
+* So this file types what MAY be present; it never asserts what must be.
+*/
+var Person$1 = object({
+	name: string().optional(),
+	avatarUrl: string().optional()
+});
+/**
+* Real payloads write `null` for "we looked and there is nothing", not an
+* absent key — a PR with no reviewer has `assignee: null`. `.optional()`
+* rejects that, and against one real 144-card document it silently dropped 81
+* of them. Stripping nulls once, here, is better than making
+* every field nullish and remembering to on the next one.
+*/
+function stripNulls(v) {
+	if (Array.isArray(v)) return v.map(stripNulls);
+	if (v && typeof v === "object") {
+		const out = {};
+		for (const [k, x] of Object.entries(v)) if (x !== null) out[k] = stripNulls(x);
+		return out;
+	}
+	return v;
+}
+var Preview = looseObject({
+	state: _enum([
+		"merged",
+		"closed",
+		"draft",
+		"open"
+	]).optional(),
+	repo: string().optional(),
+	number: union([number(), string()]).optional(),
+	author: string().optional(),
+	authorAvatarUrl: string().optional(),
+	additions: number().optional(),
+	deletions: number().optional(),
+	changedFiles: number().optional(),
+	mergedAt: string().optional(),
+	closedAt: string().optional(),
+	createdAt: string().optional(),
+	channel: string().optional(),
+	text: string().optional(),
+	/** Epoch seconds with a fraction, as Slack stamps them. */
+	ts: union([string(), number()]).optional(),
+	id: string().optional(),
+	status: string().optional(),
+	assignee: string().optional(),
+	due: string().optional(),
+	file: string().optional(),
+	page: string().optional(),
+	node: string().optional(),
+	start: string().optional(),
+	end: string().optional(),
+	month: string().optional(),
+	dateNum: union([string(), number()]).optional(),
+	day: string().optional(),
+	time: string().optional(),
+	conferenceUrl: string().optional(),
+	location: string().optional(),
+	attendees: array(Person$1).optional(),
+	attendeeCount: number().optional(),
+	mimeType: string().optional(),
+	owner: string().optional(),
+	ownerAvatarUrl: string().optional(),
+	modified: string().optional(),
+	path: string().optional(),
+	exists: boolean().optional(),
+	lines: number().optional(),
+	source: string().optional(),
+	host: string().optional(),
+	updatedAt: string().optional(),
+	/** custom — a source with no first-class card. The rows ARE the card: label
+	*  and value, in the order the source's own UI shows them, rendered as a
+	*  definition list. Data, not markup — the same rule as everywhere else, and
+	*  the reason a new source needs no new component. */
+	rows: array(object({
+		label: string(),
+		value: string()
+	})).optional(),
+	/** Sprite id for the source's minted mark. */
+	icon: string().optional(),
+	title: string().optional()
+});
+/** One entry as the build writes it: the kind decides which card renders.
+*  `bead` normalises to `tracker` here exactly as it does on a citation —
+*  the real document is full of the legacy spelling, and an entry rejected
+*  for it would lose its card. */
+var PreviewEntry = preprocess((v) => {
+	const e = stripNulls(v);
+	if (!e || typeof e !== "object") return e;
+	const o = e;
+	return o.kind === "bead" ? {
+		...o,
+		kind: "tracker"
+	} : o;
+}, object({
+	kind: _enum(CITE_KINDS).optional(),
+	raw: string().optional(),
+	preview: Preview.optional()
+}));
+/**
+* The payload behind one chip, from wherever the run actually put it.
+*
+* Two places are legal because runs use both and the old gate — "only look when
+* `cite.preview` is set" — turned each mismatch into a chip that silently opened
+* nothing:
+*
+* - `#doc-previews` keyed by the citation key. The documented place, and it wins.
+* - the citation's own `preview`, when it was written as the payload rather than
+*   as the `true` flag. `#doc-data` is the one file every run writes, so this is
+*   where a payload lands when `doc-previews.json` was never created.
+*
+* A cite key present in `#doc-previews` opens its card whether or not the
+* citation flags it. The payload existing IS the promise; a missing flag was
+* never a reason to withhold a card the document is already carrying.
+*/
+function previewFor(cite, previews) {
+	const keyed = previews[cite.key];
+	if (keyed) return keyed;
+	if (!cite.preview || typeof cite.preview !== "object") return void 0;
+	const inline = cite.preview;
+	const parsed = PreviewEntry.safeParse("preview" in inline ? inline : { preview: inline });
+	return parsed.success ? parsed.data : void 0;
+}
+/**
+* `#doc-previews` accepts either the keyed object the build writes or
+* `citations.json`'s own `{ citations: [...] }` shape, so the two can never
+* fall out of step — same tolerance `cite.js` had.
+*/
+function readPreviews(raw) {
+	const out = {};
+	if (!raw || typeof raw !== "object") return out;
+	const list = raw.citations;
+	if (Array.isArray(list)) {
+		for (const c of list) {
+			const parsed = PreviewEntry.safeParse(c);
+			const key = c?.key;
+			if (parsed.success && typeof key === "string" && parsed.data.preview) out[key] = parsed.data;
+		}
+		return out;
+	}
+	for (const [key, value] of Object.entries(raw)) {
+		const parsed = PreviewEntry.safeParse(value);
+		if (parsed.success) out[key] = parsed.data;
+	}
+	return out;
+}
+//#endregion
+//#region src/components/Cite.tsx
+/**
+* The citation chip — the one component both surfaces share, so the Today tab
+* and the Timeline tab cite things identically.
+*
+* Three things ride on it, and all three are the experience rather than the
+* information:
+*
+* - **The wobble.** Every chip's icon sits at its own small angle (`--tilt`) and
+*   swings further when you reach for it (`--htilt`). `cite.css` has always had
+*   the rules; without something setting the properties they fall back to
+*   `0deg`, which leaves the bare `scale(1.16)` and none of the character.
+* - **The tip.** A linked chip names where it goes on hover and on focus. An
+*   unlinked one does not, because it goes nowhere — same icon, no tooltip, and
+*   never a fabricated href.
+* - **The card.** A chip with a baked payload opens a hover card, built from
+*   `#doc-previews` with no request. Base UI's PreviewCard supplies the intent
+*   delay, collision-aware placement, pointer/keyboard parity and Escape
+*   dismissal; `cprev` styling and every pixel of the content stay ours.
+*
+* The allowlist is applied HERE rather than trusted from the data — a URL that
+* does not clear `#doc-allowlist` cannot become an href regardless of what
+* wrote it into `#doc-data`.
+*/
+/** kind -> [sprite id, wrap the label in `.tok`, where it goes]
+*
+*  Whether the mark is filled or stroked is NOT here: `isBrandIcon` already
+*  knows, and two places knowing meant the tracker chip kept its old stroked
+*  flag after its symbol became a filled logo. */
+var CITE_KIND = {
+	pr: [
+		"i-github",
+		true,
+		"Open in GitHub"
+	],
+	slack: [
+		"i-slack",
+		false,
+		"Open in Slack"
+	],
+	gmail: [
+		"i-gmail",
+		false,
+		"Open in Gmail"
+	],
+	cal: [
+		"i-cal",
+		false,
+		"Open in Calendar"
+	],
+	drive: [
+		"i-drive",
+		false,
+		"Open in Drive"
+	],
+	tracker: [
+		"i-bead",
+		true,
+		"Open the item"
+	],
+	figma: [
+		"i-figma",
+		false,
+		"Open in Figma"
+	],
+	commit: [
+		"i-commit",
+		true,
+		"Open the commit"
+	],
+	path: [
+		"i-file",
+		true,
+		"Open the file"
+	],
+	thread: [
+		"i-thread",
+		false,
+		"Open the thread"
+	],
+	link: [
+		"i-link",
+		false,
+		"Open the link"
+	],
+	custom: [
+		"i-link",
+		false,
+		"Open the item"
+	]
+};
+/** Intent delays, from cite.js: brushing past must not flash a card, and the
+*  pointer needs grace to cross the gap on the way out. */
+var CARD_IN = 350;
+var CARD_OUT = 120;
+function CiteChip({ cite }) {
+	const { allowlist, previews, quiet, config } = useDoc();
+	const [kindIcon, tok, tip] = CITE_KIND[cite.kind] ?? CITE_KIND.link;
+	const iconId = cite.icon ?? (cite.kind === "tracker" ? trackerIcon(cite.raw, trackerKind(config)) : kindIcon);
+	const linked = isAllowed(cite.url, allowlist);
+	const entry = previewFor(cite, previews);
+	const style = quiet ? void 0 : {
+		"--tilt": tiltFor(cite.key).tilt,
+		"--htilt": tiltFor(cite.key).htilt
+	};
+	const inner = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+			id: iconId,
+			brand: isBrandIcon(iconId)
+		}),
+		tok ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "tok",
+			children: cite.raw
+		}) : cite.raw,
+		linked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "cite-tip",
+			children: tip
+		}) : null
+	] });
+	const chip = linked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+		className: "cite",
+		style,
+		href: cite.url,
+		target: "_blank",
+		rel: "noopener",
+		"data-cite": entry ? cite.key : void 0,
+		children: inner
+	}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		className: "cite",
+		style,
+		"data-cite": entry ? cite.key : void 0,
+		tabIndex: entry ? 0 : void 0,
+		children: inner
+	});
+	if (!entry) return chip;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PreviewCardRoot, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardTrigger, {
+		delay: CARD_IN,
+		closeDelay: CARD_OUT,
+		render: chip
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPortal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPositioner, {
+		side: "top",
+		sideOffset: 8,
+		collisionPadding: 12,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewCardPopup, {
+			className: "cprev",
+			role: "tooltip",
+			"aria-hidden": "false",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardBody, {
+				cite,
+				entry
+			})
+		})
+	}) })] });
+}
+/** A run of chips, optionally wrapped. Renders nothing for an empty list —
+*  never an empty tag. */
+function Cites({ list, wrapClass }) {
+	if (!list?.length) return null;
+	const chips = list.map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CiteChip, { cite: c }, `${c.key}-${i}`));
+	return wrapClass ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: wrapClass,
+		children: chips
+	}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: chips });
+}
+//#endregion
+//#region src/components/SectionShell.tsx
+function SectionShell({ section, children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "sec",
+		id: section.id,
+		children: [
+			section.eyebrow ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "eyebrow",
+				children: [section.icon ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { id: section.icon }) : null, section.eyebrow]
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: section.title }),
+			section.lead ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "sec-lead",
+				children: section.lead
+			}) : null,
+			children
+		]
+	});
+}
+//#endregion
+//#region src/lib/sound.ts
+/**
+* The interaction sounds — synthesised, no assets, one lazily created context.
+* Ported from `doc-shell.js`'s {SOUND} block, same vocabulary as the brief.
+*
+* Everything here is a no-op under `prefers-reduced-motion` and on the server:
+* "nothing moves and nothing sounds" is one rule, and the reduced-motion check
+* happens at call time rather than at import time so a viewer who changes the
+* setting mid-session is honoured without a reload.
+*/
+var actx = null;
+function prefersReducedMotion() {
+	if (typeof window === "undefined" || !window.matchMedia) return true;
+	return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+function tone(from, to, dur, level, type = "sine") {
+	if (prefersReducedMotion()) return;
+	try {
+		actx ??= new AudioContext();
+		const t = actx.currentTime;
+		const osc = actx.createOscillator();
+		const gain = actx.createGain();
+		osc.type = type;
+		osc.frequency.setValueAtTime(from, t);
+		osc.frequency.exponentialRampToValueAtTime(to, t + dur);
+		gain.gain.setValueAtTime(level, t);
+		gain.gain.exponentialRampToValueAtTime(1e-4, t + dur + .01);
+		osc.connect(gain);
+		gain.connect(actx.destination);
+		osc.start(t);
+		osc.stop(t + dur + .02);
+	} catch {}
+}
+var sndOpen = () => tone(420, 690, .05, .05);
+var sndClose = () => tone(560, 330, .045, .035);
+var sndSwitch = () => {
+	tone(520, 810, .045, .06);
+	tone(300, 300, .02, .02, "triangle");
+};
+var sndTick = () => tone(700, 520, .03, .025);
+//#endregion
 //#region src/components/layouts/Timeline.tsx
 /**
 * An activity strip, then month clusters on one rail. A decision is an event
 * here, its depth folded in place.
 *
-* The spark, the filter chips, the legend and the month clustering are all
-* DERIVED from the events — the LLM supplies only events, so none of them can
-* drift. That was the locked renderer's central claim and it survives intact;
+* The spark, the filter chips, the legend, the month clustering and each
+* month's summary line are all DERIVED from the events — the LLM supplies only
+* events, so none of them can drift. That was the locked renderer's central claim and it survives intact;
 * what changes is that the derivation and the filtering are now the same
 * declaration instead of a renderer and a shell script that had to agree.
 *
@@ -43227,45 +43383,56 @@ var DocData = object({
 * at are still there, three inches up. `popLayout` is what makes the two
 * halves of that overlap rather than queue.
 */
-/** kind -> [css class, sprite id, the word, what it means] */
+/** kind -> [css class, sprite id, the pill's word, what it means, the countable noun]
+*
+*  The pill's word and the noun are not the same string: a `build` pill reads
+*  "built" and you count "5 builds", so a filter chip built from the pill word
+*  said "Builts". Every noun here pluralises with a bare `s`. */
 var TL_KIND = {
 	decision: [
 		"decision",
 		"i-fork",
 		"decision",
-		"a choice was made"
+		"a choice was made",
+		"decision"
 	],
 	pivot: [
 		"pivot",
 		"i-pivot",
 		"pivot",
-		"a choice was reversed"
+		"a choice was reversed",
+		"pivot"
 	],
 	incident: [
 		"incident",
 		"i-alert",
 		"incident",
-		"it needs a response"
+		"it needs a response",
+		"incident"
 	],
 	milestone: [
 		"milestone",
 		"i-check",
 		"milestone",
-		"a point was reached"
+		"a point was reached",
+		"milestone"
 	],
 	build: [
 		"build",
 		"i-ship",
 		"built",
-		"it shipped"
+		"it shipped",
+		"build"
 	],
 	meeting: [
 		"meeting",
 		"i-user",
 		"meeting",
-		"people talked"
+		"people talked",
+		"meeting"
 	]
 };
+var count = (n, noun) => `${n} ${noun}${n === 1 ? "" : "s"}`;
 var MONTHS = [
 	"January",
 	"February",
@@ -43304,6 +43471,17 @@ var ENTER = {
 function monthLabel(key) {
 	const [y, m] = key.split("-");
 	return `${MONTHS[Number(m) - 1]} ${y}`;
+}
+/** What the month held, in the legend's own order — "9 events · 3 decisions,
+*  1 incident, 5 builds".
+*
+*  Derived from the month's events like the spark, the chips and the legend, so
+*  no run can write a summary that disagrees with the rows under it. And like
+*  the spark it counts the WHOLE month, not the filtered view: it is the line
+*  that explains why a month showing one row is not a month that had one. */
+function monthSummary(events) {
+	const kinds = TIMELINE_KINDS.map((t) => [t, events.filter((e) => e.kind === t).length]).filter(([, n]) => n > 0).map(([t, n]) => count(n, TL_KIND[t][4]));
+	return `${count(events.length, "event")} · ${kinds.join(", ")}`;
 }
 function Timeline({ section }) {
 	const events = section.blocks;
@@ -43377,13 +43555,13 @@ function Timeline({ section }) {
 						children: "All"
 					}),
 					present.map((t) => {
-						const word = TL_KIND[t][2];
+						const noun = TL_KIND[t][4];
 						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							type: "button",
 							"data-filter": t,
 							"aria-pressed": active.has(t),
 							onClick: () => toggle(t),
-							children: [word.charAt(0).toUpperCase() + word.slice(1), "s"]
+							children: [noun.charAt(0).toUpperCase() + noun.slice(1), "s"]
 						}, t);
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -43409,73 +43587,80 @@ function Timeline({ section }) {
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 						className: "tl-month",
 						id: `tl-${k}`,
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: monthLabel(k) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
-							initial: false,
-							mode: "popLayout",
-							children: items.map((e) => {
-								const [cls, icon, word] = TL_KIND[e.kind];
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.li, {
-									"data-type": e.kind,
-									layout: quiet ? false : "position",
-									initial: quiet ? false : {
-										opacity: 0,
-										y: -6
-									},
-									animate: {
-										opacity: 1,
-										y: 0
-									},
-									exit: quiet ? { opacity: 0 } : {
-										opacity: 0,
-										y: -4
-									},
-									transition: quiet ? { duration: 0 } : ENTER,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "t-date",
-											children: e.date
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "t-dot" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "t-body",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "t-head",
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pill, {
-															cls,
-															icon,
-															word
-														}),
-														e.flag ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "pill flag",
-															children: "new"
-														}) : null,
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "t-title",
-															children: e.title
-														})
-													]
-												}),
-												e.gist ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "t-desc",
-													children: e.gist
-												}) : null,
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cites, {
-													list: e.cites,
-													wrapClass: "t-src"
-												}),
-												e.body ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Disclosure, {
-													headline: e.bodyHead ?? "Detail",
-													flat: true,
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: e.body })
-												}) : null
-											]
-										})
-									]
-								}, eventKey(e));
-							})
-						}) })]
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: monthLabel(k) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "tl-sum",
+								children: monthSummary(byMonth.get(k))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
+								initial: false,
+								mode: "popLayout",
+								children: items.map((e) => {
+									const [cls, icon, word] = TL_KIND[e.kind];
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.li, {
+										"data-type": e.kind,
+										layout: quiet ? false : "position",
+										initial: quiet ? false : {
+											opacity: 0,
+											y: -6
+										},
+										animate: {
+											opacity: 1,
+											y: 0
+										},
+										exit: quiet ? { opacity: 0 } : {
+											opacity: 0,
+											y: -4
+										},
+										transition: quiet ? { duration: 0 } : ENTER,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "t-date",
+												children: e.date
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "t-dot" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "t-body",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "t-head",
+														children: [
+															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pill, {
+																cls,
+																icon,
+																word
+															}),
+															e.flag ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "pill flag",
+																children: "new"
+															}) : null,
+															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "t-title",
+																children: e.title
+															})
+														]
+													}),
+													e.gist ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "t-desc",
+														children: e.gist
+													}) : null,
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cites, {
+														list: e.cites,
+														wrapClass: "t-src"
+													}),
+													e.body ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Disclosure, {
+														headline: e.bodyHead ?? "Detail",
+														flat: true,
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: e.body })
+													}) : null
+												]
+											})
+										]
+									}, eventKey(e));
+								})
+							}) })
+						]
 					}, k);
 				})
 			}),
@@ -46448,7 +46633,7 @@ function validate(raw, previews = {}) {
 	for (const [sectionId, laneId] of ganttTargets) if (!laneIds.has(laneId)) errors.push(`gantt "${sectionId}": bar laneId "${laneId}" matches no lane item`);
 	const seenCiteKeys = /* @__PURE__ */ new Map();
 	for (const c of allCites) {
-		if (c.preview && !(c.key in previews)) errors.push(`cite "${c.key}" carries a preview but #doc-previews has no entry`);
+		if (c.preview && !previewFor(c, previews)) errors.push(`cite "${c.key}" carries a preview but neither #doc-previews nor the citation has a payload`);
 		const prior = seenCiteKeys.get(c.key);
 		if (prior !== void 0 && prior !== c.raw) warns.push(`cite key "${c.key}" is reused for two different things ("${prior}" and "${c.raw}")`);
 		seenCiteKeys.set(c.key, c.raw);
@@ -46459,138 +46644,6 @@ function validate(raw, previews = {}) {
 		warns,
 		data
 	};
-}
-//#endregion
-//#region src/schema/doc-previews.ts
-/**
-* `#doc-previews` — the payload behind each hover card, baked into the document
-* so a card never fetches anything. That is what makes the cards work offline
-* and under a strict CSP.
-*
-* Every field is optional. A payload is whatever the source could actually
-* supply, and a card that is missing a field renders without it rather than
-* inventing one — "nothing fabricated" is the rule these shapes exist to serve.
-* So this file types what MAY be present; it never asserts what must be.
-*/
-var Person$1 = object({
-	name: string().optional(),
-	avatarUrl: string().optional()
-});
-/**
-* Real payloads write `null` for "we looked and there is nothing", not an
-* absent key — a PR with no reviewer has `assignee: null`. `.optional()`
-* rejects that, and against one real 144-card document it silently dropped 81
-* of them. Stripping nulls once, here, is better than making
-* every field nullish and remembering to on the next one.
-*/
-function stripNulls(v) {
-	if (Array.isArray(v)) return v.map(stripNulls);
-	if (v && typeof v === "object") {
-		const out = {};
-		for (const [k, x] of Object.entries(v)) if (x !== null) out[k] = stripNulls(x);
-		return out;
-	}
-	return v;
-}
-var Preview = looseObject({
-	state: _enum([
-		"merged",
-		"closed",
-		"draft",
-		"open"
-	]).optional(),
-	repo: string().optional(),
-	number: union([number(), string()]).optional(),
-	author: string().optional(),
-	authorAvatarUrl: string().optional(),
-	additions: number().optional(),
-	deletions: number().optional(),
-	changedFiles: number().optional(),
-	mergedAt: string().optional(),
-	closedAt: string().optional(),
-	createdAt: string().optional(),
-	channel: string().optional(),
-	text: string().optional(),
-	/** Epoch seconds with a fraction, as Slack stamps them. */
-	ts: union([string(), number()]).optional(),
-	id: string().optional(),
-	status: string().optional(),
-	assignee: string().optional(),
-	due: string().optional(),
-	file: string().optional(),
-	page: string().optional(),
-	node: string().optional(),
-	start: string().optional(),
-	end: string().optional(),
-	month: string().optional(),
-	dateNum: union([string(), number()]).optional(),
-	day: string().optional(),
-	time: string().optional(),
-	conferenceUrl: string().optional(),
-	location: string().optional(),
-	attendees: array(Person$1).optional(),
-	attendeeCount: number().optional(),
-	mimeType: string().optional(),
-	owner: string().optional(),
-	ownerAvatarUrl: string().optional(),
-	modified: string().optional(),
-	path: string().optional(),
-	exists: boolean().optional(),
-	lines: number().optional(),
-	source: string().optional(),
-	host: string().optional(),
-	updatedAt: string().optional(),
-	/** custom — a source with no first-class card. The rows ARE the card: label
-	*  and value, in the order the source's own UI shows them, rendered as a
-	*  definition list. Data, not markup — the same rule as everywhere else, and
-	*  the reason a new source needs no new component. */
-	rows: array(object({
-		label: string(),
-		value: string()
-	})).optional(),
-	/** Sprite id for the source's minted mark. */
-	icon: string().optional(),
-	title: string().optional()
-});
-/** One entry as the build writes it: the kind decides which card renders.
-*  `bead` normalises to `tracker` here exactly as it does on a citation —
-*  the real document is full of the legacy spelling, and an entry rejected
-*  for it would lose its card. */
-var PreviewEntry = preprocess((v) => {
-	const e = stripNulls(v);
-	if (!e || typeof e !== "object") return e;
-	const o = e;
-	return o.kind === "bead" ? {
-		...o,
-		kind: "tracker"
-	} : o;
-}, object({
-	kind: _enum(CITE_KINDS).optional(),
-	raw: string().optional(),
-	preview: Preview.optional()
-}));
-/**
-* `#doc-previews` accepts either the keyed object the build writes or
-* `citations.json`'s own `{ citations: [...] }` shape, so the two can never
-* fall out of step — same tolerance `cite.js` had.
-*/
-function readPreviews(raw) {
-	const out = {};
-	if (!raw || typeof raw !== "object") return out;
-	const list = raw.citations;
-	if (Array.isArray(list)) {
-		for (const c of list) {
-			const parsed = PreviewEntry.safeParse(c);
-			const key = c?.key;
-			if (parsed.success && typeof key === "string" && parsed.data.preview) out[key] = parsed.data;
-		}
-		return out;
-	}
-	for (const [key, value] of Object.entries(raw)) {
-		const parsed = PreviewEntry.safeParse(value);
-		if (parsed.success) out[key] = parsed.data;
-	}
-	return out;
 }
 //#endregion
 //#region src/schema/brief-data.ts

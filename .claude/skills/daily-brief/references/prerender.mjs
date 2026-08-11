@@ -32847,6 +32847,550 @@ function CardBody({ cite, entry }) {
 	}
 }
 //#endregion
+//#region src/schema/doc-data.ts
+/**
+* `#doc-data` — the document's content, and the single edit surface.
+*
+* This file is the CONTRACT. The LLM writes data against it, the components
+* render data typed by it, and `assemble.mjs` validates against it before
+* anything is published. One definition, three consumers — which is the whole
+* reason the app owns the schema rather than restating it in prose.
+*
+* Ported from `references/data-model.md` (format 3) and reconciled against the
+* two locked files that actually consume the data — `doc-render.mjs` and
+* `doc-data-check.mjs`. Where those disagreed with the prose, the code won:
+* `callout.variant`, `fields.title`/`fields.icon`, `lane.discHead` and
+* `primer.a` are all read by the renderer but undocumented in the data model.
+*/
+var CITE_KINDS = [
+	"pr",
+	"slack",
+	"gmail",
+	"cal",
+	"drive",
+	"tracker",
+	"figma",
+	"commit",
+	"path",
+	"thread",
+	"link",
+	"custom"
+];
+var CiteKind = preprocess((v) => v === "bead" ? "tracker" : typeof v === "string" && CITE_KINDS.includes(v) ? v : "link", _enum(CITE_KINDS));
+var Cite = object({
+	key: string().min(1),
+	kind: CiteKind,
+	/** What the project calls it in plain text — `PR #53`, `BEAD-0082`. */
+	raw: string().min(1),
+	/** Linked only when the host clears `#doc-allowlist`; checked at render. */
+	url: string().optional(),
+	/** Truthy means `#doc-previews` must carry a payload under `key`.
+	*  The payload's own shape lives in `doc-previews.ts`. */
+	preview: unknown().optional(),
+	/** Overrides the mark this kind would otherwise wear. Written by init for a
+	*  custom source, whose symbol is minted rather than built in; `assemble.mjs`
+	*  refuses an id that resolves to nothing, so this cannot silently render as
+	*  empty space the way a bare `<use>` would. */
+	icon: string().optional()
+});
+var cites = array(Cite).optional();
+/** `flag: true` renders the "new" pill. */
+var flag = boolean().optional();
+var State = _enum([
+	"risk",
+	"blocked",
+	"flight",
+	"shipped"
+]);
+var BLOCK_TYPES = [
+	"p",
+	"callout",
+	"disc",
+	"fields"
+];
+var GenericBlock = preprocess((v) => {
+	if (!v || typeof v !== "object") return v;
+	const b = v;
+	if (typeof b.type === "string" && BLOCK_TYPES.includes(b.type)) return v;
+	return {
+		type: "unknown",
+		text: typeof b.text === "string" ? b.text : void 0
+	};
+}, discriminatedUnion("type", [
+	object({
+		type: literal("p"),
+		text: string()
+	}),
+	object({
+		type: literal("callout"),
+		text: string(),
+		variant: string().optional()
+	}),
+	object({
+		type: literal("disc"),
+		title: string(),
+		body: string(),
+		gist: string().optional()
+	}),
+	object({
+		type: literal("fields"),
+		fields: array(object({
+			label: string(),
+			value: string()
+		})),
+		title: string().optional(),
+		icon: string().optional()
+	}),
+	object({
+		type: literal("unknown"),
+		text: string().optional()
+	})
+]));
+var TimelineEvent = object({
+	kind: _enum([
+		"decision",
+		"pivot",
+		"incident",
+		"milestone",
+		"build",
+		"meeting"
+	]),
+	/** Full ISO date; the renderer derives month clusters and the spark from it. */
+	iso: string().regex(/^\d{4}-\d{2}-\d{2}/, "iso must start with YYYY-MM-DD"),
+	/** The human rendering of `iso` — "12 Mar". */
+	date: string(),
+	title: string().min(1),
+	gist: string().optional(),
+	/** The disclosure rule: the full prose lives here, never in `gist`. */
+	body: string().optional(),
+	bodyHead: string().optional(),
+	cites,
+	flag
+});
+var StateGroup = object({
+	state: State,
+	rows: array(object({
+		title: string().min(1),
+		status: string().optional(),
+		gist: string().optional(),
+		/**
+		* The folded depth. Format 3 had no field for this, and one real document
+		* turned out to carry it on nearly every Current State row — its
+		* contradictions section was entirely rows whose argument lives in a
+		* disclosure. Extracting into a shape without it would have cut that prose,
+		* which is the one thing the disclosure rule forbids.
+		*/
+		body: string().optional(),
+		bodyHead: string().optional(),
+		cites,
+		flag
+	}))
+});
+var AskQuestion = object({
+	q: string().min(1),
+	who: string().optional(),
+	ctx: string().optional(),
+	answer: string().optional(),
+	cites
+});
+var WhatsNewBullet = object({
+	kind: _enum([
+		"dec",
+		"risk",
+		"res",
+		"add",
+		"upd",
+		"watch"
+	]),
+	strong: string().optional(),
+	text: string(),
+	cites,
+	goto: object({
+		target: string(),
+		label: string()
+	}).optional()
+});
+var WhatsNewRun = object({
+	iso: string().regex(/^\d{4}-\d{2}-\d{2}/),
+	date: string(),
+	time: string(),
+	/** Which sources this run read, as one display string. */
+	sources: string(),
+	/** Exactly one run in the section carries this — enforced in `validate.ts`. */
+	latest: boolean().optional(),
+	bullets: array(WhatsNewBullet)
+});
+var TldrTile = object({
+	n: string(),
+	label: string(),
+	gist: string().optional(),
+	risk: boolean().optional()
+});
+var DecisionRow = object({
+	date: string(),
+	kind: _enum([
+		"decision",
+		"pivot",
+		"milestone"
+	]),
+	title: string().min(1),
+	verdict: string(),
+	why: string().optional(),
+	cites
+});
+var PrimerCard = object({
+	q: string().min(1),
+	/** The one-line answer on the summary; `body` is the folded long form. */
+	a: string(),
+	body: string()
+});
+var GlossaryGroup = object({
+	name: string(),
+	terms: array(object({
+		term: string().min(1),
+		def: string(),
+		code: boolean().optional()
+	}))
+});
+var PipelineStage = object({
+	title: string().min(1),
+	gist: string(),
+	detail: string()
+});
+var GanttWindow = object({
+	start: string().regex(/^\d{4}-\d{2}-\d{2}$/, "window.start must be an ISO date"),
+	unit: _enum(["week", "month"]),
+	cols: number().int().positive(),
+	todayC1: number().int().optional(),
+	/** Visually-hidden label for the window, read by screen readers. */
+	vh: string().optional()
+});
+var GanttRow = object({
+	title: string().min(1),
+	/** Must match a `lane` item id — cross-checked in `validate.ts`. */
+	laneId: string().optional(),
+	status: State,
+	c1: number().int(),
+	span: number().int(),
+	dep: string().optional(),
+	vh: string().optional()
+});
+var LaneItem = object({
+	id: string().min(1),
+	title: string().min(1),
+	href: string().optional(),
+	tag: string().optional(),
+	/** "since you last looked" — the real document flags lane items too. */
+	flag,
+	/** The one-line description under the title. */
+	d: string(),
+	cites,
+	disc: string().optional(),
+	discHead: string().optional(),
+	/** Metadata the renderer ignores: what the live layer watches so this item
+	*  can check itself off. `bead` is the legacy spelling of `tracker`. */
+	watch: object({
+		kind: _enum([
+			"pr",
+			"tracker",
+			"bead"
+		]),
+		ref: string()
+	}).optional()
+});
+var base = {
+	id: string().min(1),
+	tab: _enum([
+		"today",
+		"whatsnew",
+		"orientation",
+		"project",
+		"timeline",
+		"you"
+	]),
+	title: string().min(1),
+	eyebrow: string().optional(),
+	lead: string().optional(),
+	icon: string().optional()
+};
+var generic = array(GenericBlock);
+var LAYOUTS = [
+	"timeline",
+	"state",
+	"ask",
+	"whatsnew",
+	"tldr",
+	"goal",
+	"primer",
+	"glossary",
+	"pipeline",
+	"gantt",
+	"lane",
+	"prose",
+	"generic"
+];
+var SectionNode = preprocess((v) => {
+	if (!v || typeof v !== "object") return v;
+	const s = v;
+	if (typeof s.layout === "string" && LAYOUTS.includes(s.layout)) return v;
+	return {
+		...s,
+		layout: "prose",
+		blocks: Array.isArray(s.blocks) ? s.blocks : []
+	};
+}, discriminatedUnion("layout", [
+	object({
+		...base,
+		layout: literal("timeline"),
+		blocks: array(TimelineEvent)
+	}),
+	object({
+		...base,
+		layout: literal("state"),
+		blocks: array(StateGroup)
+	}),
+	object({
+		...base,
+		layout: literal("ask"),
+		blocks: object({
+			open: array(AskQuestion).default([]),
+			done: array(AskQuestion).default([])
+		})
+	}),
+	object({
+		...base,
+		layout: literal("whatsnew"),
+		blocks: object({
+			runs: array(WhatsNewRun),
+			srcNote: string().optional()
+		})
+	}),
+	object({
+		...base,
+		layout: literal("tldr"),
+		blocks: object({
+			tiles: array(TldrTile),
+			key: string().optional(),
+			long: string().optional(),
+			longGist: string().optional()
+		})
+	}),
+	object({
+		...base,
+		layout: literal("goal"),
+		blocks: object({
+			current: string().optional(),
+			shifts: array(DecisionRow).default([]),
+			historical: string().optional()
+		})
+	}),
+	object({
+		...base,
+		layout: literal("primer"),
+		blocks: array(PrimerCard)
+	}),
+	object({
+		...base,
+		layout: literal("glossary"),
+		blocks: array(GlossaryGroup)
+	}),
+	object({
+		...base,
+		layout: literal("pipeline"),
+		blocks: array(PipelineStage)
+	}),
+	object({
+		...base,
+		layout: literal("gantt"),
+		blocks: object({
+			window: GanttWindow,
+			rows: array(GanttRow)
+		})
+	}),
+	object({
+		...base,
+		layout: literal("lane"),
+		blocks: array(LaneItem)
+	}),
+	object({
+		...base,
+		layout: literal("prose"),
+		blocks: generic
+	}),
+	object({
+		...base,
+		layout: literal("generic"),
+		blocks: generic
+	})
+]));
+object({
+	meta: object({
+		project: string().min(1),
+		tagline: string(),
+		timezone: string(),
+		locale: string().optional(),
+		updatedAt: string()
+	}),
+	/** Array order IS render order. */
+	sections: array(SectionNode).min(1, "#doc-data has no sections")
+});
+//#endregion
+//#region src/schema/doc-previews.ts
+/**
+* `#doc-previews` — the payload behind each hover card, baked into the document
+* so a card never fetches anything. That is what makes the cards work offline
+* and under a strict CSP.
+*
+* Every field is optional. A payload is whatever the source could actually
+* supply, and a card that is missing a field renders without it rather than
+* inventing one — "nothing fabricated" is the rule these shapes exist to serve.
+* So this file types what MAY be present; it never asserts what must be.
+*/
+var Person$1 = object({
+	name: string().optional(),
+	avatarUrl: string().optional()
+});
+/**
+* Real payloads write `null` for "we looked and there is nothing", not an
+* absent key — a PR with no reviewer has `assignee: null`. `.optional()`
+* rejects that, and against one real 144-card document it silently dropped 81
+* of them. Stripping nulls once, here, is better than making
+* every field nullish and remembering to on the next one.
+*/
+function stripNulls(v) {
+	if (Array.isArray(v)) return v.map(stripNulls);
+	if (v && typeof v === "object") {
+		const out = {};
+		for (const [k, x] of Object.entries(v)) if (x !== null) out[k] = stripNulls(x);
+		return out;
+	}
+	return v;
+}
+var Preview = looseObject({
+	state: _enum([
+		"merged",
+		"closed",
+		"draft",
+		"open"
+	]).optional(),
+	repo: string().optional(),
+	number: union([number(), string()]).optional(),
+	author: string().optional(),
+	authorAvatarUrl: string().optional(),
+	additions: number().optional(),
+	deletions: number().optional(),
+	changedFiles: number().optional(),
+	mergedAt: string().optional(),
+	closedAt: string().optional(),
+	createdAt: string().optional(),
+	channel: string().optional(),
+	text: string().optional(),
+	/** Epoch seconds with a fraction, as Slack stamps them. */
+	ts: union([string(), number()]).optional(),
+	id: string().optional(),
+	status: string().optional(),
+	assignee: string().optional(),
+	due: string().optional(),
+	file: string().optional(),
+	page: string().optional(),
+	node: string().optional(),
+	start: string().optional(),
+	end: string().optional(),
+	month: string().optional(),
+	dateNum: union([string(), number()]).optional(),
+	day: string().optional(),
+	time: string().optional(),
+	conferenceUrl: string().optional(),
+	location: string().optional(),
+	attendees: array(Person$1).optional(),
+	attendeeCount: number().optional(),
+	mimeType: string().optional(),
+	owner: string().optional(),
+	ownerAvatarUrl: string().optional(),
+	modified: string().optional(),
+	path: string().optional(),
+	exists: boolean().optional(),
+	lines: number().optional(),
+	source: string().optional(),
+	host: string().optional(),
+	updatedAt: string().optional(),
+	/** custom — a source with no first-class card. The rows ARE the card: label
+	*  and value, in the order the source's own UI shows them, rendered as a
+	*  definition list. Data, not markup — the same rule as everywhere else, and
+	*  the reason a new source needs no new component. */
+	rows: array(object({
+		label: string(),
+		value: string()
+	})).optional(),
+	/** Sprite id for the source's minted mark. */
+	icon: string().optional(),
+	title: string().optional()
+});
+/** One entry as the build writes it: the kind decides which card renders.
+*  `bead` normalises to `tracker` here exactly as it does on a citation —
+*  the real document is full of the legacy spelling, and an entry rejected
+*  for it would lose its card. */
+var PreviewEntry = preprocess((v) => {
+	const e = stripNulls(v);
+	if (!e || typeof e !== "object") return e;
+	const o = e;
+	return o.kind === "bead" ? {
+		...o,
+		kind: "tracker"
+	} : o;
+}, object({
+	kind: _enum(CITE_KINDS).optional(),
+	raw: string().optional(),
+	preview: Preview.optional()
+}));
+/**
+* The payload behind one chip, from wherever the run actually put it.
+*
+* Two places are legal because runs use both and the old gate — "only look when
+* `cite.preview` is set" — turned each mismatch into a chip that silently opened
+* nothing:
+*
+* - `#doc-previews` keyed by the citation key. The documented place, and it wins.
+* - the citation's own `preview`, when it was written as the payload rather than
+*   as the `true` flag. `#doc-data` is the one file every run writes, so this is
+*   where a payload lands when `doc-previews.json` was never created.
+*
+* A cite key present in `#doc-previews` opens its card whether or not the
+* citation flags it. The payload existing IS the promise; a missing flag was
+* never a reason to withhold a card the document is already carrying.
+*/
+function previewFor(cite, previews) {
+	const keyed = previews[cite.key];
+	if (keyed) return keyed;
+	if (!cite.preview || typeof cite.preview !== "object") return void 0;
+	const inline = cite.preview;
+	const parsed = PreviewEntry.safeParse("preview" in inline ? inline : { preview: inline });
+	return parsed.success ? parsed.data : void 0;
+}
+/**
+* `#doc-previews` accepts either the keyed object the build writes or
+* `citations.json`'s own `{ citations: [...] }` shape, so the two can never
+* fall out of step — same tolerance `cite.js` had.
+*/
+function readPreviews(raw) {
+	const out = {};
+	if (!raw || typeof raw !== "object") return out;
+	const list = raw.citations;
+	if (Array.isArray(list)) {
+		for (const c of list) {
+			const parsed = PreviewEntry.safeParse(c);
+			const key = c?.key;
+			if (parsed.success && typeof key === "string" && parsed.data.preview) out[key] = parsed.data;
+		}
+		return out;
+	}
+	for (const [key, value] of Object.entries(raw)) {
+		const parsed = PreviewEntry.safeParse(value);
+		if (parsed.success) out[key] = parsed.data;
+	}
+	return out;
+}
+//#endregion
 //#region src/components/Cite.tsx
 /**
 * The citation chip — the one component both surfaces share, so the Today tab
@@ -32947,7 +33491,7 @@ function CiteChip({ cite }) {
 	const [kindIcon, tok, tip] = CITE_KIND[cite.kind] ?? CITE_KIND.link;
 	const iconId = cite.icon ?? (cite.kind === "tracker" ? trackerIcon(cite.raw, trackerKind(config)) : kindIcon);
 	const linked = isAllowed(cite.url, allowlist);
-	const entry = cite.preview ? previews[cite.key] : void 0;
+	const entry = previewFor(cite, previews);
 	const style = quiet ? void 0 : {
 		"--tilt": tiltFor(cite.key).tilt,
 		"--htilt": tiltFor(cite.key).htilt
@@ -34591,526 +35135,6 @@ function BriefApp({ brief, allowlist, previews, avatars, icons, config }) {
 	});
 }
 //#endregion
-//#region src/schema/doc-data.ts
-/**
-* `#doc-data` — the document's content, and the single edit surface.
-*
-* This file is the CONTRACT. The LLM writes data against it, the components
-* render data typed by it, and `assemble.mjs` validates against it before
-* anything is published. One definition, three consumers — which is the whole
-* reason the app owns the schema rather than restating it in prose.
-*
-* Ported from `references/data-model.md` (format 3) and reconciled against the
-* two locked files that actually consume the data — `doc-render.mjs` and
-* `doc-data-check.mjs`. Where those disagreed with the prose, the code won:
-* `callout.variant`, `fields.title`/`fields.icon`, `lane.discHead` and
-* `primer.a` are all read by the renderer but undocumented in the data model.
-*/
-var CITE_KINDS = [
-	"pr",
-	"slack",
-	"gmail",
-	"cal",
-	"drive",
-	"tracker",
-	"figma",
-	"commit",
-	"path",
-	"thread",
-	"link",
-	"custom"
-];
-var CiteKind = preprocess((v) => v === "bead" ? "tracker" : typeof v === "string" && CITE_KINDS.includes(v) ? v : "link", _enum(CITE_KINDS));
-var Cite = object({
-	key: string().min(1),
-	kind: CiteKind,
-	/** What the project calls it in plain text — `PR #53`, `BEAD-0082`. */
-	raw: string().min(1),
-	/** Linked only when the host clears `#doc-allowlist`; checked at render. */
-	url: string().optional(),
-	/** Truthy means `#doc-previews` must carry a payload under `key`.
-	*  The payload's own shape lives in `doc-previews.ts`. */
-	preview: unknown().optional(),
-	/** Overrides the mark this kind would otherwise wear. Written by init for a
-	*  custom source, whose symbol is minted rather than built in; `assemble.mjs`
-	*  refuses an id that resolves to nothing, so this cannot silently render as
-	*  empty space the way a bare `<use>` would. */
-	icon: string().optional()
-});
-var cites = array(Cite).optional();
-/** `flag: true` renders the "new" pill. */
-var flag = boolean().optional();
-var State = _enum([
-	"risk",
-	"blocked",
-	"flight",
-	"shipped"
-]);
-var BLOCK_TYPES = [
-	"p",
-	"callout",
-	"disc",
-	"fields"
-];
-var GenericBlock = preprocess((v) => {
-	if (!v || typeof v !== "object") return v;
-	const b = v;
-	if (typeof b.type === "string" && BLOCK_TYPES.includes(b.type)) return v;
-	return {
-		type: "unknown",
-		text: typeof b.text === "string" ? b.text : void 0
-	};
-}, discriminatedUnion("type", [
-	object({
-		type: literal("p"),
-		text: string()
-	}),
-	object({
-		type: literal("callout"),
-		text: string(),
-		variant: string().optional()
-	}),
-	object({
-		type: literal("disc"),
-		title: string(),
-		body: string(),
-		gist: string().optional()
-	}),
-	object({
-		type: literal("fields"),
-		fields: array(object({
-			label: string(),
-			value: string()
-		})),
-		title: string().optional(),
-		icon: string().optional()
-	}),
-	object({
-		type: literal("unknown"),
-		text: string().optional()
-	})
-]));
-var TimelineEvent = object({
-	kind: _enum([
-		"decision",
-		"pivot",
-		"incident",
-		"milestone",
-		"build",
-		"meeting"
-	]),
-	/** Full ISO date; the renderer derives month clusters and the spark from it. */
-	iso: string().regex(/^\d{4}-\d{2}-\d{2}/, "iso must start with YYYY-MM-DD"),
-	/** The human rendering of `iso` — "12 Mar". */
-	date: string(),
-	title: string().min(1),
-	gist: string().optional(),
-	/** The disclosure rule: the full prose lives here, never in `gist`. */
-	body: string().optional(),
-	bodyHead: string().optional(),
-	cites,
-	flag
-});
-var StateGroup = object({
-	state: State,
-	rows: array(object({
-		title: string().min(1),
-		status: string().optional(),
-		gist: string().optional(),
-		/**
-		* The folded depth. Format 3 had no field for this, and one real document
-		* turned out to carry it on nearly every Current State row — its
-		* contradictions section was entirely rows whose argument lives in a
-		* disclosure. Extracting into a shape without it would have cut that prose,
-		* which is the one thing the disclosure rule forbids.
-		*/
-		body: string().optional(),
-		bodyHead: string().optional(),
-		cites,
-		flag
-	}))
-});
-var AskQuestion = object({
-	q: string().min(1),
-	who: string().optional(),
-	ctx: string().optional(),
-	answer: string().optional(),
-	cites
-});
-var WhatsNewBullet = object({
-	kind: _enum([
-		"dec",
-		"risk",
-		"res",
-		"add",
-		"upd",
-		"watch"
-	]),
-	strong: string().optional(),
-	text: string(),
-	cites,
-	goto: object({
-		target: string(),
-		label: string()
-	}).optional()
-});
-var WhatsNewRun = object({
-	iso: string().regex(/^\d{4}-\d{2}-\d{2}/),
-	date: string(),
-	time: string(),
-	/** Which sources this run read, as one display string. */
-	sources: string(),
-	/** Exactly one run in the section carries this — enforced in `validate.ts`. */
-	latest: boolean().optional(),
-	bullets: array(WhatsNewBullet)
-});
-var TldrTile = object({
-	n: string(),
-	label: string(),
-	gist: string().optional(),
-	risk: boolean().optional()
-});
-var DecisionRow = object({
-	date: string(),
-	kind: _enum([
-		"decision",
-		"pivot",
-		"milestone"
-	]),
-	title: string().min(1),
-	verdict: string(),
-	why: string().optional(),
-	cites
-});
-var PrimerCard = object({
-	q: string().min(1),
-	/** The one-line answer on the summary; `body` is the folded long form. */
-	a: string(),
-	body: string()
-});
-var GlossaryGroup = object({
-	name: string(),
-	terms: array(object({
-		term: string().min(1),
-		def: string(),
-		code: boolean().optional()
-	}))
-});
-var PipelineStage = object({
-	title: string().min(1),
-	gist: string(),
-	detail: string()
-});
-var GanttWindow = object({
-	start: string().regex(/^\d{4}-\d{2}-\d{2}$/, "window.start must be an ISO date"),
-	unit: _enum(["week", "month"]),
-	cols: number().int().positive(),
-	todayC1: number().int().optional(),
-	/** Visually-hidden label for the window, read by screen readers. */
-	vh: string().optional()
-});
-var GanttRow = object({
-	title: string().min(1),
-	/** Must match a `lane` item id — cross-checked in `validate.ts`. */
-	laneId: string().optional(),
-	status: State,
-	c1: number().int(),
-	span: number().int(),
-	dep: string().optional(),
-	vh: string().optional()
-});
-var LaneItem = object({
-	id: string().min(1),
-	title: string().min(1),
-	href: string().optional(),
-	tag: string().optional(),
-	/** "since you last looked" — the real document flags lane items too. */
-	flag,
-	/** The one-line description under the title. */
-	d: string(),
-	cites,
-	disc: string().optional(),
-	discHead: string().optional(),
-	/** Metadata the renderer ignores: what the live layer watches so this item
-	*  can check itself off. `bead` is the legacy spelling of `tracker`. */
-	watch: object({
-		kind: _enum([
-			"pr",
-			"tracker",
-			"bead"
-		]),
-		ref: string()
-	}).optional()
-});
-var base = {
-	id: string().min(1),
-	tab: _enum([
-		"today",
-		"whatsnew",
-		"orientation",
-		"project",
-		"timeline",
-		"you"
-	]),
-	title: string().min(1),
-	eyebrow: string().optional(),
-	lead: string().optional(),
-	icon: string().optional()
-};
-var generic = array(GenericBlock);
-var LAYOUTS = [
-	"timeline",
-	"state",
-	"ask",
-	"whatsnew",
-	"tldr",
-	"goal",
-	"primer",
-	"glossary",
-	"pipeline",
-	"gantt",
-	"lane",
-	"prose",
-	"generic"
-];
-var SectionNode = preprocess((v) => {
-	if (!v || typeof v !== "object") return v;
-	const s = v;
-	if (typeof s.layout === "string" && LAYOUTS.includes(s.layout)) return v;
-	return {
-		...s,
-		layout: "prose",
-		blocks: Array.isArray(s.blocks) ? s.blocks : []
-	};
-}, discriminatedUnion("layout", [
-	object({
-		...base,
-		layout: literal("timeline"),
-		blocks: array(TimelineEvent)
-	}),
-	object({
-		...base,
-		layout: literal("state"),
-		blocks: array(StateGroup)
-	}),
-	object({
-		...base,
-		layout: literal("ask"),
-		blocks: object({
-			open: array(AskQuestion).default([]),
-			done: array(AskQuestion).default([])
-		})
-	}),
-	object({
-		...base,
-		layout: literal("whatsnew"),
-		blocks: object({
-			runs: array(WhatsNewRun),
-			srcNote: string().optional()
-		})
-	}),
-	object({
-		...base,
-		layout: literal("tldr"),
-		blocks: object({
-			tiles: array(TldrTile),
-			key: string().optional(),
-			long: string().optional(),
-			longGist: string().optional()
-		})
-	}),
-	object({
-		...base,
-		layout: literal("goal"),
-		blocks: object({
-			current: string().optional(),
-			shifts: array(DecisionRow).default([]),
-			historical: string().optional()
-		})
-	}),
-	object({
-		...base,
-		layout: literal("primer"),
-		blocks: array(PrimerCard)
-	}),
-	object({
-		...base,
-		layout: literal("glossary"),
-		blocks: array(GlossaryGroup)
-	}),
-	object({
-		...base,
-		layout: literal("pipeline"),
-		blocks: array(PipelineStage)
-	}),
-	object({
-		...base,
-		layout: literal("gantt"),
-		blocks: object({
-			window: GanttWindow,
-			rows: array(GanttRow)
-		})
-	}),
-	object({
-		...base,
-		layout: literal("lane"),
-		blocks: array(LaneItem)
-	}),
-	object({
-		...base,
-		layout: literal("prose"),
-		blocks: generic
-	}),
-	object({
-		...base,
-		layout: literal("generic"),
-		blocks: generic
-	})
-]));
-object({
-	meta: object({
-		project: string().min(1),
-		tagline: string(),
-		timezone: string(),
-		locale: string().optional(),
-		updatedAt: string()
-	}),
-	/** Array order IS render order. */
-	sections: array(SectionNode).min(1, "#doc-data has no sections")
-});
-//#endregion
-//#region src/schema/doc-previews.ts
-/**
-* `#doc-previews` — the payload behind each hover card, baked into the document
-* so a card never fetches anything. That is what makes the cards work offline
-* and under a strict CSP.
-*
-* Every field is optional. A payload is whatever the source could actually
-* supply, and a card that is missing a field renders without it rather than
-* inventing one — "nothing fabricated" is the rule these shapes exist to serve.
-* So this file types what MAY be present; it never asserts what must be.
-*/
-var Person$1 = object({
-	name: string().optional(),
-	avatarUrl: string().optional()
-});
-/**
-* Real payloads write `null` for "we looked and there is nothing", not an
-* absent key — a PR with no reviewer has `assignee: null`. `.optional()`
-* rejects that, and against one real 144-card document it silently dropped 81
-* of them. Stripping nulls once, here, is better than making
-* every field nullish and remembering to on the next one.
-*/
-function stripNulls(v) {
-	if (Array.isArray(v)) return v.map(stripNulls);
-	if (v && typeof v === "object") {
-		const out = {};
-		for (const [k, x] of Object.entries(v)) if (x !== null) out[k] = stripNulls(x);
-		return out;
-	}
-	return v;
-}
-var Preview = looseObject({
-	state: _enum([
-		"merged",
-		"closed",
-		"draft",
-		"open"
-	]).optional(),
-	repo: string().optional(),
-	number: union([number(), string()]).optional(),
-	author: string().optional(),
-	authorAvatarUrl: string().optional(),
-	additions: number().optional(),
-	deletions: number().optional(),
-	changedFiles: number().optional(),
-	mergedAt: string().optional(),
-	closedAt: string().optional(),
-	createdAt: string().optional(),
-	channel: string().optional(),
-	text: string().optional(),
-	/** Epoch seconds with a fraction, as Slack stamps them. */
-	ts: union([string(), number()]).optional(),
-	id: string().optional(),
-	status: string().optional(),
-	assignee: string().optional(),
-	due: string().optional(),
-	file: string().optional(),
-	page: string().optional(),
-	node: string().optional(),
-	start: string().optional(),
-	end: string().optional(),
-	month: string().optional(),
-	dateNum: union([string(), number()]).optional(),
-	day: string().optional(),
-	time: string().optional(),
-	conferenceUrl: string().optional(),
-	location: string().optional(),
-	attendees: array(Person$1).optional(),
-	attendeeCount: number().optional(),
-	mimeType: string().optional(),
-	owner: string().optional(),
-	ownerAvatarUrl: string().optional(),
-	modified: string().optional(),
-	path: string().optional(),
-	exists: boolean().optional(),
-	lines: number().optional(),
-	source: string().optional(),
-	host: string().optional(),
-	updatedAt: string().optional(),
-	/** custom — a source with no first-class card. The rows ARE the card: label
-	*  and value, in the order the source's own UI shows them, rendered as a
-	*  definition list. Data, not markup — the same rule as everywhere else, and
-	*  the reason a new source needs no new component. */
-	rows: array(object({
-		label: string(),
-		value: string()
-	})).optional(),
-	/** Sprite id for the source's minted mark. */
-	icon: string().optional(),
-	title: string().optional()
-});
-/** One entry as the build writes it: the kind decides which card renders.
-*  `bead` normalises to `tracker` here exactly as it does on a citation —
-*  the real document is full of the legacy spelling, and an entry rejected
-*  for it would lose its card. */
-var PreviewEntry = preprocess((v) => {
-	const e = stripNulls(v);
-	if (!e || typeof e !== "object") return e;
-	const o = e;
-	return o.kind === "bead" ? {
-		...o,
-		kind: "tracker"
-	} : o;
-}, object({
-	kind: _enum(CITE_KINDS).optional(),
-	raw: string().optional(),
-	preview: Preview.optional()
-}));
-/**
-* `#doc-previews` accepts either the keyed object the build writes or
-* `citations.json`'s own `{ citations: [...] }` shape, so the two can never
-* fall out of step — same tolerance `cite.js` had.
-*/
-function readPreviews(raw) {
-	const out = {};
-	if (!raw || typeof raw !== "object") return out;
-	const list = raw.citations;
-	if (Array.isArray(list)) {
-		for (const c of list) {
-			const parsed = PreviewEntry.safeParse(c);
-			const key = c?.key;
-			if (parsed.success && typeof key === "string" && parsed.data.preview) out[key] = parsed.data;
-		}
-		return out;
-	}
-	for (const [key, value] of Object.entries(raw)) {
-		const parsed = PreviewEntry.safeParse(value);
-		if (parsed.success) out[key] = parsed.data;
-	}
-	return out;
-}
-//#endregion
 //#region src/schema/brief-data.ts
 /**
 * `#brief-data` — the Today fragment, as data.
@@ -35337,7 +35361,7 @@ function prerenderBrief(input) {
 		warns
 	};
 	const previews = readPreviews(input.previews);
-	for (const key of new Set(citedKeys(parsed.data))) if (!previews[key]) warns.push(`cite "${key}" has no preview payload — the chip will not open a card`);
+	for (const key of new Set(citedKeys(parsed.data))) if (!previews[key]) warns.push(`cite "${key}" has no entry in #doc-previews — no card unless the citation carries its own payload`);
 	return {
 		html: (0, import_server_node.renderToString)(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BriefApp, {
 			brief: parsed.data,
