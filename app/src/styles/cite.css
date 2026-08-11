@@ -65,7 +65,12 @@ a.cite:hover .cite-tip, a.cite:focus-visible .cite-tip { opacity: 1;
    the motion, which is the daily brief's .startip vocabulary. */
 .cprev { position: fixed; z-index: 90; width: min(340px, calc(100vw - 24px));
   background: color-mix(in srgb, var(--card) 80%, transparent);
-  backdrop-filter: blur(14px) saturate(1.6); -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  /* Unprefixed ONLY. The CSS minifier prefixes this itself, and when the source
+     already carries a `-webkit-` twin it merges the pair and keeps the PREFIXED
+     one — which Chrome does not support (`CSS.supports('-webkit-backdrop-filter')`
+     is false), so the card shipped with no blur at all. Never hand-write a vendor
+     prefix beside its unprefixed property in this file. */
+  backdrop-filter: blur(14px) saturate(1.6);
   border: 1px solid var(--hairline); border-radius: 12px;
   padding: 12px 14px 13px; pointer-events: none; opacity: 0;
   box-shadow: 0 18px 44px color-mix(in srgb, var(--page) 84%, transparent);

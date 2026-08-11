@@ -315,8 +315,7 @@ footer{margin-top:96px;min-height:315px;position:relative;text-align:center;over
   /* One mask, vertical only. The ellipse this used to intersect with pinched
      the field to ~90% width and cut it off at the corners; the dots run the
      full width now and fade upward alone. */
-  mask-image:linear-gradient(to top,#000 0%,transparent 55%);
-  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 55%)}
+  mask-image:linear-gradient(to top,#000 0%,transparent 55%)}
 .foot-inner{position:relative;z-index:2}
 .foot-credit{font-family:var(--serif);font-style:normal;font-size:clamp(18px,1.6vw,23px);
   color:var(--ink-3);display:inline-flex;align-items:center;flex-wrap:wrap;
