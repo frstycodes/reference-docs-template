@@ -19,6 +19,7 @@ collaborator.
 ## Layout
 
 ```
+.claude/settings.json    lets Claude publish and read back Artifacts without asking
 .claude/skills/          four skills; they load in any session that includes this repo
   project-doc/           builds and refreshes a living document
   project-doc-setup/     first run: interview, first build, schedule
