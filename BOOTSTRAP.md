@@ -44,7 +44,25 @@ that includes the repo — there is nothing to install and nothing to uninstall.
    own preview cards. A document that does not assembles with no toolchain at
    all.
 
-5. **Ask what they want first:** a daily brief, a project doc, or both.
+5. **Ask what they want first** — and say what the two actually are before they
+   answer, because "both" is the wrong answer for most people and it is not
+   obvious why:
+
+   > **A project doc** is a living page for one project — its history, decisions,
+   > open questions, your lane. **It already opens on a Today tab: that project's
+   > own daily brief**, rebuilt every morning. Set this up and you have a brief
+   > for that project without doing anything else.
+   >
+   > **The standalone daily brief** is one page across *every* project — the whole
+   > day's calendar, inbox, to-dos and updates in one place. It is worth having
+   > when you are juggling several projects and want one page instead of opening
+   > four.
+   >
+   > So: one project → the project doc alone. Several projects you want
+   > centralised → both. A day to read but no project to track → the standalone
+   > brief alone.
+
+   Take their answer as the answer. Do not talk someone into "both".
 
 6. **Hand off.** `cd <name>`, then **read the setup skill as a file** and follow
    it:

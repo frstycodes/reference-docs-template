@@ -17,6 +17,13 @@ many times, and a bad run is a bad *build*. Keeping them apart keeps each honest
 writes document markup or `#doc-data` — it writes the config and drafts the goal,
 then invokes `project-doc init`, which assumes a valid config and builds.
 
+**This includes a daily brief; say so.** The document's Today tab *is* a daily
+brief for this project, rebuilt every morning by the scheduled refresh. Tell the
+user that once, here, so they do not go and set up the standalone brief expecting
+it to be the thing that gives them a morning read on this project. The standalone
+brief (`daily-brief-setup`) is worth adding only when they are running several
+projects and want one page across all of them instead of opening each doc.
+
 ## The arc
 
 Run these in order. Each step is detailed in the references; do not summarise

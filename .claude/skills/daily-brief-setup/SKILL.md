@@ -19,6 +19,26 @@ event, inbox item, to-do and update across all projects. The per-project brief i
 a different thing — it is a fragment `project-doc` embeds in its Today tab, and it
 is configured there, not here. This skill only ever sets up the standalone brief.
 
+## First, check this is the one they want
+
+A project doc **already contains a daily brief for its project** — that is its
+Today tab, rebuilt every morning by the same skill. So somebody who set one up
+and then asks for "a daily brief" often already has the brief they meant, and
+setting this up gives them a second page and a second morning notification for
+one project's worth of news.
+
+Before the interview, say which is which and get an answer:
+
+> Your project doc's Today tab is already a daily brief for that project. This
+> one spans **every** project — one page for the whole day instead of opening
+> each doc. Worth it if you are juggling a few; redundant if you have one
+> project.
+
+If they have exactly one project doc and no plans for a second, say so plainly
+and let them decline. If they have several, or none and want a day view without
+tracking a project, carry on. Their answer decides it — do not refuse to build
+one because you judged it redundant.
+
 ## Why this is simpler than project-doc-setup
 
 The brief is a **stateless snapshot**. There are no cursors, no surgical patch,
