@@ -2,9 +2,9 @@
  * An activity strip, then month clusters on one rail. A decision is an event
  * here, its depth folded in place.
  *
- * The spark, the filter chips, the legend and the month clustering are all
- * DERIVED from the events — the LLM supplies only events, so none of them can
- * drift. That was the locked renderer's central claim and it survives intact;
+ * The spark, the filter chips, the legend, the month clustering and each
+ * month's summary line are all DERIVED from the events — the LLM supplies only
+ * events, so none of them can drift. That was the locked renderer's central claim and it survives intact;
  * what changes is that the derivation and the filtering are now the same
  * declaration instead of a renderer and a shell script that had to agree.
  *
@@ -43,15 +43,21 @@ import type { z } from 'zod'
 type Event = z.infer<typeof TimelineEvent>
 type Kind = Event['kind']
 
-/** kind -> [css class, sprite id, the word, what it means] */
-const TL_KIND: Record<Kind, [string, string, string, string]> = {
-  decision: ['decision', 'i-fork', 'decision', 'a choice was made'],
-  pivot: ['pivot', 'i-pivot', 'pivot', 'a choice was reversed'],
-  incident: ['incident', 'i-alert', 'incident', 'it needs a response'],
-  milestone: ['milestone', 'i-check', 'milestone', 'a point was reached'],
-  build: ['build', 'i-ship', 'built', 'it shipped'],
-  meeting: ['meeting', 'i-user', 'meeting', 'people talked'],
+/** kind -> [css class, sprite id, the pill's word, what it means, the countable noun]
+ *
+ *  The pill's word and the noun are not the same string: a `build` pill reads
+ *  "built" and you count "5 builds", so a filter chip built from the pill word
+ *  said "Builts". Every noun here pluralises with a bare `s`. */
+const TL_KIND: Record<Kind, [string, string, string, string, string]> = {
+  decision: ['decision', 'i-fork', 'decision', 'a choice was made', 'decision'],
+  pivot: ['pivot', 'i-pivot', 'pivot', 'a choice was reversed', 'pivot'],
+  incident: ['incident', 'i-alert', 'incident', 'it needs a response', 'incident'],
+  milestone: ['milestone', 'i-check', 'milestone', 'a point was reached', 'milestone'],
+  build: ['build', 'i-ship', 'built', 'it shipped', 'build'],
+  meeting: ['meeting', 'i-user', 'meeting', 'people talked', 'meeting'],
 }
+
+const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December']
@@ -77,6 +83,21 @@ const ENTER = { duration: 0.26, ease: [0.16, 1, 0.3, 1] as const }
 function monthLabel(key: string): string {
   const [y, m] = key.split('-')
   return `${MONTHS[Number(m) - 1]} ${y}`
+}
+
+/** What the month held, in the legend's own order — "9 events · 3 decisions,
+ *  1 incident, 5 builds".
+ *
+ *  Derived from the month's events like the spark, the chips and the legend, so
+ *  no run can write a summary that disagrees with the rows under it. And like
+ *  the spark it counts the WHOLE month, not the filtered view: it is the line
+ *  that explains why a month showing one row is not a month that had one. */
+function monthSummary(events: Event[]): string {
+  const kinds = TIMELINE_KINDS
+    .map((t) => [t, events.filter((e) => e.kind === t).length] as const)
+    .filter(([, n]) => n > 0)
+    .map(([t, n]) => count(n, TL_KIND[t][4]))
+  return `${count(events.length, 'event')} · ${kinds.join(', ')}`
 }
 
 export function Timeline({ section }: { section: SectionOf<'timeline'> }) {
@@ -150,10 +171,10 @@ export function Timeline({ section }: { section: SectionOf<'timeline'> }) {
           All
         </button>
         {present.map((t) => {
-          const word = TL_KIND[t][2]
+          const noun = TL_KIND[t][4]
           return (
             <button type="button" data-filter={t} aria-pressed={active.has(t)} onClick={() => toggle(t)} key={t}>
-              {word.charAt(0).toUpperCase() + word.slice(1)}s
+              {noun.charAt(0).toUpperCase() + noun.slice(1)}s
             </button>
           )
         })}
@@ -188,6 +209,7 @@ export function Timeline({ section }: { section: SectionOf<'timeline'> }) {
           return (
             <section className="tl-month" id={`tl-${k}`} key={k}>
               <h3>{monthLabel(k)}</h3>
+              <p className="tl-sum">{monthSummary(byMonth.get(k)!)}</p>
               <ol>
                 {/* `popLayout` takes an exiting row OUT of the flow the
                     instant it starts leaving, so the survivors begin sliding

@@ -342,6 +342,11 @@ section.sec + section.sec { margin-top: 54px; border-top: 1px solid var(--hairli
    it can never be mistaken for a "decision" */
 .tl-month > h3::before { content: ""; position: absolute; left: 84px; margin-top: 9px;
   width: 9px; height: 9px; border-radius: 50%; background: var(--ink-4); }
+/* what the month held, derived — it counts the whole month, so it reads as the
+   heading's subtitle and sits on the label's own indent, never on the rail */
+.tl-sum { margin: -4px 0 0; padding-left: 118px; max-width: none;
+  font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-4); }
  /* `position: relative` is load-bearing, not tidiness: AnimatePresence's
    popLayout absolutely-positions an exiting row, which resolves against the
    nearest positioned ancestor. Without this that is `.tl-month`, and every
@@ -351,6 +356,9 @@ section.sec + section.sec { margin-top: 54px; border-top: 1px solid var(--hairli
   position: relative; }
 .timeline > .tl-month > ol > li { display: grid; grid-template-columns: 74px 30px 1fr;
   align-items: baseline; margin: 0; padding: 7px 0; }
+/* Events sit on the rail with no card between them, so the only thing telling
+   one from the next is the space. */
+.timeline > .tl-month > ol > li + li { margin-top: 10px; }
 .timeline .t-date { font-family: var(--sans); font-size: 11px; font-weight: 500;
   letter-spacing: .07em; text-transform: uppercase; color: var(--ink-4); text-align: right; }
 /* {TIMELINE DOTS} — the ONE definition, shared by the rail and the legend.
@@ -385,10 +393,15 @@ section.sec + section.sec { margin-top: 54px; border-top: 1px solid var(--hairli
 .timeline .t-title { font-size: 15px; font-weight: 600; color: var(--ink); }
 .timeline .t-desc { font-size: 14px; color: var(--ink-3); margin-top: 3px; max-width: 60ch; }
 .timeline .t-src { margin-top: 6px; }
+/* The rule closes the event instead of opening the fold. Above the "Why"
+   summary it sat between the citations and their own disclosure and read as the
+   divider between two events; below it, it is one. */
+.timeline .t-body > .disc.flat { border-top: 0; border-bottom: 1px solid var(--hairline); }
 @media (max-width: 620px) {
   .timeline::before { left: 5px; }
   .tl-month > h3 { padding-left: 30px; }
   .tl-month > h3::before { left: 1px; }
+  .tl-sum { padding-left: 30px; }
   .timeline > .tl-month > ol > li { grid-template-columns: 30px 1fr; }
   .timeline .t-date { grid-column: 2; text-align: left; order: -1; padding: 0 0 3px; }
   .timeline .t-dot { grid-row: 1 / span 2; }
