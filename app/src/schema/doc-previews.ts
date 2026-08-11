@@ -10,7 +10,7 @@
  */
 
 import { z } from 'zod'
-import { CITE_KINDS } from './doc-data.ts'
+import { CITE_KINDS, type Cite } from './doc-data.ts'
 
 const Person = z.object({
   name: z.string().optional(),
@@ -128,6 +128,34 @@ export const PreviewEntry = z.preprocess(
   }),
 )
 export type PreviewEntry = z.infer<typeof PreviewEntry>
+
+/**
+ * The payload behind one chip, from wherever the run actually put it.
+ *
+ * Two places are legal because runs use both and the old gate — "only look when
+ * `cite.preview` is set" — turned each mismatch into a chip that silently opened
+ * nothing:
+ *
+ * - `#doc-previews` keyed by the citation key. The documented place, and it wins.
+ * - the citation's own `preview`, when it was written as the payload rather than
+ *   as the `true` flag. `#doc-data` is the one file every run writes, so this is
+ *   where a payload lands when `doc-previews.json` was never created.
+ *
+ * A cite key present in `#doc-previews` opens its card whether or not the
+ * citation flags it. The payload existing IS the promise; a missing flag was
+ * never a reason to withhold a card the document is already carrying.
+ */
+export function previewFor(cite: Cite, previews: Record<string, PreviewEntry>): PreviewEntry | undefined {
+  const keyed = previews[cite.key]
+  if (keyed) return keyed
+  if (!cite.preview || typeof cite.preview !== 'object') return undefined
+
+  // A bare payload (`{ state, repo, … }`) and a whole entry (`{ kind, preview }`)
+  // both appear in the wild; the entry parse tells them apart.
+  const inline = cite.preview as Record<string, unknown>
+  const parsed = PreviewEntry.safeParse('preview' in inline ? inline : { preview: inline })
+  return parsed.success ? parsed.data : undefined
+}
 
 /**
  * `#doc-previews` accepts either the keyed object the build writes or

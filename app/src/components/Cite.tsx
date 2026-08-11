@@ -27,6 +27,7 @@ import { Icon, isBrandIcon } from './primitives.tsx'
 import { CardBody } from './preview/CardBody.tsx'
 import { useDoc } from './doc-context.tsx'
 import { isAllowed, trackerKind } from '../schema/doc-config.ts'
+import { previewFor } from '../schema/doc-previews.ts'
 import { tiltFor } from '../lib/format.ts'
 import { trackerIcon } from '../lib/tracker.ts'
 import type { Cite } from '../schema/doc-data.ts'
@@ -68,7 +69,7 @@ export function CiteChip({ cite }: { cite: Cite }) {
     ?? (cite.kind === 'tracker' ? trackerIcon(cite.raw, trackerKind(config)) : kindIcon)
 
   const linked = isAllowed(cite.url, allowlist)
-  const entry = cite.preview ? previews[cite.key] : undefined
+  const entry = previewFor(cite, previews)
 
   // Nothing moves and nothing sounds when the reader asked for stillness — the
   // wobble is decoration, so it simply is not applied.

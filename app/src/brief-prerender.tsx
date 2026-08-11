@@ -63,7 +63,7 @@ export function prerenderBrief(input: BriefPrerenderInput): BriefPrerenderResult
   // A chip whose payload is missing still renders; it just has no card. Worth
   // naming, not worth failing over.
   for (const key of new Set(citedKeys(parsed.data))) {
-    if (!previews[key]) warns.push(`cite "${key}" has no preview payload — the chip will not open a card`)
+    if (!previews[key]) warns.push(`cite "${key}" has no entry in #doc-previews — no card unless the citation carries its own payload`)
   }
 
   const html = renderToString(

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 
 import { DocData, Cite, SectionNode } from './doc-data.ts'
 import { validate } from './validate.ts'
+import { previewFor } from './doc-previews.ts'
 import { isAllowed } from './doc-config.ts'
 
 const meta = { project: 'Demo', tagline: 'A tagline.', timezone: 'UTC', updatedAt: '2026-08-08' }
@@ -58,13 +59,29 @@ test('exactly one What\'s New run is marked latest', () => {
   assert.equal(validate(wn([run('2026-08-08')])).ok, false)
 })
 
-test('a cite promising a preview needs a payload in #doc-previews', () => {
-  const withPreview = doc([{
+test('a cite promising a preview needs a payload in one of the two places', () => {
+  const lane = (preview: unknown) => doc([{
     id: 'l', tab: 'you', title: 'Items', layout: 'lane',
-    blocks: [{ id: 'i1', title: 'A', d: 'x', cites: [{ key: 'pr-53', kind: 'pr', raw: 'PR #53', preview: { title: 'x' } }] }],
+    blocks: [{ id: 'i1', title: 'A', d: 'x', cites: [{ key: 'pr-53', kind: 'pr', raw: 'PR #53', preview }] }],
   }])
-  assert.equal(validate(withPreview).ok, false)
-  assert.equal(validate(withPreview, { 'pr-53': {} }).ok, true)
+  assert.equal(validate(lane(true)).ok, false)
+  assert.equal(validate(lane(true), { 'pr-53': {} }).ok, true)
+  // The payload written onto the citation itself, which is where it lands when
+  // the run never created doc-previews.json.
+  assert.equal(validate(lane({ title: 'x' })).ok, true)
+})
+
+test('a chip opens its card from either place, flag or no flag', () => {
+  const cite = (preview?: unknown) => Cite.parse({ key: 'pr-53', kind: 'pr', raw: 'PR #53', preview })
+  const payload = { kind: 'pr' as const, preview: { title: 'Ship it' } }
+
+  assert.equal(previewFor(cite(true), { 'pr-53': payload })?.preview?.title, 'Ship it')
+  // No flag on the citation — the payload existing is the promise.
+  assert.equal(previewFor(cite(), { 'pr-53': payload })?.preview?.title, 'Ship it')
+  // Inline, as a bare payload and as a whole entry.
+  assert.equal(previewFor(cite({ title: 'Ship it' }), {})?.preview?.title, 'Ship it')
+  assert.equal(previewFor(cite(payload), {})?.preview?.title, 'Ship it')
+  assert.equal(previewFor(cite(true), {}), undefined)
 })
 
 test('the allowlist matches hosts and subdomains, and only http(s)', () => {

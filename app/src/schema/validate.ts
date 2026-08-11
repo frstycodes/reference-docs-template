@@ -9,6 +9,7 @@
  */
 
 import { DocData, type SectionNode, type Cite } from './doc-data.ts'
+import { previewFor, type PreviewEntry } from './doc-previews.ts'
 
 export interface ValidationReport {
   ok: boolean
@@ -18,7 +19,7 @@ export interface ValidationReport {
   data?: DocData
 }
 
-type Previews = Record<string, unknown>
+type Previews = Record<string, PreviewEntry>
 
 function citesOf(section: SectionNode): Cite[] {
   const out: Cite[] = []
@@ -99,8 +100,11 @@ export function validate(raw: unknown, previews: Previews = {}): ValidationRepor
 
   const seenCiteKeys = new Map<string, string>()
   for (const c of allCites) {
-    if (c.preview && !(c.key in previews)) {
-      errors.push(`cite "${c.key}" carries a preview but #doc-previews has no entry`)
+    // The chip resolves its payload from `#doc-previews` OR from the citation's
+    // own `preview`, so this fails only when neither place has one — a chip
+    // promising a card that does not exist anywhere.
+    if (c.preview && !previewFor(c, previews)) {
+      errors.push(`cite "${c.key}" carries a preview but neither #doc-previews nor the citation has a payload`)
     }
     const prior = seenCiteKeys.get(c.key)
     if (prior !== undefined && prior !== c.raw) {

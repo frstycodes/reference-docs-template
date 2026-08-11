@@ -108,15 +108,28 @@ golden-tested in the app (`npm test` in `app/`).
 
 ```json
 { "key": "pr-53", "kind": "pr|slack|gmail|cal|drive|tracker|figma|commit|path|thread|link",
-  "raw": "PR #53", "url": "https://…", "preview": { … } }
+  "raw": "PR #53", "url": "https://…", "preview": true }
 ```
 
 `url` present and allowlisted → linked `<a class="cite">`; else `<span>`.
-`preview` present → the chip carries `data-cite` and its payload goes in
-`#doc-previews`. `kind: "link"` (or any unknown kind) → the generic `#i-link` chip
-and the generic preview card. `kind: "bead"` is a legacy alias of `"tracker"` and
-renders identically — write `tracker` in new data, whatever tracker the project
-uses.
+`kind: "link"` (or any unknown kind) → the generic `#i-link` chip and the generic
+preview card. `kind: "bead"` is a legacy alias of `"tracker"` and renders
+identically — write `tracker` in new data, whatever tracker the project uses.
+
+**The hover card, and where its payload goes.** Write the payload in
+`doc-previews.json`, keyed by this citation's `key`, and set `preview: true`
+here — that is the documented shape, and the one the reference set in
+`app/src/__external/` uses.
+
+The chip resolves its card from `#doc-previews` **first** and falls back to a
+payload written inline on `preview`. Both work, so a run cannot lose a card to a
+missing flag or to a payload it put in the other place; do not read that as a
+choice, though — one document that writes payloads in both places has two copies
+of the same fact and only one of them gets patched by the next run.
+
+The one shape that is an error: `preview: true` with no payload anywhere.
+`assemble.mjs` fails the build on it rather than shipping a chip that opens
+nothing.
 
 ## The security invariant (absolute)
 
