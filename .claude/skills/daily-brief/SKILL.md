@@ -136,6 +136,13 @@ job with a hand-picked icon, no kind, no unlinked fallback and no card.
    before anything is drafted — **whenever there is one**, under either scope. It
    is always there under `scope: project` and only sometimes under `all`; a
    filter dropped here is a user's narrowing silently ignored.
+
+   One day across five sources is a handful of calls, so gather inline. Delegate
+   only when a source comes back huge — a busy channel, a hundred-message inbox
+   — and then to a subagent on the cheapest model that returns items and
+   permalinks, never a judgement about what belongs in the brief. The split is
+   [`project-doc/references/delegation.md`](../project-doc/references/delegation.md);
+   the editorial work in steps 4–6 is never delegated.
 2. **Pick the painting** per `references/voice.md`, download it, base64-encode it.
 3. **Fetch the faces.** Every avatar URL gathered in step 1 is downloaded and
    base64-encoded, rewriting Slack's `…_original.png` to `…_72.png` first — 250 kB

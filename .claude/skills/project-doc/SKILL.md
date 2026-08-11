@@ -47,6 +47,20 @@ Two questions setup must ask rather than assume, because getting them wrong is i
 - **"Which task tracker does the team use?"** Pact, Linear, Jira, GitHub issues, Asana, Shortcut — the answer becomes `sources.tracker.kind`, and the team's word for one item becomes `itemNoun`. **Nothing in this skill defaults to a tracker**, and a document that says "bead" to a Jira shop reads as though it were written for somebody else. See "The tracker" in [`references/config.md`](references/config.md).
 - **"Is your design work in Figma?"** — offered only when the Figma connector is actually present. Design decides what the front end builds, and on a design-gated project the approval of a surface is a milestone. Say the limit in the same breath: Figma exposes no history query, so the document can cite designs that other sources link to but **cannot notice a design that changed and was never mentioned**. See "Figma" in [`references/config.md`](references/config.md).
 
+## What the run pays for
+
+Init reads months of Slack, every PR with its review thread, every meeting note
+and every closed tracker item. Read inline, that text all lands in the main
+context and the run costs a large multiple of what it should.
+
+**Extraction is delegated to subagents on the cheapest model; judgement stays on
+the main thread.** Reading a source to its beginning and copying quotes out of it
+is mechanical. Deciding two entries are one event, spotting a reversal, choosing
+the questions and writing `#doc-data` is the whole value of the document, and a
+cheaper model there costs you the thing you were paying for. The split, the model
+per job, and what a sweep subagent may not do are in
+[`references/delegation.md`](references/delegation.md).
+
 ## The build
 
 **You write JSON and run one command.**

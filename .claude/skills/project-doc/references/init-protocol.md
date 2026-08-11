@@ -69,6 +69,13 @@ The refresh window is a cursor. **Init has no cursor: its window is the project'
 entire history**, and the run is not finished with a source until it has reached
 that source's first item or the project's start date, whichever is later.
 
+**Delegate this pass.** One subagent per source, on the cheapest model, each
+writing its notes to its own file and returning a receipt rather than the text —
+this is the single largest cost in a run, and it is mechanical.
+[`delegation.md`](delegation.md) has the split, the model per job and what a
+sweep subagent is and is not allowed to do. The join in step 2 and everything
+after it stay on the main thread.
+
 Paginate. Every one of these tools returns a page and a continuation token, and a
 run that takes the first page and moves on has read the last few days of a
 months-long project — which is exactly the failure mode that produces a document
@@ -94,19 +101,23 @@ that is worth knowing before it becomes the baseline.
 
 ### Capture verbatim, and capture as you go
 
-`.ignored/project-doc/<name>/init-notes.md` is not a crash-recovery file. It
-lives under `.ignored/`, not `__external/`, because it is scratch for this run
-alone — verbatim quotes from private sources, read by no schema and by nobody
-after the compose pass. It is the **reservoir every disclosure in the finished
-document is poured from**, and it is the reason the disclosure rule can be
-satisfied at all.
+`.ignored/project-doc/<name>/notes-*.md` is not a crash-recovery file. It lives
+under `.ignored/`, not `__external/`, because it is scratch for this run alone —
+verbatim quotes from private sources, read by no schema and by nobody after the
+compose pass. It is the **reservoir every disclosure in the finished document is
+poured from**, and it is the reason the disclosure rule can be satisfied at all.
+
+One file per source — `notes-slack.md`, `notes-github.md` — because the sweep is
+delegated and concurrent subagents appending to one file lose each other's
+writes. `init-notes.md` is the main thread's own: what the join found, written
+while reading the per-source files. Both are read the same way at compose time.
 
 The failure this exists to prevent: a run reads a thread, understands it,
 summarises it into one line, discards the thread, and moves on — and three hours
 later the disclosure that should hold the argument holds nothing, because the
 argument is gone and re-reading everything is too expensive to contemplate.
 
-So: as each item is read, append to `init-notes.md`
+So: as each item is read, append to that source's notes file
 
 - the **quote** — the message, PR description, review comment or notes paragraph,
   copied, not paraphrased;

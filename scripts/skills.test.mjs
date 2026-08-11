@@ -25,12 +25,13 @@ function hits(pattern) {
   }
 }
 
-// `.ignored/project-doc/<name>/init-notes.md` is legitimate: scratch for one
-// init run, gitignored on purpose, never a document's home. Everything else
-// under `.ignored/project-doc/` is the retired per-repo document location.
-// Keyed on the one-segment-then-init-notes shape rather than on the literal
+// An init run's notes — `init-notes.md`, and the per-source `notes-<source>.md`
+// each sweep subagent writes — are legitimate: scratch for one run, gitignored
+// on purpose, never a document's home. Everything else under
+// `.ignored/project-doc/` is the retired per-repo document location.
+// Keyed on the one-segment-then-notes-file shape rather than on the literal
 // `<name>` placeholder, which is spelling and could change.
-const INIT_NOTES_SCRATCH = /\.ignored\/project-doc\/[^/]+\/init-notes\.md\b/
+const INIT_NOTES_SCRATCH = /\.ignored\/project-doc\/[^/]+\/(init-)?notes[^/]*\.md\b/
 
 test('nothing still uses .ignored/project-doc as a document\'s home', () => {
   const found = hits('\\.ignored/project-doc').filter((line) => !INIT_NOTES_SCRATCH.test(line))

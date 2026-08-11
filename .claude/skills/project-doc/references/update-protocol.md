@@ -143,6 +143,11 @@ not enter the document, and that limit is stated at setup rather than papered ov
 
 ## 4. Query each source, then decide whether anything happened
 
+A window of hours across a handful of sources is a few tool calls, and it belongs
+inline. Fan the reading out to subagents only when the window is genuinely large —
+a run picking up after a long gap, or a source returning hundreds of items. See
+[`delegation.md`](delegation.md); the judging below is never delegated.
+
 Fetch, then judge. Activity is not news: a rebase, a lint commit, a "thanks!" reply and a
 calendar invite that nobody accepted are all *activity*, and none of them change a section.
 
