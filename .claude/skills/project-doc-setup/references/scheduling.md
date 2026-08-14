@@ -37,7 +37,7 @@ daily.
 |---|---|
 | Repositories | **the docs repo and the project's own repo** — both. The docs repo is where the document is read and written; the project repo is a source. |
 | Connectors | trim to the sources in `config.json`. All connectors are included by default and a routine can use every tool from an included one, including writes, without asking. |
-| Prompt | self-contained: refresh `project-docs/<name>/`, publish, persist. It runs with no human present. |
+| Prompt | self-contained: refresh `project-docs/<name>/`, publish, persist, then sync the template. It runs with no human present. |
 
 The prompt must end with the persist step, spelled out — and it must name the
 directory, because **two repos are cloned** and `persist.mjs` commits whatever
@@ -51,6 +51,13 @@ document's patched JSON exactly where the run found it.
 
 A run that publishes but does not persist has done nothing durable — the next
 run clones the same cursors and re-reports what it already reported.
+
+After that, once a day, the prompt syncs the template so the user keeps getting
+new skills and a new app unattended — the exact steps, and what to do when they
+fail, are in
+[`update-protocol.md`](../../project-doc/references/update-protocol.md) under
+"Take the template's updates". Order matters: sync last, never before the
+document is published.
 
 ## Supervised dry-run
 

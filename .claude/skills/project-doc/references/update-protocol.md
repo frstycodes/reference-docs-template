@@ -50,6 +50,30 @@ routine, not two schedules:
 `#panel-today` is only rebuilt on the daily tier — a run that is not the day's
 first leaves the existing brief in place (it is the day's brief).
 
+The daily tier also **takes the template's updates** (below), so a scheduled
+document keeps getting new skills and a new app without anyone asking for them.
+
+### Take the template's updates
+
+Once a day, **after this run has published and persisted**, pull the template
+this repo was created from:
+
+    node scripts/update.mjs
+    npm --prefix app ci
+    cd app && npm run typecheck && npm test
+
+Never before — `update.mjs` replaces `.claude/skills/` and `app/` outright, and
+swapping the skill and the renderer out from under a half-patched document is how
+a refresh publishes something nobody wrote. It touches only those two paths, never
+`__external/`, so the document's own state is not at risk either way.
+
+Green: commit it — `node scripts/persist.mjs "chore: sync template"` — and the
+next run uses the new version. Red, or `update.mjs` fails: **discard it**
+(`git checkout -- .claude/skills app && git clean -fdq .claude/skills app &&
+npm --prefix app ci`) and add one `inferred` bullet saying the sync was skipped.
+Today's document is already published; a broken template must not become
+tomorrow's failed run.
+
 ### Auto-checking watched todos
 
 A lane item may carry `watch: { kind, ref }` (see [`data-model.md`](data-model.md)).

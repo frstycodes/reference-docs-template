@@ -220,6 +220,12 @@ everything in whatever repo it is invoked in:
 
     cd <the docs repo> && node scripts/persist.mjs "brief: $(date +%F)"
 
+Then, still once a day and **only after that persist**, the prompt syncs the
+template — same steps and same failure handling as
+[`update-protocol.md`](../project-doc/references/update-protocol.md) under "Take
+the template's updates". A repo whose only routine is the brief has no other
+occasion to pick up new skills or a new app.
+
 Yesterday's brief is simply overwritten — the brief is a stateless snapshot, so
 the commit is a record, not a cursor. That is why an unattended failure is soft
 here and hard in `project-doc`: a thin brief is replaced tomorrow, a lost cursor
